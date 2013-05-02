@@ -1,11 +1,3 @@
-/*
-*********************************************
-*	GOSFML2
-*	SFML Examples:	 Pong
-*	Ported from C++ to Go
-*********************************************
- */
-
 package main
 
 import (
@@ -48,22 +40,19 @@ func main() {
 
 	renderWindow := sf.NewRenderWindow(sf.VideoMode{gameWidth, gameHeight, 32}, "Rest it", sf.StyleDefault, nil)
 
-	// Create the left paddle
+	// Create the tetris block
 	block := sf.NewRectangleShape()
 	block.SetSize(sf.Vector2f{blockSize, blockSize})
 	block.SetFillColor(sf.Color{100, 100, 200, 255})
 	
-	// Create the left paddle
+	// Create the empty block
 	emptyBlock := sf.NewRectangleShape()
 	emptyBlock.SetSize(sf.Vector2f{blockSize, blockSize})
 	emptyBlock.SetFillColor(sf.Color{255,255,255,255})
 	
 	//block.SetOutlineThickness(3)
-	//block.SetOutlineColor(sf.ColorBlack())
-	
-	
-	
-//	leftPaddle.SetOrigin(sf.Vector2f{paddleSize.X / 2, paddleSize.Y / 2})
+	//block.SetOutlineColor(sf.ColorBlack())	
+	//leftPaddle.SetOrigin(sf.Vector2f{paddleSize.X / 2, paddleSize.Y / 2})
 
 	// Load the text font
 	font, _ := sf.NewFontFromFile("resources/sansation.ttf")
@@ -85,18 +74,12 @@ func main() {
 					switch ev.Code {
 					case sf.KeyEscape:
 						renderWindow.Close()
-					case sf.KeySpace:
-						//do stuff
 					}
 				case sf.EventClosed:
 					renderWindow.Close()
 				}
 			}
 			//deltaTime := time.Second / 60
-
-			// Move the player's paddle
-			//if sf.KeyboardIsKeyPressed(sf.KeyUp) && leftPaddle.GetPosition().Y-paddleSize.Y/2 > 5 {
-//			}
 
 			// Clear the window
 			renderWindow.Clear(sf.Color{140, 170, 255, 0})
@@ -111,11 +94,9 @@ func main() {
 						renderWindow.Draw(emptyBlock, nil)
 					}
 				}
-			}
-			
+			}			
 			renderWindow.Draw(pauseMessage, nil)
 
-			// Display things on screen
 			renderWindow.Display()
 		}
 	}
