@@ -14,13 +14,29 @@ import (
 	"math/rand"
 	"runtime"
 	"time"
+	"fmt"
 )
+
+const (
+	gridWidth = 10
+	gridHeight = 20
+	blockSize = 25
+)
+
+
+type tetrisGrid struct {
+	tiles [gridWidth][gridHeight]bool
+}
 
 func init() {
 	runtime.LockOSThread()
 }
 
 func main() {
+	fmt.Println("Starting restit")
+
+	grid := tetrisGrid{}
+	grid.tiles[1][1] = true
 
 	var (
 		gameWidth  uint        = 800
@@ -33,13 +49,22 @@ func main() {
 	renderWindow := sf.NewRenderWindow(sf.VideoMode{gameWidth, gameHeight, 32}, "Rest it", sf.StyleDefault, nil)
 
 	// Create the left paddle
-/*	leftPaddle := sf.NewRectangleShape()
-	leftPaddle.SetSize(sf.Vector2f{paddleSize.X - 3, paddleSize.Y - 3})
-	leftPaddle.SetOutlineThickness(3)
-	leftPaddle.SetOutlineColor(sf.ColorBlack())
-	leftPaddle.SetFillColor(sf.Color{100, 100, 200, 255})
-	leftPaddle.SetOrigin(sf.Vector2f{paddleSize.X / 2, paddleSize.Y / 2})
-*/
+	block := sf.NewRectangleShape()
+	block.SetSize(sf.Vector2f{blockSize, blockSize})
+	block.SetFillColor(sf.Color{100, 100, 200, 255})
+	
+	// Create the left paddle
+	emptyBlock := sf.NewRectangleShape()
+	emptyBlock.SetSize(sf.Vector2f{blockSize, blockSize})
+	emptyBlock.SetFillColor(sf.Color{255,255,255,255})
+	
+	//block.SetOutlineThickness(3)
+	//block.SetOutlineColor(sf.ColorBlack())
+	
+	
+	
+//	leftPaddle.SetOrigin(sf.Vector2f{paddleSize.X / 2, paddleSize.Y / 2})
+
 	// Load the text font
 	font, _ := sf.NewFontFromFile("resources/sansation.ttf")
 
@@ -76,7 +101,17 @@ func main() {
 			// Clear the window
 			renderWindow.Clear(sf.Color{140, 170, 255, 0})
 
-			//renderWindow.Draw(block, nil)
+			for column := range grid.tiles {
+				for row := range grid.tiles[column] {
+					if grid.tiles[column][row] {
+						block.SetPosition(sf.Vector2f{float32(column*blockSize), float32(row*blockSize)})
+						renderWindow.Draw(block, nil)
+					} else {
+						emptyBlock.SetPosition(sf.Vector2f{float32(column*blockSize), float32(row*blockSize)})
+						renderWindow.Draw(emptyBlock, nil)
+					}
+				}
+			}
 			
 			renderWindow.Draw(pauseMessage, nil)
 
@@ -85,3 +120,4 @@ func main() {
 		}
 	}
 }
+
