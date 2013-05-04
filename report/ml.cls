@@ -3,9 +3,9 @@
 \LoadClass[10pt, a4paper, oneside]{article}
 
 \usepackage[utf8x]{inputenc}
-\usepackage[ngerman]{babel}
+\usepackage[english]{babel}
 \usepackage[T1]{fontenc}
-\usepackage{hyperref}
+\usepackage[colorlinks=true, linkcolor=black,citecolor=black,raiselinks=true,urlcolor=black]{hyperref}
 \usepackage{graphicx}
 \usepackage{palatino}
 \usepackage{a4}
@@ -38,7 +38,7 @@
 % -----------------------------------------------------------------------
 % Main macros
 \renewcommand{\maketitle}[6]
-          {\@maketitle{#1}{#2}{#3}{#4}{#5}{#6}{Project}}
+          {\@maketitle{#1}{#2}{#3}{#4}{#5}{#6}{Project Report}}
 \renewcommand\thesection{\arabic{section}}
 \renewcommand\thesubsection{\arabic{section}.\arabic{subsection}}
 
@@ -52,14 +52,14 @@
 % param4: Student number1
 % param5: Name2
 % param6: Student number2
-% param7: "Assignment"
+% param7: "Project Report"
 \renewcommand{\@maketitle}[7]
 {
-    \begin{tabular}[t]{l@{\hskip 8mm}c l}
-        \thistitle 	& \thissemester & {#3}, {#4}\\
-        			& 				& {#5}, {#6}\\
-        			& 				& \\
-        {\Huge\sf {#7} {#1} } & 	& Due: {#2} \\
+    \hspace*{-.8em}\begin{tabular}[t]{lr}
+        \thistitle 		& {#3}, {#4}\\
+        \thissemester	& {#5}, {#6}\\
+        				& 			\\
+        {\Huge\sf {#7} {#1} } & Due: {#2} \\
       \end{tabular}\\
     \rule{\linewidth}{1pt}
 
