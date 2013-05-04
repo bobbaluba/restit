@@ -78,7 +78,7 @@ protected:
 private:
     enum { BoardWidth = 10, BoardHeight = 22 };
 
-    TetrixShape &shapeAt(int x, int y) { return board[(y * BoardWidth) + x]; }
+
     int timeoutTime() { return 1000 / (1 + level); }
     int squareWidth() { return contentsRect().width() / BoardWidth; }
     int squareHeight() { return contentsRect().height() / BoardHeight; }
@@ -105,7 +105,6 @@ private:
     int numPiecesDropped;
     int score;
     int level;
-    TetrixShape board[BoardWidth * BoardHeight];
 
 
     BoardModel boardModel;
