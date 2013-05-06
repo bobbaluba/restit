@@ -12,9 +12,9 @@ private:
     std::vector<TetrixShape> tiles;
 public:
     BoardModel(int width, int height);
-    TetrixShape shapeAt(int x, int y) { return tiles[(y * width) + x]; }
+    TetrixShape getShapeAt(int x, int y) const { return tiles[(y * width) + x]; }
     void setShapeAt(int x, int y, TetrixShape shape) {tiles[(y * width) + x] = shape; }
-    bool isFree(const TetrixPiece &piece, int x, int y);
+    bool isFree(const TetrixPiece &piece, int x, int y) const;
     void placePiece(const TetrixPiece &piece, int x, int y);
     int removeFullLines();
     void clear();

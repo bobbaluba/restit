@@ -3,13 +3,13 @@
 BoardModel::BoardModel(int width, int height): height(height), width(width), tiles(width*height){
 }
 
-bool BoardModel::isFree(const TetrixPiece &piece, int x, int y){
+bool BoardModel::isFree(const TetrixPiece &piece, int x, int y) const{
     for (int i = 0; i < 4; ++i) {
         int currentX = x + piece.x(i);
         int currentY = y - piece.y(i);
         if (currentX < 0 || currentX >= width || currentY < 0 || currentY >= height)
             return false;
-        if (shapeAt(currentX, currentY) != NoShape)
+        if (getShapeAt(currentX, currentY) != NoShape)
             return false;
     }
     return true;
@@ -30,7 +30,7 @@ int BoardModel::removeFullLines(){
         bool lineIsFull = true;
 
         for (int j = 0; j < width; ++j) {
-            if (shapeAt(j, i) == NoShape) {
+            if (getShapeAt(j, i) == NoShape) {
                 lineIsFull = false;
                 break;
             }
@@ -40,7 +40,7 @@ int BoardModel::removeFullLines(){
             ++numFullLines;
             for (int k = i; k < height - 1; ++k) {
                 for (int j = 0; j < width; ++j)
-                    setShapeAt(j, k, shapeAt(j, k + 1));
+                    setShapeAt(j, k, getShapeAt(j, k + 1));
             }
             for (int j = 0; j < width; ++j)
                 setShapeAt(j, height - 1, NoShape);
