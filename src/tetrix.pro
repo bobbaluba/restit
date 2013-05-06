@@ -1,3 +1,4 @@
+CONFIG += qt
 HEADERS       = tetrixboard.h \
                  tetrixpiece.h \
 				 tetrixwindow.h \
@@ -13,6 +14,7 @@ HEADERS       = tetrixboard.h \
  sources.files = $$SOURCES $$HEADERS $$RESOURCES $$FORMS tetrix.pro
  sources.path = $$[QT_INSTALL_EXAMPLES]/widgets/tetrix
  INSTALLS += target sources
+
 
  symbian {
      TARGET.UID3 = 0xA000C606
