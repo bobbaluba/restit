@@ -1,6 +1,6 @@
 #include "boardmodel.h"
 
-BoardModel::BoardModel(int width, int height): height(height), width(width), tiles(width*height, NoShape){
+BoardModel::BoardModel(int width, int height): width(width), height(height), tiles(width*height, NoShape){
 }
 
 bool BoardModel::isFree(const TetrixPiece &piece, int x, int y) const{
