@@ -155,7 +155,7 @@ void TetrixBoard::keyPressEvent(QKeyEvent *event)
         tryMove(curPiece, curX + 1, curY);
         break;
     case Qt::Key_Down:
-        tryMove(curPiece.rotatedRight(), curX, curY);
+        oneLineDown();
         break;
     case Qt::Key_Up:
         tryMove(curPiece.rotatedLeft(), curX, curY);
