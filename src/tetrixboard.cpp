@@ -207,7 +207,7 @@ void TetrixBoard::oneLineDown()
 
 void TetrixBoard::pieceDropped(int dropHeight)
 {
-    boardModel.placePiece(curPiece, curX, curY);
+    int numFullLines = boardModel.placePiece(curPiece, curX, curY);
 
     ++numPiecesDropped;
     if (numPiecesDropped % 25 == 0) {
@@ -218,15 +218,6 @@ void TetrixBoard::pieceDropped(int dropHeight)
 
     score += dropHeight + 7;
     emit scoreChanged(score);
-    removeFullLines();
-
-    if (!isWaitingAfterLine)
-        newPiece();
-}
-
-void TetrixBoard::removeFullLines()
-{
-    int numFullLines = boardModel.removeFullLines();
 
     if (numFullLines > 0) {
         numLinesRemoved += numFullLines;
@@ -239,6 +230,9 @@ void TetrixBoard::removeFullLines()
         curPiece.setShape(NoShape);
         update();
     }
+
+    if (!isWaitingAfterLine)
+        newPiece();
 }
 
 void TetrixBoard::newPiece()

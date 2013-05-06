@@ -15,12 +15,13 @@ bool BoardModel::isFree(const TetrixPiece &piece, int x, int y) const{
     return true;
 }
 
-void BoardModel::placePiece(const TetrixPiece &piece, int x, int y){
+int BoardModel::placePiece(const TetrixPiece &piece, int x, int y){
     for (int i = 0; i < 4; ++i) {
         int currentX = x + piece.x(i);
         int currentY = y - piece.y(i);
         setShapeAt(currentX, currentY, piece.shape());
     }
+    return removeFullLines();
 }
 
 int BoardModel::removeFullLines(){

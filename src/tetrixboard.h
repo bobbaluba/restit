@@ -86,7 +86,6 @@ private:
     void dropDown();
     void oneLineDown();
     void pieceDropped(int dropHeight);
-    void removeFullLines();
     void newPiece();
     void showNextPiece();
     bool tryMove(const TetrixPiece &newPiece, int newX, int newY);
