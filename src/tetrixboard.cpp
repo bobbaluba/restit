@@ -122,7 +122,7 @@ void TetrixBoard::paintEvent(QPaintEvent *event)
 
     for (int i = 0; i < BoardHeight; ++i) {
         for (int j = 0; j < BoardWidth; ++j) {
-            TetrixShape shape = boardModel.shapeAt(j, BoardHeight - i - 1);
+            TetrixShape shape = boardModel.getShapeAt(j, BoardHeight - i - 1);
             if (shape != NoShape)
                 drawSquare(painter, rect.left() + j * squareWidth(),
                            boardTop + i * squareHeight(), shape);
