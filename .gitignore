@@ -42,6 +42,7 @@ Makefile
 *.out
 *.bbl
 *.blg
+*.dvi
 
 #additional stuff
 *~
