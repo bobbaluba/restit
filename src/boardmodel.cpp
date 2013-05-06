@@ -1,5 +1,7 @@
 #include "boardmodel.h"
 
+#include <cassert>
+
 BoardModel::BoardModel(int width, int height): width(width), height(height), tiles(width*height, NoShape){
 }
 
@@ -13,6 +15,17 @@ bool BoardModel::isFree(const TetrixPiece &piece, int x, int y) const{
             return false;
     }
     return true;
+}
+
+BoardModel BoardModel::dropPiece(const TetrixPiece &piece, int x, int *numLinesRemoved) const {
+    int curY = height - 1 + piece.minY();
+
+    assert(isFree(piece, x, curY)); //verify that the move is legal
+
+    while(isFree(piece, x, curY-1)){
+        --curY;
+    }
+    return placePiece(piece, x, curY, numLinesRemoved);
 }
 
 BoardModel BoardModel::placePiece(const TetrixPiece &piece, int x, int y, int *numLinesRemoved) const {

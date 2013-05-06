@@ -207,6 +207,10 @@ void TetrixBoard::oneLineDown()
 void TetrixBoard::pieceDropped(int dropHeight)
 {
     int numFullLines;
+    //simplified column tetris
+    //boardModel = boardModel.dropPiece(curPiece, curX, &numLinesRemoved);
+
+    //real tetris
     boardModel = boardModel.placePiece(curPiece, curX, curY, &numFullLines);
 
     ++numPiecesDropped;
