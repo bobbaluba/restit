@@ -1,6 +1,6 @@
 #include "boardmodel.h"
 
-BoardModel::BoardModel(int width, int height): height(height), width(width), tiles(width*height){
+BoardModel::BoardModel(int width, int height): height(height), width(width), tiles(width*height, NoShape){
 }
 
 bool BoardModel::isFree(const TetrixPiece &piece, int x, int y) const{
@@ -13,6 +13,12 @@ bool BoardModel::isFree(const TetrixPiece &piece, int x, int y) const{
             return false;
     }
     return true;
+}
+
+BoardModel BoardModel::placePiece(const TetrixPiece &piece, int x, int y, int *numLinesRemoved) const {
+    BoardModel copy = *this;
+    *numLinesRemoved = copy.placePiece(piece, x, y);
+    return copy;
 }
 
 int BoardModel::placePiece(const TetrixPiece &piece, int x, int y){
@@ -49,12 +55,6 @@ int BoardModel::removeFullLines(){
     }
 
     return numFullLines;
-}
-
-void BoardModel::clear() {
-    for (int i = 0; i < height * width; ++i){
-        tiles[i] = NoShape;
-    }
 }
 
 

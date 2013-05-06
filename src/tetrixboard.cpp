@@ -49,7 +49,6 @@ TetrixBoard::TetrixBoard(QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
     isStarted = false;
     isPaused = false;
-    boardModel.clear();
 
     nextPiece.setRandomShape();
 }
@@ -82,7 +81,7 @@ void TetrixBoard::start()
     numPiecesDropped = 0;
     score = 0;
     level = 1;
-    boardModel.clear();
+    boardModel = BoardModel(BoardWidth, BoardHeight);
 
     emit linesRemovedChanged(numLinesRemoved);
     emit scoreChanged(score);
@@ -207,7 +206,8 @@ void TetrixBoard::oneLineDown()
 
 void TetrixBoard::pieceDropped(int dropHeight)
 {
-    int numFullLines = boardModel.placePiece(curPiece, curX, curY);
+    int numFullLines;
+    boardModel = boardModel.placePiece(curPiece, curX, curY, &numFullLines);
 
     ++numPiecesDropped;
     if (numPiecesDropped % 25 == 0) {

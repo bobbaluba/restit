@@ -13,11 +13,11 @@ private:
 public:
     BoardModel(int width, int height);
     TetrixShape getShapeAt(int x, int y) const { return tiles[(y * width) + x]; }
-    void setShapeAt(int x, int y, TetrixShape shape) {tiles[(y * width) + x] = shape; }
     bool isFree(const TetrixPiece &piece, int x, int y) const;
-    int placePiece(const TetrixPiece &piece, int x, int y); //returns number of lines removed
-    void clear();
+    BoardModel placePiece(const TetrixPiece &piece, int x, int y, int* numLinesRemoved) const;
 private:
+    void setShapeAt(int x, int y, TetrixShape shape) {tiles[(y * width) + x] = shape; }
+    int placePiece(const TetrixPiece &piece, int x, int y); //returns number of lines removed
     int removeFullLines();
 };
 
