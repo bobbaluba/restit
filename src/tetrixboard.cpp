@@ -208,7 +208,7 @@ void TetrixBoard::pieceDropped(int dropHeight)
 {
     int numFullLines;
     //simplified column tetris
-    //boardModel = boardModel.dropPiece(curPiece, curX, &numLinesRemoved);
+    //boardModel = boardModel.dropPiece(curPiece, curX, &numFullLines);
 
     //real tetris
     boardModel = boardModel.placePiece(curPiece, curX, curY, &numFullLines);
