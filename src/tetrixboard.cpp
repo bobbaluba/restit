@@ -43,7 +43,11 @@
 #include "tetrixboard.h"
 
 TetrixBoard::TetrixBoard(QWidget *parent)
-    : QFrame(parent), borisIsPlaying(true), boardModel(BoardWidth, BoardHeight)
+    : QFrame(parent),
+      locoBoss(BoardWidth),
+      boris(&locoBoss),
+      borisIsPlaying(true),
+      boardModel(BoardWidth, BoardHeight)
 {
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
     setFocusPolicy(Qt::StrongFocus);

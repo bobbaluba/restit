@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <vector>
 
+#include "bossofboris.h"
+
 class Boris{
 public:
     enum Action {
@@ -11,11 +13,10 @@ public:
     };
 private:
     std::vector<Boris::Action> plan;
-    void getNextGoal();
-    int goalPosition;
-    int goalRotation;
+    void makeNewPlan();
+    BossOfBoris *boss;
 public:
-    Boris();
+    Boris(BossOfBoris *boss);
     Boris::Action getNextAction();
 };
 

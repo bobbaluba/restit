@@ -5,7 +5,10 @@ HEADERS       = tetrixboard.h \
 				 boardmodel.h \
     policy.h \
     state.h \
-    boris.h
+    boris.h \
+    borisgoal.h \
+    bossofboris.h \
+    locoboss.h
  SOURCES       = main.cpp \
                  tetrixboard.cpp \
                  tetrixpiece.cpp \
@@ -13,7 +16,10 @@ HEADERS       = tetrixboard.h \
 				 boardmodel.cpp \
     policy.cpp \
     state.cpp \
-    boris.cpp
+    boris.cpp \
+    borisgoal.cpp \
+    bossofboris.cpp \
+    locoboss.cpp
 
  # install
  target.path = $$[QT_INSTALL_EXAMPLES]/widgets/tetrix

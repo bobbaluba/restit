@@ -44,6 +44,7 @@
 #include "tetrixpiece.h"
 #include "boardmodel.h"
 #include "boris.h"
+#include "locoboss.h"
 
 #include <QBasicTimer>
 #include <QFrame>
@@ -109,8 +110,9 @@ private:
     int level;
 
 
-    bool borisIsPlaying;
+    LocoBoss locoBoss;
     Boris boris;
+    bool borisIsPlaying;
 
     BoardModel boardModel;
 };
