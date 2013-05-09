@@ -95,7 +95,7 @@ private:
     bool tryMove(const TetrixPiece &newPiece, int newX, int newY);
     void drawSquare(QPainter &painter, int x, int y, TetrixShape shape);
 
-    QBasicTimer timer;
+    QBasicTimer timer, borisTimer;
     QPointer<QLabel> nextPieceLabel;
     bool isStarted;
     bool isPaused;
@@ -109,9 +109,10 @@ private:
     int score;
     int level;
 
-
+    enum {BorisInterval = 100};
     LocoBoss locoBoss;
     Boris boris;
+    bool borisCanPlay;
     bool borisIsPlaying;
 
     BoardModel boardModel;

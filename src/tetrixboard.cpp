@@ -46,6 +46,7 @@ TetrixBoard::TetrixBoard(QWidget *parent)
     : QFrame(parent),
       locoBoss(BoardWidth),
       boris(&locoBoss),
+      borisCanPlay(false),
       borisIsPlaying(true),
       boardModel(BoardWidth, BoardHeight)
 {
@@ -93,6 +94,7 @@ void TetrixBoard::start()
 
     newPiece();
     timer.start(timeoutTime(), this);
+    borisTimer.start(BorisInterval, this);
 }
 
 void TetrixBoard::pause()
@@ -103,7 +105,9 @@ void TetrixBoard::pause()
     isPaused = !isPaused;
     if (isPaused) {
         timer.stop();
+        borisTimer.stop();
     } else {
+        borisTimer.start(BorisInterval, this);
         timer.start(timeoutTime(), this);
     }
     update();
@@ -175,8 +179,7 @@ void TetrixBoard::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void TetrixBoard::timerEvent(QTimerEvent *event)
-{
+void TetrixBoard::timerEvent(QTimerEvent *event){
     if (event->timerId() == timer.timerId()) {
         if (isWaitingAfterLine) {
             isWaitingAfterLine = false;
@@ -184,21 +187,22 @@ void TetrixBoard::timerEvent(QTimerEvent *event)
             timer.start(timeoutTime(), this);
         } else {
             oneLineDown();
-            if (borisIsPlaying){
-                switch (boris.getNextAction()) {
-                case Boris::MOVE_LEFT:
-                    tryMove(curPiece, curX - 1, curY);
-                    break;
-                case Boris::MOVE_RIGHT:
-                    tryMove(curPiece, curX + 1, curY);
-                    break;
-                case Boris::ROTATE_CCW:
-                    tryMove(curPiece.rotatedLeft(), curX, curY);
-                    break;
-                case Boris::DROP:
-                    dropDown();
-                    break;
-                }
+        }
+    } else if (event->timerId() == borisTimer.timerId()) {
+        if(borisCanPlay && borisIsPlaying) {
+            switch (boris.getNextAction()) {
+            case Boris::MOVE_LEFT:
+                tryMove(curPiece, curX - 1, curY);
+                break;
+            case Boris::MOVE_RIGHT:
+                tryMove(curPiece, curX + 1, curY);
+                break;
+            case Boris::ROTATE_CCW:
+                tryMove(curPiece.rotatedLeft(), curX, curY);
+                break;
+            case Boris::DROP:
+                dropDown();
+                break;
             }
         }
     } else {
@@ -227,6 +231,7 @@ void TetrixBoard::oneLineDown()
 
 void TetrixBoard::pieceDropped(int dropHeight)
 {
+    borisCanPlay = false;
     int numFullLines;
     //simplified column tetris
     //boardModel = boardModel.dropPiece(curPiece, curX, &numFullLines);
@@ -271,8 +276,12 @@ void TetrixBoard::newPiece()
     if (!tryMove(curPiece, curX, curY)) {
         curPiece.setShape(NoShape);
         timer.stop();
+        borisTimer.stop();
         isStarted = false;
+    } else { //we can place a new piece, game continues
+        borisCanPlay = true;
     }
+
 }
 
 void TetrixBoard::showNextPiece()
