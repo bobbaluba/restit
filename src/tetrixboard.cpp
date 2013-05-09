@@ -45,7 +45,7 @@
 TetrixBoard::TetrixBoard(QWidget *parent)
     : QFrame(parent),
       locoBoss(BoardWidth),
-      boris(&locoBoss),
+      boris(&greedyBoss),
       borisCanPlay(false),
       borisIsPlaying(true),
       boardModel(BoardWidth, BoardHeight)
@@ -190,7 +190,7 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
         }
     } else if (event->timerId() == borisTimer.timerId()) {
         if(borisCanPlay && borisIsPlaying) {
-            switch (boris.getNextAction()) {
+            switch (boris.getNextAction(State{curPiece, boardModel})) {
             case Boris::MOVE_LEFT:
                 tryMove(curPiece, curX - 1, curY);
                 break;

@@ -8,7 +8,8 @@ HEADERS       = tetrixboard.h \
     boris.h \
     borisgoal.h \
     bossofboris.h \
-    locoboss.h
+    locoboss.h \
+    greedyboss.h
  SOURCES       = main.cpp \
                  tetrixboard.cpp \
                  tetrixpiece.cpp \
@@ -19,7 +20,8 @@ HEADERS       = tetrixboard.h \
     boris.cpp \
     borisgoal.cpp \
     bossofboris.cpp \
-    locoboss.cpp
+    locoboss.cpp \
+    greedyboss.cpp
 
  # install
  target.path = $$[QT_INSTALL_EXAMPLES]/widgets/tetrix

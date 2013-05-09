@@ -45,6 +45,7 @@
 #include "boardmodel.h"
 #include "boris.h"
 #include "locoboss.h"
+#include "greedyboss.h"
 
 #include <QBasicTimer>
 #include <QFrame>
@@ -109,7 +110,8 @@ private:
     int score;
     int level;
 
-    enum {BorisInterval = 100};
+    enum {BorisInterval = 50};
+    GreedyBoss greedyBoss;
     LocoBoss locoBoss;
     Boris boris;
     bool borisCanPlay;

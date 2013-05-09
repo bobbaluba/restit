@@ -13,11 +13,11 @@ public:
     };
 private:
     std::vector<Boris::Action> plan;
-    void makeNewPlan();
+    void makeNewPlan(const State& currentState);
     BossOfBoris *boss;
 public:
     Boris(BossOfBoris *boss);
-    Boris::Action getNextAction();
+    Boris::Action getNextAction(const State& currentState);
 };
 
 #endif // BORIS_H

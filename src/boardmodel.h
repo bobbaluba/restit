@@ -17,6 +17,9 @@ public:
 
     TetrixShape getShapeAt(int x, int y) const { return tiles[(y * width) + x]; }
 
+    int getWidth() const { return width; }
+    int getHeight() const { return height; }
+
     //check if there are no conflicting or pieces, or pieces outside the board
     bool isFree(const TetrixPiece &piece, int x, int y) const;
 

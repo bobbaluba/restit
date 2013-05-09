@@ -2,8 +2,8 @@
 
 #include "tetrixboard.h"
 
-void Boris::makeNewPlan() {
-    BorisGoal goal = boss->getGoal();
+void Boris::makeNewPlan(const State &currentState) {
+    BorisGoal goal = boss->getGoal(currentState);
 
     const int startPosition = TetrixBoard::getStartColumn();
     int dx = goal.position - startPosition;
@@ -29,10 +29,10 @@ void Boris::makeNewPlan() {
 Boris::Boris(BossOfBoris *boss) : boss(boss){
 }
 
-Boris::Action Boris::getNextAction()
+Boris::Action Boris::getNextAction(const State &currentState)
 {
     if(plan.empty()){
-        makeNewPlan();
+        makeNewPlan(currentState);
     }
     Boris::Action nextMove = plan.back();
     plan.pop_back();
