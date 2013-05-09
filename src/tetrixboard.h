@@ -41,12 +41,14 @@
 #ifndef TETRIXBOARD_H
 #define TETRIXBOARD_H
 
+#include "tetrixpiece.h"
+#include "boardmodel.h"
+#include "boris.h"
+
 #include <QBasicTimer>
 #include <QFrame>
 #include <QPointer>
 
-#include "tetrixpiece.h"
-#include "boardmodel.h"
 
 class QLabel;
 
@@ -60,6 +62,8 @@ public:
     void setNextPieceLabel(QLabel *label);
     QSize sizeHint() const;
     QSize minimumSizeHint() const;
+    static int getStartColumn() { return BoardWidth / 2 + 1; }
+    enum { BoardWidth = 10, BoardHeight = 22 };
 
 public slots:
     void start();
@@ -76,7 +80,6 @@ protected:
     void timerEvent(QTimerEvent *event);
 
 private:
-    enum { BoardWidth = 10, BoardHeight = 22 };
 
 
     int timeoutTime() { return 1000 / (1 + level); }
@@ -105,6 +108,9 @@ private:
     int score;
     int level;
 
+
+    bool borisIsPlaying;
+    Boris boris;
 
     BoardModel boardModel;
 };

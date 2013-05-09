@@ -2,12 +2,18 @@ CONFIG += qt
 HEADERS       = tetrixboard.h \
                  tetrixpiece.h \
 				 tetrixwindow.h \
-				 boardmodel.h
+				 boardmodel.h \
+    policy.h \
+    state.h \
+    boris.h
  SOURCES       = main.cpp \
                  tetrixboard.cpp \
                  tetrixpiece.cpp \
 				 tetrixwindow.cpp \
-				 boardmodel.cpp
+				 boardmodel.cpp \
+    policy.cpp \
+    state.cpp \
+    boris.cpp
 
  # install
  target.path = $$[QT_INSTALL_EXAMPLES]/widgets/tetrix

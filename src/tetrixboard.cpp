@@ -43,7 +43,7 @@
 #include "tetrixboard.h"
 
 TetrixBoard::TetrixBoard(QWidget *parent)
-    : QFrame(parent), boardModel(BoardWidth, BoardHeight)
+    : QFrame(parent), borisIsPlaying(true), boardModel(BoardWidth, BoardHeight)
 {
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
     setFocusPolicy(Qt::StrongFocus);
@@ -146,6 +146,7 @@ void TetrixBoard::keyPressEvent(QKeyEvent *event)
         return;
     }
 
+
     switch (event->key()) {
     case Qt::Key_Left:
         tryMove(curPiece, curX - 1, curY);
@@ -179,6 +180,22 @@ void TetrixBoard::timerEvent(QTimerEvent *event)
             timer.start(timeoutTime(), this);
         } else {
             oneLineDown();
+            if (borisIsPlaying){
+                switch (boris.getNextAction()) {
+                case Boris::MOVE_LEFT:
+                    tryMove(curPiece, curX - 1, curY);
+                    break;
+                case Boris::MOVE_RIGHT:
+                    tryMove(curPiece, curX + 1, curY);
+                    break;
+                case Boris::ROTATE_CCW:
+                    tryMove(curPiece.rotatedLeft(), curX, curY);
+                    break;
+                case Boris::DROP:
+                    dropDown();
+                    break;
+                }
+            }
         }
     } else {
         QFrame::timerEvent(event);
@@ -244,7 +261,7 @@ void TetrixBoard::newPiece()
     curPiece = nextPiece;
     nextPiece.setRandomShape();
     showNextPiece();
-    curX = BoardWidth / 2 + 1;
+    curX = getStartColumn();
     curY = BoardHeight - 1 + curPiece.minY();
 
     if (!tryMove(curPiece, curX, curY)) {
