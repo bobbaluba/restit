@@ -15,6 +15,7 @@
 _obj
 _test
 */build/
+**/build-tetrix-Desktop-Debug/
 
 # Architecture specific extensions/prefixes
 *.[568vq]
