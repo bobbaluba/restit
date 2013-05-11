@@ -55,7 +55,7 @@ TetrixBoard::TetrixBoard(QWidget *parent)
     isStarted = false;
     isPaused = false;
 
-    nextPiece.setRandomShape();
+    nextPieceTmp.setRandomShape();
 }
 
 void TetrixBoard::setNextPieceLabel(QLabel *label)
@@ -136,20 +136,20 @@ void TetrixBoard::paintEvent(QPaintEvent *event)
         }
     }
 
-    if (curPiece.shape() != NoShape) {
+    if (curPiece().shape() != NoShape) {
         for (int i = 0; i < 4; ++i) {
-            int x = curX + curPiece.x(i);
-            int y = curY - curPiece.y(i);
+            int x = curX + curPiece().x(i);
+            int y = curY - curPiece().y(i);
             drawSquare(painter, rect.left() + x * squareWidth(),
                        boardTop + (BoardHeight - y - 1) * squareHeight(),
-                       curPiece.shape());
+                       curPiece().shape());
         }
     }
 }
 
 void TetrixBoard::keyPressEvent(QKeyEvent *event)
 {
-    if (!isStarted || isPaused || curPiece.shape() == NoShape) {
+    if (!isStarted || isPaused || curPiece().shape() == NoShape) {
         QFrame::keyPressEvent(event);
         return;
     }
@@ -157,16 +157,16 @@ void TetrixBoard::keyPressEvent(QKeyEvent *event)
 
     switch (event->key()) {
     case Qt::Key_Left:
-        tryMove(curPiece, curX - 1, curY);
+        tryMove(curPiece(), curX - 1, curY);
         break;
     case Qt::Key_Right:
-        tryMove(curPiece, curX + 1, curY);
+        tryMove(curPiece(), curX + 1, curY);
         break;
     case Qt::Key_Down:
         oneLineDown();
         break;
     case Qt::Key_Up:
-        tryMove(curPiece.rotatedLeft(), curX, curY);
+        tryMove(curPiece().rotatedLeft(), curX, curY);
         break;
     case Qt::Key_Space:
         dropDown();
@@ -190,15 +190,15 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
         }
     } else if (event->timerId() == borisTimer.timerId()) {
         if(borisCanPlay && borisIsPlaying) {
-            switch (boris.getNextAction(State{curPiece, boardModel})) {
+            switch (boris.getNextAction(State{curPiece(), boardModel})) {
             case Boris::MOVE_LEFT:
-                tryMove(curPiece, curX - 1, curY);
+                tryMove(curPiece(), curX - 1, curY);
                 break;
             case Boris::MOVE_RIGHT:
-                tryMove(curPiece, curX + 1, curY);
+                tryMove(curPiece(), curX + 1, curY);
                 break;
             case Boris::ROTATE_CCW:
-                tryMove(curPiece.rotatedLeft(), curX, curY);
+                tryMove(curPiece().rotatedLeft(), curX, curY);
                 break;
             case Boris::DROP:
                 dropDown();
@@ -215,7 +215,7 @@ void TetrixBoard::dropDown()
     int dropHeight = 0;
     int newY = curY;
     while (newY > 0) {
-        if (!tryMove(curPiece, curX, newY - 1))
+        if (!tryMove(curPiece(), curX, newY - 1))
             break;
         --newY;
         ++dropHeight;
@@ -225,7 +225,7 @@ void TetrixBoard::dropDown()
 
 void TetrixBoard::oneLineDown()
 {
-    if (!tryMove(curPiece, curX, curY - 1))
+    if (!tryMove(curPiece(), curX, curY - 1))
         pieceDropped(0);
 }
 
@@ -237,7 +237,7 @@ void TetrixBoard::pieceDropped(int dropHeight)
     //boardModel = boardModel.dropPiece(curPiece, curX, &numFullLines);
 
     //real tetris
-    boardModel = boardModel.placePiece(curPiece, curX, curY, &numFullLines);
+    boardModel = boardModel.placePiece(curPiece(), curX, curY, &numFullLines);
 
     ++numPiecesDropped;
     if (numPiecesDropped % 25 == 0) {
@@ -257,7 +257,7 @@ void TetrixBoard::pieceDropped(int dropHeight)
 
         timer.start(500, this);
         isWaitingAfterLine = true;
-        curPiece.setShape(NoShape);
+        curPieceTmp.setShape(NoShape);
         update();
     }
 
@@ -267,14 +267,14 @@ void TetrixBoard::pieceDropped(int dropHeight)
 
 void TetrixBoard::newPiece()
 {
-    curPiece = nextPiece;
-    nextPiece.setRandomShape();
+    curPieceTmp = nextPiece();
+    nextPieceTmp.setRandomShape();
     showNextPiece();
     curX = getStartColumn();
-    curY = BoardHeight - 1 + curPiece.minY();
+    curY = BoardHeight - 1 + curPiece().minY();
 
-    if (!tryMove(curPiece, curX, curY)) {
-        curPiece.setShape(NoShape);
+    if (!tryMove(curPiece(), curX, curY)) {
+        curPieceTmp.setShape(NoShape);
         timer.stop();
         borisTimer.stop();
         isStarted = false;
@@ -289,25 +289,25 @@ void TetrixBoard::showNextPiece()
     if (!nextPieceLabel)
         return;
 
-    int dx = nextPiece.maxX() - nextPiece.minX() + 1;
-    int dy = nextPiece.maxY() - nextPiece.minY() + 1;
+    int dx = nextPiece().maxX() - nextPiece().minX() + 1;
+    int dy = nextPiece().maxY() - nextPiece().minY() + 1;
 
     QPixmap pixmap(dx * squareWidth(), dy * squareHeight());
     QPainter painter(&pixmap);
     painter.fillRect(pixmap.rect(), nextPieceLabel->palette().background());
 
     for (int i = 0; i < 4; ++i) {
-        int x = nextPiece.x(i) - nextPiece.minX();
-        int y = nextPiece.y(i) - nextPiece.minY();
+        int x = nextPiece().x(i) - nextPiece().minX();
+        int y = nextPiece().y(i) - nextPiece().minY();
         drawSquare(painter, x * squareWidth(), y * squareHeight(),
-                   nextPiece.shape());
+                   nextPiece().shape());
     }
     nextPieceLabel->setPixmap(pixmap);
 }
 
 bool TetrixBoard::tryMove(const TetrixPiece &newPiece, int newX, int newY){
     if(boardModel.isFree(newPiece, newX, newY)){
-        curPiece = newPiece;
+        curPieceTmp = newPiece;
         curX = newX;
         curY = newY;
         update();

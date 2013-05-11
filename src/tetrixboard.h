@@ -87,6 +87,8 @@ private:
     int timeoutTime() { return 1000 / (1 + level); }
     int squareWidth() { return contentsRect().width() / BoardWidth; }
     int squareHeight() { return contentsRect().height() / BoardHeight; }
+    const TetrixPiece& curPiece(){ return curPieceTmp; }
+    const TetrixPiece& nextPiece(){ return nextPieceTmp; }
     void clearBoard();
     void dropDown();
     void oneLineDown();
@@ -101,8 +103,8 @@ private:
     bool isStarted;
     bool isPaused;
     bool isWaitingAfterLine;
-    TetrixPiece curPiece;
-    TetrixPiece nextPiece;
+    TetrixPiece curPieceTmp;
+    TetrixPiece nextPieceTmp;
     int curX;
     int curY;
     int numLinesRemoved;
