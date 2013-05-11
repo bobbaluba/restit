@@ -257,7 +257,7 @@ void TetrixBoard::pieceDropped(int dropHeight)
 
         timer.start(500, this);
         isWaitingAfterLine = true;
-        curPieceTmp.setShape(NoShape);
+        //curPiece.setShape(NoShape); //this is probably unneccessary
         update();
     }
 
@@ -274,7 +274,7 @@ void TetrixBoard::newPiece()
     curY = BoardHeight - 1 + curPiece().minY();
 
     if (!tryMove(curPiece(), curX, curY)) {
-        curPieceTmp.setShape(NoShape);
+        //curPiece.setShape(NoShape);
         timer.stop();
         borisTimer.stop();
         isStarted = false;
