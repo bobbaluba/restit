@@ -89,6 +89,7 @@ private:
     int squareHeight() { return contentsRect().height() / BoardHeight; }
     const TetrixPiece& curPiece(){ return gameModel.getCurrentPiece(); }
     const TetrixPiece& nextPiece(){ return gameModel.getNextPiece(); }
+    const BoardModel& board(){ return gameModel.getBoard(); }
     void clearBoard();
     void dropDown();
     void oneLineDown();
@@ -117,7 +118,6 @@ private:
     bool borisCanPlay;
     bool borisIsPlaying;
 
-    BoardModel boardModel;
     GameModel gameModel;
 };
 

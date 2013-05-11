@@ -48,8 +48,7 @@ TetrixBoard::TetrixBoard(QWidget *parent)
       boris(&greedyBoss),
       borisCanPlay(false),
       borisIsPlaying(true),
-      gameModel(BoardWidth, BoardHeight),
-      boardModel(BoardWidth, BoardHeight)
+      gameModel(BoardWidth, BoardHeight)
 {
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
     setFocusPolicy(Qt::StrongFocus);
@@ -89,7 +88,8 @@ void TetrixBoard::start()
     numPiecesDropped = 0;
     score = 0;
     level = 1;
-    boardModel = BoardModel(BoardWidth, BoardHeight);
+    BoardModel emptyBoard(BoardWidth, BoardHeight);
+    gameModel.setBoard(emptyBoard);
 
     emit linesRemovedChanged(numLinesRemoved);
     emit scoreChanged(score);
@@ -132,7 +132,7 @@ void TetrixBoard::paintEvent(QPaintEvent *event)
 
     for (int i = 0; i < BoardHeight; ++i) {
         for (int j = 0; j < BoardWidth; ++j) {
-            TetrixShape shape = boardModel.getShapeAt(j, BoardHeight - i - 1);
+            TetrixShape shape = board().getShapeAt(j, BoardHeight - i - 1);
             if (shape != NoShape)
                 drawSquare(painter, rect.left() + j * squareWidth(),
                            boardTop + i * squareHeight(), shape);
@@ -193,7 +193,7 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
         }
     } else if (event->timerId() == borisTimer.timerId()) {
         if(borisCanPlay && borisIsPlaying) {
-            switch (boris.getNextAction(State{curPiece(), boardModel})) {
+            switch (boris.getNextAction(State{curPiece(), board()})) {
             case Boris::MOVE_LEFT:
                 tryMove(curPiece(), curX - 1, curY);
                 break;
@@ -240,7 +240,8 @@ void TetrixBoard::pieceDropped(int dropHeight)
     //boardModel = boardModel.dropPiece(curPiece, curX, &numFullLines);
 
     //real tetris
-    boardModel = boardModel.placePiece(curPiece(), curX, curY, &numFullLines);
+    BoardModel newBoard = board().placePiece(curPiece(), curX, curY, &numFullLines);
+    gameModel.setBoard(newBoard);
 
     ++numPiecesDropped;
     if (numPiecesDropped % 25 == 0) {
@@ -319,7 +320,7 @@ void TetrixBoard::showNextPiece()
 }
 
 bool TetrixBoard::tryMove(const TetrixPiece &newPiece, int newX, int newY){
-    if(boardModel.isFree(newPiece, newX, newY)){
+    if(board().isFree(newPiece, newX, newY)){
         gameModel.setCurrentPiece(newPiece);
         curX = newX;
         curY = newY;
