@@ -13,11 +13,11 @@ public:
         board(BoardModel(width, height)){
     }
 
-    BoardModel getBoard() const;
+    const BoardModel &getBoard() const;
     void setBoard(const BoardModel &value);
-    TetrixPiece getCurrentPiece() const;
+    const TetrixPiece &getCurrentPiece() const;
     void setCurrentPiece(const TetrixPiece &value);
-    TetrixPiece getNextPiece() const;
+    const TetrixPiece &getNextPiece() const;
     void setNextPiece(const TetrixPiece &value);
 };
 

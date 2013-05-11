@@ -42,7 +42,7 @@
 #define TETRIXBOARD_H
 
 #include "tetrixpiece.h"
-#include "boardmodel.h"
+#include "gamemodel.h"
 #include "boris.h"
 #include "locoboss.h"
 #include "greedyboss.h"
@@ -87,8 +87,8 @@ private:
     int timeoutTime() { return 1000 / (1 + level); }
     int squareWidth() { return contentsRect().width() / BoardWidth; }
     int squareHeight() { return contentsRect().height() / BoardHeight; }
-    const TetrixPiece& curPiece(){ return curPieceTmp; }
-    const TetrixPiece& nextPiece(){ return nextPieceTmp; }
+    const TetrixPiece& curPiece(){ return gameModel.getCurrentPiece(); }
+    const TetrixPiece& nextPiece(){ return gameModel.getNextPiece(); }
     void clearBoard();
     void dropDown();
     void oneLineDown();
@@ -103,8 +103,6 @@ private:
     bool isStarted;
     bool isPaused;
     bool isWaitingAfterLine;
-    TetrixPiece curPieceTmp;
-    TetrixPiece nextPieceTmp;
     int curX;
     int curY;
     int numLinesRemoved;
@@ -120,6 +118,7 @@ private:
     bool borisIsPlaying;
 
     BoardModel boardModel;
+    GameModel gameModel;
 };
 
 #endif

@@ -51,7 +51,7 @@ class TetrixPiece
 public:
     TetrixPiece() { setShape(NoShape); }
 
-    void setRandomShape();
+    void setRandomShape(); //refactor this
     void setShape(TetrixShape shape);
 
     TetrixShape shape() const { return pieceShape; }

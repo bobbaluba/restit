@@ -48,6 +48,7 @@ TetrixBoard::TetrixBoard(QWidget *parent)
       boris(&greedyBoss),
       borisCanPlay(false),
       borisIsPlaying(true),
+      gameModel(BoardWidth, BoardHeight),
       boardModel(BoardWidth, BoardHeight)
 {
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -55,7 +56,9 @@ TetrixBoard::TetrixBoard(QWidget *parent)
     isStarted = false;
     isPaused = false;
 
-    nextPieceTmp.setRandomShape();
+    TetrixPiece piece;
+    piece.setRandomShape();
+    gameModel.setNextPiece(piece);
 }
 
 void TetrixBoard::setNextPieceLabel(QLabel *label)
@@ -257,7 +260,11 @@ void TetrixBoard::pieceDropped(int dropHeight)
 
         timer.start(500, this);
         isWaitingAfterLine = true;
-        //curPiece.setShape(NoShape); //this is probably unneccessary
+
+        TetrixPiece piece;
+        piece.setShape(NoShape);
+        gameModel.setCurrentPiece(piece); //this is probably unneccessary
+
         update();
     }
 
@@ -267,14 +274,20 @@ void TetrixBoard::pieceDropped(int dropHeight)
 
 void TetrixBoard::newPiece()
 {
-    curPieceTmp = nextPiece();
-    nextPieceTmp.setRandomShape();
+    gameModel.setCurrentPiece(nextPiece());
+    TetrixPiece piece;
+    piece.setRandomShape();
+    gameModel.setNextPiece(piece);
     showNextPiece();
     curX = getStartColumn();
     curY = BoardHeight - 1 + curPiece().minY();
 
     if (!tryMove(curPiece(), curX, curY)) {
-        //curPiece.setShape(NoShape);
+
+        TetrixPiece piece;
+        piece.setShape(NoShape);
+        gameModel.setCurrentPiece(piece); //this is probably unneccessary
+
         timer.stop();
         borisTimer.stop();
         isStarted = false;
@@ -307,7 +320,7 @@ void TetrixBoard::showNextPiece()
 
 bool TetrixBoard::tryMove(const TetrixPiece &newPiece, int newX, int newY){
     if(boardModel.isFree(newPiece, newX, newY)){
-        curPieceTmp = newPiece;
+        gameModel.setCurrentPiece(newPiece);
         curX = newX;
         curY = newY;
         update();

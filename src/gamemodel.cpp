@@ -1,6 +1,6 @@
 #include "gamemodel.h"
 
-BoardModel GameModel::getBoard() const
+const BoardModel &GameModel::getBoard() const
 {
     return board;
 }
@@ -10,7 +10,7 @@ void GameModel::setBoard(const BoardModel &value)
     board = value;
 }
 
-TetrixPiece GameModel::getCurrentPiece() const
+const TetrixPiece &GameModel::getCurrentPiece() const
 {
     return currentPiece;
 }
@@ -20,7 +20,7 @@ void GameModel::setCurrentPiece(const TetrixPiece &value)
     currentPiece = value;
 }
 
-TetrixPiece GameModel::getNextPiece() const
+const TetrixPiece &GameModel::getNextPiece() const
 {
     return nextPiece;
 }
