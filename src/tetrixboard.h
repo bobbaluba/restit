@@ -111,7 +111,7 @@ private:
     int score;
     int level;
 
-    enum {BorisInterval = 50};
+    enum {BorisInterval = 20};
     GreedyBoss greedyBoss;
     LocoBoss locoBoss;
     Boris boris;

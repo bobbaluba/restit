@@ -9,15 +9,15 @@
 class Boris{
 public:
     enum Action {
-        MOVE_LEFT, MOVE_RIGHT, ROTATE_CCW, DROP
+        MOVE_LEFT, MOVE_RIGHT, ROTATE_CCW, MOVE_DOWN, DROP
     };
 private:
     std::vector<Boris::Action> plan;
-    void makeNewPlan(const State& currentState);
     BossOfBoris *boss;
 public:
+    void updatePlan(const State& currentState);
     Boris(BossOfBoris *boss);
-    Boris::Action getNextAction(const State& currentState);
+    Boris::Action getNextAction();
 };
 
 #endif // BORIS_H

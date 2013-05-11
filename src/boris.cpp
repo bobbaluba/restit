@@ -1,8 +1,12 @@
 #include "boris.h"
 
+#include <cassert>
+
 #include "tetrixboard.h"
 
-void Boris::makeNewPlan(const State &currentState) {
+void Boris::updatePlan(const State &currentState) {
+    plan.clear();
+
     BorisGoal goal = boss->getGoal(currentState);
 
     const int startPosition = TetrixBoard::getStartColumn();
@@ -24,16 +28,14 @@ void Boris::makeNewPlan(const State &currentState) {
     for(int i=0; i<goal.rotation; ++i){
         plan.push_back(ROTATE_CCW);
     }
+    plan.push_back(MOVE_DOWN);
 }
 
 Boris::Boris(BossOfBoris *boss) : boss(boss){
 }
 
-Boris::Action Boris::getNextAction(const State &currentState)
-{
-    if(plan.empty()){
-        makeNewPlan(currentState);
-    }
+Boris::Action Boris::getNextAction(){
+    assert(!plan.empty());
     Boris::Action nextMove = plan.back();
     plan.pop_back();
     return nextMove;

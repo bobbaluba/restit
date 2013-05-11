@@ -192,7 +192,7 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
         }
     } else if (event->timerId() == borisTimer.timerId()) {
         if(borisCanPlay && borisIsPlaying) {
-            switch (boris.getNextAction(State{curPiece(), board()})) {
+            switch (boris.getNextAction()) {
             case Boris::MOVE_LEFT:
                 tryMove(curPiece(), curX - 1, curY);
                 break;
@@ -201,6 +201,9 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
                 break;
             case Boris::ROTATE_CCW:
                 tryMove(curPiece().rotatedLeft(), curX, curY);
+                break;
+            case Boris::MOVE_DOWN:
+                oneLineDown();
                 break;
             case Boris::DROP:
                 dropDown();
@@ -287,6 +290,7 @@ void TetrixBoard::newPiece()
         isStarted = false;
     } else { //we can place a new piece, game continues
         borisCanPlay = true;
+        boris.updatePlan(State{curPiece(), board()});
     }
 
 }
