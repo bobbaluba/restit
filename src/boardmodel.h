@@ -16,9 +16,12 @@ public:
     BoardModel(int width, int height);
 
     TetrixShape getShapeAt(int x, int y) const { return tiles[(y * width) + x]; }
+    bool isEmpty(int x, int y) const { return getShapeAt(x,y) == NoShape; }
 
     int getWidth() const { return width; }
     int getHeight() const { return height; }
+
+    int getHoles();
 
     //check if there are no conflicting or pieces, or pieces outside the board
     bool isFree(const TetrixPiece &piece, int x, int y) const;

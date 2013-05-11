@@ -5,13 +5,28 @@
 BoardModel::BoardModel(int width, int height): width(width), height(height), tiles(width*height, NoShape){
 }
 
+int BoardModel::getHoles(){
+    int numHoles = 0;
+    for(int x=0; x<width; ++x){
+        bool hasSeenNonEmpty = false;
+        for(int y = height-1; y >= 0; --y){
+            if(!isEmpty(x, y)){
+                hasSeenNonEmpty=true;
+            } else if (hasSeenNonEmpty) {
+                ++numHoles;
+            }
+        }
+    }
+    return numHoles;
+}
+
 bool BoardModel::isFree(const TetrixPiece &piece, int x, int y) const{
     for (int i = 0; i < 4; ++i) {
         int currentX = x + piece.x(i);
         int currentY = y - piece.y(i);
         if (currentX < 0 || currentX >= width || currentY < 0 || currentY >= height)
             return false;
-        if (getShapeAt(currentX, currentY) != NoShape)
+        if (!isEmpty(currentX, currentY))
             return false;
     }
     return true;
@@ -55,7 +70,7 @@ int BoardModel::removeFullLines(){
         bool lineIsFull = true;
 
         for (int j = 0; j < width; ++j) {
-            if (getShapeAt(j, i) == NoShape) {
+            if (isEmpty(j, i)) {
                 lineIsFull = false;
                 break;
             }
