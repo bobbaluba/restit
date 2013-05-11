@@ -38,36 +38,38 @@
  **
  ****************************************************************************/
 
- #ifndef TETRIXPIECE_H
- #define TETRIXPIECE_H
+#ifndef TETRIXPIECE_H
+#define TETRIXPIECE_H
 
- enum TetrixShape { NoShape, ZShape, SShape, LineShape, TShape, SquareShape,
-                    LShape, MirroredLShape };
+#include <array>
 
- class TetrixPiece
- {
- public:
-     TetrixPiece() { setShape(NoShape); }
+enum TetrixShape { NoShape, ZShape, SShape, LineShape, TShape, SquareShape,
+                   LShape, MirroredLShape };
 
-     void setRandomShape();
-     void setShape(TetrixShape shape);
+class TetrixPiece
+{
+public:
+    TetrixPiece() { setShape(NoShape); }
 
-     TetrixShape shape() const { return pieceShape; }
-     int x(int index) const { return coords[index][0]; }
-     int y(int index) const { return coords[index][1]; }
-     int minX() const;
-     int maxX() const;
-     int minY() const;
-     int maxY() const;
-     TetrixPiece rotatedLeft() const;
-     TetrixPiece rotatedRight() const;
+    void setRandomShape();
+    void setShape(TetrixShape shape);
 
- private:
-     void setX(int index, int x) { coords[index][0] = x; }
-     void setY(int index, int y) { coords[index][1] = y; }
+    TetrixShape shape() const { return pieceShape; }
+    int x(int index) const { return coords[index][0]; }
+    int y(int index) const { return coords[index][1]; }
+    int minX() const;
+    int maxX() const;
+    int minY() const;
+    int maxY() const;
+    TetrixPiece rotatedLeft() const;
+    TetrixPiece rotatedRight() const;
 
-     TetrixShape pieceShape;
-     int coords[4][2];
- };
+private:
+    void setX(int index, int x) { coords[index][0] = x; }
+    void setY(int index, int y) { coords[index][1] = y; }
 
- #endif
+    TetrixShape pieceShape;
+    std::array<std::array<int, 2>, 4> coords;
+};
+
+#endif
