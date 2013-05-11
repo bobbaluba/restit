@@ -1,4 +1,5 @@
 CONFIG += qt
+QMAKE_CXXFLAGS += -std=c++11
 HEADERS       = tetrixboard.h \
                  tetrixpiece.h \
 				 tetrixwindow.h \
