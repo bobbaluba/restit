@@ -55,8 +55,7 @@ TetrixBoard::TetrixBoard(QWidget *parent)
     isStarted = false;
     isPaused = false;
 
-    TetrixPiece piece;
-    piece.setRandomShape();
+    TetrixPiece piece = TetrixPiece::getRandomPiece();
     gameModel.setNextPiece(piece);
 }
 
@@ -262,9 +261,7 @@ void TetrixBoard::pieceDropped(int dropHeight)
         timer.start(500, this);
         isWaitingAfterLine = true;
 
-        TetrixPiece piece;
-        piece.setShape(NoShape);
-        gameModel.setCurrentPiece(piece); //this is probably unneccessary
+        gameModel.setCurrentPiece(TetrixPiece(NoShape)); //this is probably unneccessary
 
         update();
     }
@@ -276,18 +273,14 @@ void TetrixBoard::pieceDropped(int dropHeight)
 void TetrixBoard::newPiece()
 {
     gameModel.setCurrentPiece(nextPiece());
-    TetrixPiece piece;
-    piece.setRandomShape();
-    gameModel.setNextPiece(piece);
+    gameModel.setNextPiece(TetrixPiece::getRandomPiece());
     showNextPiece();
     curX = getStartColumn();
     curY = BoardHeight - 1 + curPiece().minY();
 
     if (!tryMove(curPiece(), curX, curY)) {
 
-        TetrixPiece piece;
-        piece.setShape(NoShape);
-        gameModel.setCurrentPiece(piece); //this is probably unneccessary
+        gameModel.setCurrentPiece(TetrixPiece(NoShape)); //this is probably unneccessary
 
         timer.stop();
         borisTimer.stop();

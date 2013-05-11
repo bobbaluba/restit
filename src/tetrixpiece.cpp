@@ -44,13 +44,7 @@
 
 #include "tetrixpiece.h"
 
-void TetrixPiece::setRandomShape()
-{
-    setShape(TetrixShape(qrand() % 7 + 1));
-}
-
-void TetrixPiece::setShape(TetrixShape shape)
-{
+TetrixPiece::TetrixPiece(TetrixShape shape): pieceShape(shape){
     static const int coordsTable[8][4][2] = {
         { { 0, 0 },   { 0, 0 },   { 0, 0 },   { 0, 0 } },
         { { 0, -1 },  { 0, 0 },   { -1, 0 },  { -1, 1 } },
@@ -66,7 +60,6 @@ void TetrixPiece::setShape(TetrixShape shape)
         for (int j = 0; j < 2; ++j)
             coords[i][j] = coordsTable[shape][i][j];
     }
-    pieceShape = shape;
 }
 
 int TetrixPiece::minX() const

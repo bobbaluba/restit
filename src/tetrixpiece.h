@@ -42,17 +42,16 @@
 #define TETRIXPIECE_H
 
 #include <array>
+#include <cstdlib>
 
 enum TetrixShape { NoShape, ZShape, SShape, LineShape, TShape, SquareShape,
                    LShape, MirroredLShape };
 
-class TetrixPiece
-{
+class TetrixPiece{
 public:
-    TetrixPiece() { setShape(NoShape); }
-
-    void setRandomShape(); //refactor this
-    void setShape(TetrixShape shape);
+    TetrixPiece(TetrixShape shape);
+    TetrixPiece() : TetrixPiece(NoShape){}
+    static TetrixPiece getRandomPiece(){ return TetrixPiece(TetrixShape(rand() % 7 + 1)); }
 
     TetrixShape shape() const { return pieceShape; }
     int x(int index) const { return coords[index][0]; }
