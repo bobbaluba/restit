@@ -23,6 +23,8 @@ public:
     //check if there are no conflicting or pieces, or pieces outside the board
     bool isFree(const TetrixPiece &piece, int x, int y) const;
 
+    bool canDropIntoColumn(const TetrixPiece &piece, int x) const;
+
     //returns the board after dropping a piece into column x, number of lines removed are stored in *numLinesRemoved
     BoardModel dropPiece(const TetrixPiece &piece, int x, int* numLinesRemoved) const;
 

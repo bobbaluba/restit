@@ -6,7 +6,9 @@ std::vector<BorisGoal> State::getLegalBorisGoals() const{
     for(int i=0; i<4; ++i){
         //check each x position
         for(int j = -piece.minX(); j < board.getWidth() - piece.maxX(); ++j){
-            legalActions.push_back(BorisGoal{i, j});
+            if(board.canDropIntoColumn(piece, j)){
+                legalActions.push_back(BorisGoal{i, j});
+            }
         }
         piece = piece.rotatedLeft();
     }

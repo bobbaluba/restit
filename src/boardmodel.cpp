@@ -17,6 +17,11 @@ bool BoardModel::isFree(const TetrixPiece &piece, int x, int y) const{
     return true;
 }
 
+bool BoardModel::canDropIntoColumn(const TetrixPiece& piece, int x) const{
+    int y = height - 1 + piece.minY();
+    return isFree(piece, x, y);
+}
+
 BoardModel BoardModel::dropPiece(const TetrixPiece &piece, int x, int *numLinesRemoved) const {
     int curY = height - 1 + piece.minY();
 
