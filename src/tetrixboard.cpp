@@ -200,10 +200,9 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
                 tryMove(curPiece(), curX + 1, curY);
                 break;
             case Boris::ROTATE_CCW:
-                tryMove(curPiece().rotatedLeft(), curX, curY);
-                break;
-            case Boris::MOVE_DOWN:
-                oneLineDown();
+                while(!tryMove(curPiece().rotatedLeft(), curX, curY)){
+                    oneLineDown(); //move down while we can't rotate
+                }
                 break;
             case Boris::DROP:
                 dropDown();

@@ -9,7 +9,7 @@
 class Boris{
 public:
     enum Action {
-        MOVE_LEFT, MOVE_RIGHT, ROTATE_CCW, MOVE_DOWN, DROP
+        MOVE_LEFT, MOVE_RIGHT, ROTATE_CCW, DROP
     };
 private:
     std::vector<Boris::Action> plan;

@@ -28,7 +28,6 @@ void Boris::updatePlan(const State &currentState) {
     for(int i=0; i<goal.rotation; ++i){
         plan.push_back(ROTATE_CCW);
     }
-    plan.push_back(MOVE_DOWN);
 }
 
 Boris::Boris(BossOfBoris *boss) : boss(boss){
