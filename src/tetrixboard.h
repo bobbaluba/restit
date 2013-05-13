@@ -65,14 +65,13 @@ public:
     void setNextPieceLabel(QLabel *label);
     QSize sizeHint() const;
     QSize minimumSizeHint() const;
-    enum { BoardWidth = 10, BoardHeight = 22 };
+    enum { BoardWidth = 10, BoardHeight = 20 };
 
 public slots:
     void start();
     void pause();
 
 signals:
-    void scoreChanged(int score);
     void levelChanged(int level);
     void linesRemovedChanged(int numLines);
 

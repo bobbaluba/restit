@@ -69,7 +69,7 @@
      connect(startButton, SIGNAL(clicked()), board, SLOT(start()));
      connect(quitButton , SIGNAL(clicked()), qApp, SLOT(quit()));
      connect(pauseButton, SIGNAL(clicked()), board, SLOT(pause()));
-     connect(board, SIGNAL(scoreChanged(int)), scoreLcd, SLOT(display(int)));
+     //connect(board, SIGNAL(scoreChanged(int)), scoreLcd, SLOT(display(int)));
      connect(board, SIGNAL(levelChanged(int)), levelLcd, SLOT(display(int)));
      connect(board, SIGNAL(linesRemovedChanged(int)),
              linesLcd, SLOT(display(int)));

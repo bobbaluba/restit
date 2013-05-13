@@ -7,6 +7,36 @@ Boris::Boris(BossOfBoris *boss, ComplexTetris *tetris) :
     tetris(tetris){
 }
 
+void Boris::tick(){
+    if(plan.empty()){
+        updatePlan();
+    }
+    Boris::Action nextMove = plan.back();
+    bool moveSuccessful = true;
+    switch (nextMove) {
+    case MOVE_LEFT:
+        tetris->moveLeft();
+        break;
+    case MOVE_RIGHT:
+        tetris->moveRight();
+        break;
+    case MOVE_DOWN:
+        tetris->moveDown();
+        break;
+    case ROTATE_CCW:
+        moveSuccessful = tetris->rotateCCW();
+        break;
+    case DROP:
+        tetris->drop();
+        break;
+    }
+    if(!moveSuccessful){
+        plan.push_back(MOVE_DOWN); //move down while something is in the way
+    } else {
+        plan.pop_back();
+    }
+}
+
 void Boris::updatePlan() {
     plan.clear();
 
@@ -34,9 +64,3 @@ void Boris::updatePlan() {
     }
 }
 
-Boris::Action Boris::getNextAction(){
-    assert(!plan.empty());
-    Boris::Action nextMove = plan.back();
-    plan.pop_back();
-    return nextMove;
-}

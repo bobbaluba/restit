@@ -8,9 +8,9 @@
 #include "complextetris.h"
 
 class Boris{
-public:
+private:
     enum Action {
-        MOVE_LEFT, MOVE_RIGHT, ROTATE_CCW, DROP
+        MOVE_LEFT, MOVE_RIGHT, MOVE_DOWN, ROTATE_CCW, DROP
     };
 private:
     BossOfBoris *boss;
@@ -18,6 +18,7 @@ private:
     std::vector<Boris::Action> plan;
 public:
     Boris(BossOfBoris *boss, ComplexTetris* tetris);
+    void tick(); //called whenever boris can do an action
     void updatePlan();
     Boris::Action getNextAction();
 };

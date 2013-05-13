@@ -47,7 +47,7 @@ TetrixBoard::TetrixBoard(QWidget *parent) : QFrame(parent),
     tetris(&gameModel),
     locoBoss(BoardWidth),
     boris(&greedyBoss, &tetris),
-    borisIsPlaying(false)
+    borisIsPlaying(true)
 {
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
     setFocusPolicy(Qt::StrongFocus);
@@ -88,11 +88,6 @@ void TetrixBoard::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
     QRect rect = contentsRect();
-
-    //if (isPaused) {
-    //    painter.drawText(rect, Qt::AlignCenter, tr("Pause"));
-    //    return;
-    //}
 
     int boardTop = rect.bottom() - BoardHeight*squareHeight();
 
@@ -158,23 +153,8 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
         refreshGUI();
     } else if (event->timerId() == borisTimer.timerId()) {
         if(tetris.isStarted() && !tetris.isPaused() && borisIsPlaying){
-            boris.updatePlan(); //TODO: this should not be called so often
-            switch (boris.getNextAction()) {
-            case Boris::MOVE_LEFT:
-                tetris.moveLeft();
-                break;
-            case Boris::MOVE_RIGHT:
-                tetris.moveRight();
-                break;
-            case Boris::ROTATE_CCW:
-                while(!tetris.rotateCCW()){
-                    tetris.moveDown(); //move down while we can't rotate
-                }
-                break;
-            case Boris::DROP:
-                tetris.drop();
-                break;
-            }
+            boris.tick();
+            refreshGUI();
         }
     } else {
         QFrame::timerEvent(event);
