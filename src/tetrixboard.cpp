@@ -150,6 +150,7 @@ void TetrixBoard::keyPressEvent(QKeyEvent *event)
 void TetrixBoard::timerEvent(QTimerEvent *event){
     if (event->timerId() == timer.timerId()) {
         tetris.timeoutElapsed();
+        timer.start(tetris.getTimeoutTime(), this);
         refreshGUI();
     } else if (event->timerId() == borisTimer.timerId()) {
         if(tetris.isStarted() && !tetris.isPaused() && borisIsPlaying){
