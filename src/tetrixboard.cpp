@@ -40,6 +40,8 @@
 
 #include <QtGui>
 
+#include <cassert>
+
 #include "tetrixboard.h"
 
 TetrixBoard::TetrixBoard(QWidget *parent) : QFrame(parent),
@@ -47,7 +49,8 @@ TetrixBoard::TetrixBoard(QWidget *parent) : QFrame(parent),
     tetris(&gameModel),
     locoBoss(BoardWidth),
     boris(&greedyBoss, &tetris),
-    borisIsPlaying(true)
+    borisIsPlaying(true),
+    borisInterval(100)
 {
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
     setFocusPolicy(Qt::StrongFocus);
@@ -73,13 +76,18 @@ QSize TetrixBoard::minimumSizeHint() const
 void TetrixBoard::start(){
     tetris.startNewGame();
     timer.start(tetris.getTimeoutTime(), this);
-    borisTimer.start(BorisInterval, this);
+    borisTimer.start(borisInterval, this);
     refreshGUI();
 }
 
-void TetrixBoard::pause(){
-    tetris.togglePaused();
+void TetrixBoard::pause(bool checked){
+    tetris.setPaused(checked);
     update();
+}
+
+void TetrixBoard::setAISpeed(int speed){
+    borisInterval = 2*(100 - speed);
+    borisTimer.start(borisInterval,this);
 }
 
 void TetrixBoard::paintEvent(QPaintEvent *event)

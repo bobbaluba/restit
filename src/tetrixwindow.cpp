@@ -65,28 +65,35 @@ TetrixWindow::TetrixWindow()
     quitButton->setFocusPolicy(Qt::NoFocus);
     pauseButton = new QPushButton(tr("&Pause"));
     pauseButton->setFocusPolicy(Qt::NoFocus);
+    pauseButton->setCheckable(true);
+
+    QGroupBox *aiSelector = createAISelector();
+
+    QSlider *speedSlider = new QSlider(Qt::Horizontal, 0);
+    speedSlider->setRange(0,100);
+    speedSlider->setValue(50);
 
     connect(startButton, SIGNAL(clicked()), board, SLOT(start()));
     connect(quitButton , SIGNAL(clicked()), qApp, SLOT(quit()));
-    connect(pauseButton, SIGNAL(clicked()), board, SLOT(pause()));
+    connect(pauseButton, SIGNAL(toggled(bool)), board, SLOT(pause(bool)));
     //connect(board, SIGNAL(scoreChanged(int)), scoreLcd, SLOT(display(int)));
     connect(board, SIGNAL(levelChanged(int)), levelLcd, SLOT(display(int)));
-    connect(board, SIGNAL(linesRemovedChanged(int)),
-            linesLcd, SLOT(display(int)));
-
+    connect(board, SIGNAL(linesRemovedChanged(int)), linesLcd, SLOT(display(int)));
+    connect(speedSlider, SIGNAL(valueChanged(int)), board, SLOT(setAISpeed(int)));
     QGridLayout *layout = new QGridLayout;
-    layout->addWidget(createLabel(tr("NEXT")), 0, 0);
+    //layout->addWidget(createLabel(tr("NEXT")), 0, 0);
     layout->addWidget(nextPieceLabel, 1, 0);
     layout->addWidget(createLabel(tr("LEVEL")), 2, 0);
     layout->addWidget(levelLcd, 3, 0);
     layout->addWidget(startButton, 4, 0);
     layout->addWidget(board, 0, 1, 6, 1);
-    layout->addWidget(createLabel(tr("SCORE")), 0, 2);
-    layout->addWidget(scoreLcd, 1, 2);
+    //layout->addWidget(createLabel(tr("SCORE")), 0, 2);
+    layout->addWidget(aiSelector, 1, 2);
     layout->addWidget(createLabel(tr("LINES REMOVED")), 2, 2);
     layout->addWidget(linesLcd, 3, 2);
     layout->addWidget(quitButton, 4, 2);
     layout->addWidget(pauseButton, 5, 2);
+    layout->addWidget(speedSlider, 6, 0, 1, 3);
     setLayout(layout);
 
     setWindowTitle(tr("Tetrix"));
@@ -98,4 +105,25 @@ QLabel *TetrixWindow::createLabel(const QString &text)
     QLabel *lbl = new QLabel(text);
     lbl->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
     return lbl;
+}
+
+QGroupBox *TetrixWindow::createAISelector()
+{
+    QGroupBox *groupBox = new QGroupBox(tr("Select AI"));
+
+    QRadioButton *noneRadio = new QRadioButton(tr("None"));
+    QRadioButton *greedyRadio = new QRadioButton(tr("Greedy"));
+    QRadioButton *superAwesomeRadio = new QRadioButton(tr("Super Awesome"));
+
+    noneRadio->setChecked(true);
+
+    QVBoxLayout *vbox = new QVBoxLayout;
+    vbox->addWidget(noneRadio);
+    vbox->addWidget(greedyRadio);
+    vbox->addWidget(superAwesomeRadio);
+    //vbox->addStretch(1);
+
+    groupBox->setLayout(vbox);
+
+    return groupBox;
 }

@@ -20,7 +20,7 @@ public:
     bool moveRight();
     void drop();
     void startNewGame();
-    void togglePaused();
+    void setPaused(bool paused);
     void timeoutElapsed();
 
     //getters

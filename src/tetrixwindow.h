@@ -43,6 +43,8 @@
 
 #include <QFrame>
 #include <QWidget>
+#include <QRadioButton>
+#include <QGroupBox>
 
 
 class QLCDNumber;
@@ -60,6 +62,7 @@ public:
 
 private:
     QLabel *createLabel(const QString &text);
+    QGroupBox *createAISelector();
 
     TetrixBoard *board;
     QLabel *nextPieceLabel;
@@ -69,6 +72,8 @@ private:
     QPushButton *startButton;
     QPushButton *quitButton;
     QPushButton *pauseButton;
+
+    QRadioButton *radioButton;
 };
 
 #endif

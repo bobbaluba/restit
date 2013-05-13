@@ -46,11 +46,11 @@ void ComplexTetris::startNewGame(){
     newPiece();
 }
 
-void ComplexTetris::togglePaused(){
+void ComplexTetris::setPaused(bool paused){
     if (!isStarted()){
         return;
     }
-    paused = !isPaused();
+    this->paused = paused;
 }
 
 void ComplexTetris::timeoutElapsed(){

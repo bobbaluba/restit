@@ -69,7 +69,8 @@ public:
 
 public slots:
     void start();
-    void pause();
+    void pause(bool checked);
+    void setAISpeed(int speed);
 
 signals:
     void levelChanged(int level);
@@ -101,11 +102,11 @@ private:
     ComplexTetris tetris; //controller
 
     //ai
-    enum {BorisInterval = 20};
     GreedyBoss greedyBoss;
     LocoBoss locoBoss;
     Boris boris;
     bool borisIsPlaying;
+    int borisInterval;
 };
 
 #endif
