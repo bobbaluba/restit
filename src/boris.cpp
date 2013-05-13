@@ -2,15 +2,19 @@
 
 #include <cassert>
 
-#include "tetrixboard.h"
+Boris::Boris(BossOfBoris *boss, ComplexTetris *tetris) :
+    boss(boss),
+    tetris(tetris){
+}
 
-void Boris::updatePlan(const State &currentState) {
+void Boris::updatePlan() {
     plan.clear();
 
+    State currentState = tetris->getState();
     BorisGoal goal = boss->getGoal(currentState);
 
-    const int startPosition = TetrixBoard::getStartColumn();
-    int dx = goal.position - startPosition;
+    const int currentX = tetris->getCurrentPieceX();
+    int dx = goal.position - currentX;
 
     plan.push_back(DROP);
 
@@ -28,9 +32,6 @@ void Boris::updatePlan(const State &currentState) {
     for(int i=0; i<goal.rotation; ++i){
         plan.push_back(ROTATE_CCW);
     }
-}
-
-Boris::Boris(BossOfBoris *boss) : boss(boss){
 }
 
 Boris::Action Boris::getNextAction(){

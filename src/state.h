@@ -8,10 +8,13 @@
 
 class State{
 private:
-    TetrixPiece currentPiece; //piece we are about to place
     BoardModel board;
+    TetrixPiece currentPiece; //piece we are about to place
 public:
-    State(const TetrixPiece& currentPiece, const BoardModel& board): currentPiece(currentPiece), board(board){}
+    State(const BoardModel& board, const TetrixPiece& currentPiece):
+        board(board),
+        currentPiece(currentPiece)
+    {}
     std::vector<BorisGoal> getLegalBorisGoals() const;
     BoardModel applyAction(BorisGoal borisGoal, int *numLinesRemoved) const;
 };

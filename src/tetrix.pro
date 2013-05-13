@@ -11,7 +11,8 @@ HEADERS       = tetrixboard.h \
     bossofboris.h \
     locoboss.h \
     greedyboss.h \
-    gamemodel.h
+    gamemodel.h \
+    complextetris.h
  SOURCES       = main.cpp \
                  tetrixboard.cpp \
                  tetrixpiece.cpp \
@@ -24,7 +25,8 @@ HEADERS       = tetrixboard.h \
     bossofboris.cpp \
     locoboss.cpp \
     greedyboss.cpp \
-    gamemodel.cpp
+    gamemodel.cpp \
+    complextetris.cpp
 
  # install
  target.path = $$[QT_INSTALL_EXAMPLES]/widgets/tetrix

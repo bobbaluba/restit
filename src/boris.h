@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "bossofboris.h"
+#include "complextetris.h"
 
 class Boris{
 public:
@@ -12,11 +13,12 @@ public:
         MOVE_LEFT, MOVE_RIGHT, ROTATE_CCW, DROP
     };
 private:
-    std::vector<Boris::Action> plan;
     BossOfBoris *boss;
+    ComplexTetris* tetris;
+    std::vector<Boris::Action> plan;
 public:
-    void updatePlan(const State& currentState);
-    Boris(BossOfBoris *boss);
+    Boris(BossOfBoris *boss, ComplexTetris* tetris);
+    void updatePlan();
     Boris::Action getNextAction();
 };
 

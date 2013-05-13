@@ -42,21 +42,15 @@
 
 #include "tetrixboard.h"
 
-TetrixBoard::TetrixBoard(QWidget *parent)
-    : QFrame(parent),
-      locoBoss(BoardWidth),
-      boris(&greedyBoss),
-      borisCanPlay(false),
-      borisIsPlaying(true),
-      gameModel(BoardWidth, BoardHeight)
+TetrixBoard::TetrixBoard(QWidget *parent) : QFrame(parent),
+    gameModel(BoardWidth, BoardHeight),
+    tetris(&gameModel),
+    locoBoss(BoardWidth),
+    boris(&greedyBoss, &tetris),
+    borisIsPlaying(false)
 {
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
     setFocusPolicy(Qt::StrongFocus);
-    isStarted = false;
-    isPaused = false;
-
-    TetrixPiece piece = TetrixPiece::getRandomPiece();
-    gameModel.setNextPiece(piece);
 }
 
 void TetrixBoard::setNextPieceLabel(QLabel *label)
@@ -76,42 +70,15 @@ QSize TetrixBoard::minimumSizeHint() const
                  BoardHeight * 5 + frameWidth() * 2);
 }
 
-void TetrixBoard::start()
-{
-    if (isPaused)
-        return;
-
-    isStarted = true;
-    isWaitingAfterLine = false;
-    numLinesRemoved = 0;
-    numPiecesDropped = 0;
-    score = 0;
-    level = 1;
-    BoardModel emptyBoard(BoardWidth, BoardHeight);
-    gameModel.setBoard(emptyBoard);
-
-    emit linesRemovedChanged(numLinesRemoved);
-    emit scoreChanged(score);
-    emit levelChanged(level);
-
-    newPiece();
-    timer.start(timeoutTime(), this);
+void TetrixBoard::start(){
+    tetris.startNewGame();
+    timer.start(tetris.getTimeoutTime(), this);
     borisTimer.start(BorisInterval, this);
+    refreshGUI();
 }
 
-void TetrixBoard::pause()
-{
-    if (!isStarted)
-        return;
-
-    isPaused = !isPaused;
-    if (isPaused) {
-        timer.stop();
-        borisTimer.stop();
-    } else {
-        borisTimer.start(BorisInterval, this);
-        timer.start(timeoutTime(), this);
-    }
+void TetrixBoard::pause(){
+    tetris.togglePaused();
     update();
 }
 
@@ -122,90 +89,90 @@ void TetrixBoard::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     QRect rect = contentsRect();
 
-    if (isPaused) {
-        painter.drawText(rect, Qt::AlignCenter, tr("Pause"));
-        return;
-    }
+    //if (isPaused) {
+    //    painter.drawText(rect, Qt::AlignCenter, tr("Pause"));
+    //    return;
+    //}
 
     int boardTop = rect.bottom() - BoardHeight*squareHeight();
 
+    //draw the board
+    const BoardModel& board = gameModel.getBoard();
     for (int i = 0; i < BoardHeight; ++i) {
         for (int j = 0; j < BoardWidth; ++j) {
-            TetrixShape shape = board().getShapeAt(j, BoardHeight - i - 1);
+            const TetrixShape &shape = board.getShapeAt(j, BoardHeight - i - 1);
             if (shape != NoShape)
                 drawSquare(painter, rect.left() + j * squareWidth(),
                            boardTop + i * squareHeight(), shape);
         }
     }
 
-    if (curPiece().shape() != NoShape) {
+    //draw the tetronimo on top of the board
+    const TetrixPiece &curPiece = gameModel.getCurrentPiece();
+    const int curX = tetris.getCurrentPieceX();
+    const int curY = tetris.getCurrentPieceY();
+    if (curPiece.shape() != NoShape) {
         for (int i = 0; i < 4; ++i) {
-            int x = curX + curPiece().x(i);
-            int y = curY - curPiece().y(i);
+            int x = curX + curPiece.x(i);
+            int y = curY - curPiece.y(i);
             drawSquare(painter, rect.left() + x * squareWidth(),
                        boardTop + (BoardHeight - y - 1) * squareHeight(),
-                       curPiece().shape());
+                       curPiece.shape());
         }
     }
 }
 
 void TetrixBoard::keyPressEvent(QKeyEvent *event)
 {
-    if (!isStarted || isPaused || curPiece().shape() == NoShape) {
+    if (!tetris.isStarted() || tetris.isPaused()) {
         QFrame::keyPressEvent(event);
         return;
     }
 
-
     switch (event->key()) {
     case Qt::Key_Left:
-        tryMove(curPiece(), curX - 1, curY);
+        tetris.moveLeft();
         break;
     case Qt::Key_Right:
-        tryMove(curPiece(), curX + 1, curY);
+        tetris.moveRight();
         break;
     case Qt::Key_Down:
-        oneLineDown();
+        tetris.moveDown();
         break;
     case Qt::Key_Up:
-        tryMove(curPiece().rotatedLeft(), curX, curY);
+        tetris.rotateCCW();
         break;
     case Qt::Key_Space:
-        dropDown();
-        break;
-    case Qt::Key_D:
-        oneLineDown();
+        tetris.drop();
         break;
     default:
         QFrame::keyPressEvent(event);
     }
+
+    refreshGUI();
 }
 
 void TetrixBoard::timerEvent(QTimerEvent *event){
     if (event->timerId() == timer.timerId()) {
-        if (isWaitingAfterLine) {
-            isWaitingAfterLine = false;
-            newPiece();
-            timer.start(timeoutTime(), this);
-        } else {
-            oneLineDown();
-        }
+        tetris.timeoutElapsed();
+        refreshGUI();
     } else if (event->timerId() == borisTimer.timerId()) {
-        if(borisCanPlay && borisIsPlaying) {
+        if(tetris.isStarted() && !tetris.isPaused() && borisIsPlaying){
+            boris.updatePlan(); //TODO: this should not be called so often
             switch (boris.getNextAction()) {
             case Boris::MOVE_LEFT:
-                tryMove(curPiece(), curX - 1, curY);
+                tetris.moveLeft();
                 break;
             case Boris::MOVE_RIGHT:
-                tryMove(curPiece(), curX + 1, curY);
+                tetris.moveRight();
                 break;
             case Boris::ROTATE_CCW:
-                while(!tryMove(curPiece().rotatedLeft(), curX, curY)){
-                    oneLineDown(); //move down while we can't rotate
+                while(!tetris.rotateCCW()){
+                    tetris.moveDown(); //move down while we can't rotate
                 }
                 break;
             case Boris::DROP:
-                dropDown();
+                tetris.drop();
                 break;
             }
         }
@@ -214,117 +181,33 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
     }
 }
 
-void TetrixBoard::dropDown()
-{
-    int dropHeight = 0;
-    int newY = curY;
-    while (newY > 0) {
-        if (!tryMove(curPiece(), curX, newY - 1))
-            break;
-        --newY;
-        ++dropHeight;
-    }
-    pieceDropped(dropHeight);
-}
-
-void TetrixBoard::oneLineDown()
-{
-    if (!tryMove(curPiece(), curX, curY - 1))
-        pieceDropped(0);
-}
-
-void TetrixBoard::pieceDropped(int dropHeight)
-{
-    borisCanPlay = false;
-    int numFullLines;
-    //simplified column tetris
-    //boardModel = boardModel.dropPiece(curPiece, curX, &numFullLines);
-
-    //real tetris
-    BoardModel newBoard = board().placePiece(curPiece(), curX, curY, &numFullLines);
-    gameModel.setBoard(newBoard);
-
-    ++numPiecesDropped;
-    if (numPiecesDropped % 25 == 0) {
-        ++level;
-        timer.start(timeoutTime(), this);
-        emit levelChanged(level);
-    }
-
-    score += dropHeight + 7;
-    emit scoreChanged(score);
-
-    if (numFullLines > 0) {
-        numLinesRemoved += numFullLines;
-        score += 10 * numFullLines;
-        emit linesRemovedChanged(numLinesRemoved);
-        emit scoreChanged(score);
-
-        timer.start(500, this);
-        isWaitingAfterLine = true;
-
-        gameModel.setCurrentPiece(TetrixPiece(NoShape)); //this is probably unneccessary
-
-        update();
-    }
-
-    if (!isWaitingAfterLine)
-        newPiece();
-}
-
-void TetrixBoard::newPiece()
-{
-    gameModel.setCurrentPiece(nextPiece());
-    gameModel.setNextPiece(TetrixPiece::getRandomPiece());
-    showNextPiece();
-    curX = getStartColumn();
-    curY = BoardHeight - 1 + curPiece().minY();
-
-    if (!tryMove(curPiece(), curX, curY)) {
-
-        gameModel.setCurrentPiece(TetrixPiece(NoShape)); //this is probably unneccessary
-
-        timer.stop();
-        borisTimer.stop();
-        isStarted = false;
-    } else { //we can place a new piece, game continues
-        borisCanPlay = true;
-        boris.updatePlan(State{curPiece(), board()});
-    }
-
-}
-
 void TetrixBoard::showNextPiece()
 {
     if (!nextPieceLabel)
         return;
 
-    int dx = nextPiece().maxX() - nextPiece().minX() + 1;
-    int dy = nextPiece().maxY() - nextPiece().minY() + 1;
+    const TetrixPiece& nextPiece = gameModel.getNextPiece();
+    int dx = nextPiece.maxX() - nextPiece.minX() + 1;
+    int dy = nextPiece.maxY() - nextPiece.minY() + 1;
 
     QPixmap pixmap(dx * squareWidth(), dy * squareHeight());
     QPainter painter(&pixmap);
     painter.fillRect(pixmap.rect(), nextPieceLabel->palette().background());
 
     for (int i = 0; i < 4; ++i) {
-        int x = nextPiece().x(i) - nextPiece().minX();
-        int y = nextPiece().y(i) - nextPiece().minY();
+        int x = nextPiece.x(i) - nextPiece.minX();
+        int y = nextPiece.y(i) - nextPiece.minY();
         drawSquare(painter, x * squareWidth(), y * squareHeight(),
-                   nextPiece().shape());
+                   nextPiece.shape());
     }
     nextPieceLabel->setPixmap(pixmap);
 }
 
-bool TetrixBoard::tryMove(const TetrixPiece &newPiece, int newX, int newY){
-    if(board().isFree(newPiece, newX, newY)){
-        gameModel.setCurrentPiece(newPiece);
-        curX = newX;
-        curY = newY;
-        update();
-        return true;
-    } else {
-        return false;
-    }
+void TetrixBoard::refreshGUI(){
+    emit levelChanged(tetris.getLevel());
+    emit linesRemovedChanged(tetris.getLinesRemoved());
+    update();
+    showNextPiece();
 }
 
 void TetrixBoard::drawSquare(QPainter &painter, int x, int y, TetrixShape shape)

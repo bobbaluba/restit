@@ -50,6 +50,7 @@
 #include <QBasicTimer>
 #include <QFrame>
 #include <QPointer>
+#include <complextetris.h>
 
 
 class QLabel;
@@ -64,7 +65,6 @@ public:
     void setNextPieceLabel(QLabel *label);
     QSize sizeHint() const;
     QSize minimumSizeHint() const;
-    static int getStartColumn() { return BoardWidth / 2 + 1; }
     enum { BoardWidth = 10, BoardHeight = 22 };
 
 public slots:
@@ -82,43 +82,31 @@ protected:
     void timerEvent(QTimerEvent *event);
 
 private:
-
-
-    int timeoutTime() { return 1000 / (1 + level); }
     int squareWidth() { return contentsRect().width() / BoardWidth; }
     int squareHeight() { return contentsRect().height() / BoardHeight; }
-    const TetrixPiece& curPiece(){ return gameModel.getCurrentPiece(); }
-    const TetrixPiece& nextPiece(){ return gameModel.getNextPiece(); }
-    const BoardModel& board(){ return gameModel.getBoard(); }
     void clearBoard();
     void dropDown();
     void oneLineDown();
     void pieceDropped(int dropHeight);
     void newPiece();
     void showNextPiece();
-    bool tryMove(const TetrixPiece &newPiece, int newX, int newY);
+    void refreshGUI();
     void drawSquare(QPainter &painter, int x, int y, TetrixShape shape);
 
     QBasicTimer timer, borisTimer;
     QPointer<QLabel> nextPieceLabel;
-    bool isStarted;
-    bool isPaused;
-    bool isWaitingAfterLine;
-    int curX;
-    int curY;
-    int numLinesRemoved;
-    int numPiecesDropped;
-    int score;
-    int level;
+    //int score;
 
+
+    GameModel gameModel; //model
+    ComplexTetris tetris; //controller
+
+    //ai
     enum {BorisInterval = 20};
     GreedyBoss greedyBoss;
     LocoBoss locoBoss;
     Boris boris;
-    bool borisCanPlay;
     bool borisIsPlaying;
-
-    GameModel gameModel;
 };
 
 #endif

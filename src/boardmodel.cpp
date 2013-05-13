@@ -2,7 +2,10 @@
 
 #include <cassert>
 
-BoardModel::BoardModel(int width, int height): width(width), height(height), tiles(width*height, NoShape){
+BoardModel::BoardModel(int width, int height):
+    width(width),
+    height(height),
+    tiles(width*height, NoShape){
 }
 
 int BoardModel::getHoles(){

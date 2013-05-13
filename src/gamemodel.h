@@ -19,6 +19,10 @@ public:
     void setCurrentPiece(const TetrixPiece &value);
     const TetrixPiece &getNextPiece() const;
     void setNextPiece(const TetrixPiece &value);
+
+    //convenience methods
+    int getWidth() {return getBoard().getWidth(); }
+    int getHeight() {return getBoard().getHeight(); }
 };
 
 #endif // GAMEMODEL_H
