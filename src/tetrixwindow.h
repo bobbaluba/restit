@@ -38,36 +38,37 @@
  **
  ****************************************************************************/
 
- #ifndef TETRIXWINDOW_H
- #define TETRIXWINDOW_H
+#ifndef TETRIXWINDOW_H
+#define TETRIXWINDOW_H
 
- #include <QFrame>
- #include <QWidget>
+#include <QFrame>
+#include <QWidget>
 
- class QLCDNumber;
- class QLabel;
- class QPushButton;
 
- class TetrixBoard;
+class QLCDNumber;
+class QLabel;
+class QPushButton;
 
- class TetrixWindow : public QWidget
- {
-     Q_OBJECT
+class TetrixBoard;
 
- public:
-     TetrixWindow();
+class TetrixWindow : public QWidget
+{
+    Q_OBJECT
 
- private:
-     QLabel *createLabel(const QString &text);
+public:
+    TetrixWindow();
 
-     TetrixBoard *board;
-     QLabel *nextPieceLabel;
-     QLCDNumber *scoreLcd;
-     QLCDNumber *levelLcd;
-     QLCDNumber *linesLcd;
-     QPushButton *startButton;
-     QPushButton *quitButton;
-     QPushButton *pauseButton;
- };
+private:
+    QLabel *createLabel(const QString &text);
 
- #endif
+    TetrixBoard *board;
+    QLabel *nextPieceLabel;
+    QLCDNumber *scoreLcd;
+    QLCDNumber *levelLcd;
+    QLCDNumber *linesLcd;
+    QPushButton *startButton;
+    QPushButton *quitButton;
+    QPushButton *pauseButton;
+};
+
+#endif
