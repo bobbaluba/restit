@@ -12,14 +12,9 @@ BorisGoal StochyBoss::getGoal(const State &currentState){
     float maxScore = std::numeric_limits<float>::lowest();
     BorisGoal bestAction = actions[0];
     for(std::vector<BorisGoal>::iterator it = actions.begin(); it!=actions.end(); ++it){
-        //check each move and number of lines removed
         const BorisGoal& action = *it;
 
-        //gather features
-        int linesRemoved;
-        BoardModel nextBoard = currentState.applyAction(action, &linesRemoved);
-        std::vector<int> features = nextBoard.getFeatures();
-        features.push_back(linesRemoved);
+        std::vector<int> features = getFeatures(currentState, action);
 
         //create parameter vector
         std::vector<float> parameterVector(features.size(), 0);
@@ -28,11 +23,7 @@ BorisGoal StochyBoss::getGoal(const State &currentState){
         parameterVector[features.size()-1] = 1; //linesremoved
         parameterVector[features.size()-2] = -1; //number of holes
 
-        //evaluate state
-        float score = 0;
-        for(unsigned int i = 0; i < features.size(); ++i){
-            score += parameterVector[i] * features[i];
-        }
+        float score = calculateQuality(parameterVector, features);
 
         if(score>maxScore){
             maxScore = score;
@@ -40,4 +31,23 @@ BorisGoal StochyBoss::getGoal(const State &currentState){
         }
     }
     return bestAction;
+}
+
+float StochyBoss::calculateQuality(const std::vector<float> parameterVector, const std::vector<int> features){
+    //evaluate state
+    float score = 0;
+    for(unsigned int i = 0; i < features.size(); ++i){
+        score += parameterVector[i] * features[i];
+    }
+    return score;
+}
+
+
+std::vector<int> StochyBoss::getFeatures(const State& currentState, const BorisGoal& action){
+    //gather features
+    int linesRemoved;
+    BoardModel nextBoard = currentState.applyAction(action, &linesRemoved);
+    std::vector<int> features = nextBoard.getFeatures();
+    features.push_back(linesRemoved);
+    return features;
 }
