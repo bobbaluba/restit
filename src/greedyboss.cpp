@@ -16,14 +16,14 @@ BorisGoal GreedyBoss::getGoal(const State &currentState){
         const BorisGoal& action = *it;
         int linesRemoved;
         int holes = currentState.applyAction(action, &linesRemoved).getHoles();
-        if(holes<minimumNumberOfHoles){
-            minimumNumberOfHoles = holes;
+        if(linesRemoved>maxNumLinesRemoved){
             maxNumLinesRemoved = linesRemoved;
+            minimumNumberOfHoles = holes;
             bestAction = action;
-        } else if (holes == minimumNumberOfHoles){
-            if(linesRemoved > maxNumLinesRemoved){
-                maxNumLinesRemoved = linesRemoved;
+        } else if (linesRemoved == maxNumLinesRemoved){
+            if(holes < minimumNumberOfHoles){
                 bestAction = action;
+                minimumNumberOfHoles = holes;
             }
         }
     }

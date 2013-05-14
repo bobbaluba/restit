@@ -46,6 +46,7 @@
 #include "boris.h"
 #include "locoboss.h"
 #include "greedyboss.h"
+#include "stochyboss.h"
 
 #include <QBasicTimer>
 #include <QFrame>
@@ -104,6 +105,7 @@ private:
     //ai
     GreedyBoss greedyBoss;
     LocoBoss locoBoss;
+    StochyBoss stochyBoss;
     Boris boris;
     bool borisIsPlaying;
     int borisInterval;

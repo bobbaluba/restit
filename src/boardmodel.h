@@ -21,7 +21,13 @@ public:
     int getWidth() const { return width; }
     int getHeight() const { return height; }
 
-    int getHoles();
+    //feature calculation
+    int getHoles() const;
+    int getColumnHeight(int x) const;
+    int getColumnHeightDifference(int x1, int x2) const;
+    int getMaximumHeight() const;
+    std::vector<int> getFeatures() const;
+
 
     //check if there are no conflicting or pieces, or pieces outside the board
     bool isFree(const TetrixPiece &piece, int x, int y) const;
