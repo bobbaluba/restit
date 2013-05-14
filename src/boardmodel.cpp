@@ -8,7 +8,7 @@ BoardModel::BoardModel(int width, int height):
     tiles(width*height, NoShape){
 }
 
-int BoardModel::getHoles(){
+int BoardModel::getHoles() const{
     int numHoles = 0;
     for(int x=0; x<width; ++x){
         bool hasSeenNonEmpty = false;
@@ -21,6 +21,43 @@ int BoardModel::getHoles(){
         }
     }
     return numHoles;
+}
+
+int BoardModel::getColumnHeight(int x) const {
+    for(int y = height-1; y>=0; --y){
+        if(!isEmpty(x,y)){
+            return y;
+        }
+    }
+    return 0;
+}
+
+int BoardModel::getColumnHeightDifference(int x1, int x2) const {
+    return abs(getColumnHeight(x1) - getColumnHeight(x2));
+}
+
+int BoardModel::getMaximumHeight() const {
+    for(int y = height - 1; y<=0; --y){
+        for(int x = 0; x < width; ++x){
+            if(!isEmpty(x,y)){
+                return y;
+            }
+        }
+    }
+    return 0;
+}
+
+std::vector<int> BoardModel::getFeatures() const {
+    std::vector<int> features;
+    for(int i = 0; i < width; ++i){
+        features.push_back(getColumnHeight(i));
+    }
+    for(int i = 0; i < width-1; ++i){
+        features.push_back(getColumnHeightDifference(i, i+1));
+    }
+    features.push_back(getMaximumHeight());
+    features.push_back(getHoles());
+    return features;
 }
 
 bool BoardModel::isFree(const TetrixPiece &piece, int x, int y) const{

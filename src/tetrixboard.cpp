@@ -48,7 +48,7 @@ TetrixBoard::TetrixBoard(QWidget *parent) : QFrame(parent),
     gameModel(BoardWidth, BoardHeight),
     tetris(&gameModel),
     locoBoss(BoardWidth),
-    boris(&greedyBoss, &tetris),
+    boris(&stochyBoss, &tetris),
     borisIsPlaying(true),
     borisInterval(100)
 {
