@@ -15,7 +15,7 @@ BorisGoal StochyBoss::getGoal(const State &currentState){
     for(std::vector<BorisGoal>::iterator it = actions.begin(); it!=actions.end(); ++it){
         const BorisGoal& action = *it;
 
-        std::vector<int> features = getFeatures(currentState, action);
+        std::vector<float> features = getFeatures(currentState, action);
 
         //create parameter vector
         std::vector<float> parameterVector = getParameterVector(features.size());
@@ -30,13 +30,7 @@ BorisGoal StochyBoss::getGoal(const State &currentState){
     return bestAction;
 }
 
-void StochyBoss::updateWeights(const std::vector<float> &delta){
-    for(unsigned int i=0; i<parameterVector.size(); ++i){
-        parameterVector[i] += learningRate*delta[i];
-    }
-}
-
-float StochyBoss::calculateQuality(const std::vector<float> parameterVector, const std::vector<int> features){
+float StochyBoss::calculateQuality(const std::vector<float> parameterVector, const std::vector<float> features){
     //evaluate state
     float score = 0;
     for(unsigned int i = 0; i < features.size(); ++i){
@@ -45,17 +39,11 @@ float StochyBoss::calculateQuality(const std::vector<float> parameterVector, con
     return score;
 }
 
-float StochyBoss::z(){
-    const float discount = 0.7f;
-
-}
-
-
-std::vector<int> StochyBoss::getFeatures(const State& currentState, const BorisGoal& action){
+std::vector<float> StochyBoss::getFeatures(const State& currentState, const BorisGoal& action){
     //gather features
     int linesRemoved;
     BoardModel nextBoard = currentState.applyAction(action, &linesRemoved);
-    std::vector<int> features = nextBoard.getFeatures();
+    std::vector<float> features = nextBoard.getFeatures();
     features.push_back(linesRemoved);
     return features;
 }
