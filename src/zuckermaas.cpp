@@ -65,7 +65,7 @@ std::vector<float> operator- (const std::vector<float>& rhs){
 std::vector<float> operator- (const std::vector<float>& lhs, const std::vector<float>& rhs){
     return lhs + (-rhs);
 }
-ZuckerMaas::ZuckerMaas(float alpha):zt(22, 0), delta(22, 0), alpha(alpha), beta(0), t(0){
+ZuckerMaas::ZuckerMaas(float alpha):zt(22, 0), delta(22, 0), alpha(alpha), beta(0.5), t(0){
 }
 
 BorisGoal ZuckerMaas::getGoal(const State &currentState){
@@ -211,22 +211,19 @@ float ZuckerMaas::calculateQuality(const std::vector<float> &parameterVector, co
     return score;
 }
 
-void ZuckerMaas::updateWeights(const State &state, const BorisGoal &action){
-
-}
-
 
 std::vector<float> ZuckerMaas::getParameterVector(int size){
     if(parameters.empty()){
         //create parameter vector
         parameters.reserve(size);
         for(int i = 0; i<size; ++i){
-            parameters.push_back(-1 + (float)rand()/((float)RAND_MAX/(1+1)));
+            //parameters.push_back(-1 + (float)rand()/((float)RAND_MAX/(1+1)));
+            parameters.push_back(0);
         }
         //debug for a vector that performs reasonably well
         //set weight for numlinesremoved and number of holes
-        //parameterVector[22-1] = 1; //linesremoved
-        //parameterVector[22-2] = -1; //number of holes
+        parameters[22-1] = 1; //linesremoved
+        parameters[22-2] = -1; //number of holes
     }
     return parameters;
 }

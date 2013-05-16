@@ -22,8 +22,6 @@ private:
     std::vector<float> getFeatures(const State& currentState, const BorisGoal& action);
     std::vector<float> getParameterVector(int size);
     float calculateQuality(const std::vector<float> &parameterVector, const std::vector<float> &features);
-
-    void updateWeights(const State& state, const BorisGoal& action);
 };
 
 #endif // ZUCKERMAAS_H

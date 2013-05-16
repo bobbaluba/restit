@@ -67,11 +67,34 @@ TetrixWindow::TetrixWindow()
     pauseButton->setFocusPolicy(Qt::NoFocus);
     pauseButton->setCheckable(true);
 
-    QGroupBox *aiSelector = createAISelector();
+    QGroupBox *aiSelector = new QGroupBox(tr("Select AI"));
+
+    QRadioButton *noneRadio = new QRadioButton(tr("None"));
+    QRadioButton *greedyRadio = new QRadioButton(tr("Greedy"));
+    QRadioButton *superAwesomeRadio = new QRadioButton(tr("Super Awesome"));
+
+    QCheckBox *autoPlayCheckBox = new QCheckBox(tr("Auto Play"));
+
+    noneRadio->setChecked(true);
+
+    QVBoxLayout *vbox = new QVBoxLayout;
+    vbox->addWidget(noneRadio);
+    vbox->addWidget(greedyRadio);
+    vbox->addWidget(superAwesomeRadio);
+
+    vbox->addWidget(autoPlayCheckBox);
+
+    //vbox->addStretch(1);
+
+    aiSelector->setLayout(vbox);
+
+
+
+
 
     QSlider *speedSlider = new QSlider(Qt::Horizontal, 0);
     speedSlider->setRange(0,100);
-    speedSlider->setValue(50);
+    speedSlider->setValue(100);
 
     connect(startButton, SIGNAL(clicked()), board, SLOT(start()));
     connect(quitButton , SIGNAL(clicked()), qApp, SLOT(quit()));
@@ -80,6 +103,10 @@ TetrixWindow::TetrixWindow()
     connect(board, SIGNAL(levelChanged(int)), levelLcd, SLOT(display(int)));
     connect(board, SIGNAL(linesRemovedChanged(int)), linesLcd, SLOT(display(int)));
     connect(speedSlider, SIGNAL(valueChanged(int)), board, SLOT(setAISpeed(int)));
+
+    connect(autoPlayCheckBox, SIGNAL(toggled(bool)), board, SLOT(setAutoPlay(bool)));
+
+
     QGridLayout *layout = new QGridLayout;
     //layout->addWidget(createLabel(tr("NEXT")), 0, 0);
     layout->addWidget(nextPieceLabel, 1, 0);
@@ -105,25 +132,4 @@ QLabel *TetrixWindow::createLabel(const QString &text)
     QLabel *lbl = new QLabel(text);
     lbl->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
     return lbl;
-}
-
-QGroupBox *TetrixWindow::createAISelector()
-{
-    QGroupBox *groupBox = new QGroupBox(tr("Select AI"));
-
-    QRadioButton *noneRadio = new QRadioButton(tr("None"));
-    QRadioButton *greedyRadio = new QRadioButton(tr("Greedy"));
-    QRadioButton *superAwesomeRadio = new QRadioButton(tr("Super Awesome"));
-
-    noneRadio->setChecked(true);
-
-    QVBoxLayout *vbox = new QVBoxLayout;
-    vbox->addWidget(noneRadio);
-    vbox->addWidget(greedyRadio);
-    vbox->addWidget(superAwesomeRadio);
-    //vbox->addStretch(1);
-
-    groupBox->setLayout(vbox);
-
-    return groupBox;
 }

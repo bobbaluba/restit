@@ -49,9 +49,11 @@ TetrixBoard::TetrixBoard(QWidget *parent) : QFrame(parent),
     tetris(&gameModel),
     locoBoss(BoardWidth),
     stochyBoss(0.2), //learning rate, put in named constant
-    boris(&stochyBoss, &tetris),
+    zuckerBoss(0.005),
+    boris(&zuckerBoss, &tetris),
     borisIsPlaying(true),
-    borisInterval(100)
+    borisInterval(0),
+    autoPlay(false)
 {
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
     setFocusPolicy(Qt::StrongFocus);
@@ -90,6 +92,12 @@ void TetrixBoard::setAISpeed(int speed){
     borisInterval = 2*(100 - speed);
     borisTimer.start(borisInterval,this);
 }
+
+void TetrixBoard::setAutoPlay(bool value){
+    autoPlay = value;
+}
+
+
 
 void TetrixBoard::paintEvent(QPaintEvent *event)
 {
@@ -161,10 +169,16 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
         tetris.timeoutElapsed();
         timer.start(tetris.getTimeoutTime(), this);
         refreshGUI();
+        if (!tetris.isStarted() && autoPlay){
+            start();
+        }
     } else if (event->timerId() == borisTimer.timerId()) {
         if(tetris.isStarted() && !tetris.isPaused() && borisIsPlaying){
             boris.tick();
             refreshGUI();
+        }
+        if (!tetris.isStarted() && autoPlay){
+            start();
         }
     } else {
         QFrame::timerEvent(event);

@@ -47,6 +47,7 @@
 #include "locoboss.h"
 #include "greedyboss.h"
 #include "stochyboss.h"
+#include "zuckermaas.h"
 
 #include <QBasicTimer>
 #include <QFrame>
@@ -72,6 +73,7 @@ public slots:
     void start();
     void pause(bool checked);
     void setAISpeed(int speed);
+    void setAutoPlay(bool value);
 
 signals:
     void levelChanged(int level);
@@ -106,9 +108,11 @@ private:
     GreedyBoss greedyBoss;
     LocoBoss locoBoss;
     StochyBoss stochyBoss;
+    ZuckerMaas zuckerBoss;
     Boris boris;
     bool borisIsPlaying;
     int borisInterval;
+    bool autoPlay;
 };
 
 #endif
