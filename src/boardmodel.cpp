@@ -47,8 +47,8 @@ int BoardModel::getMaximumHeight() const {
     return 0;
 }
 
-std::vector<int> BoardModel::getFeatures() const {
-    std::vector<int> features;
+std::vector<float> BoardModel::getFeatures() const {
+    std::vector<float> features;
     for(int i = 0; i < width; ++i){
         features.push_back(getColumnHeight(i));
     }

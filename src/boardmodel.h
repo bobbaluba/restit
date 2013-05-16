@@ -26,7 +26,7 @@ public:
     int getColumnHeight(int x) const;
     int getColumnHeightDifference(int x1, int x2) const;
     int getMaximumHeight() const;
-    std::vector<int> getFeatures() const;
+    std::vector<float> getFeatures() const;
 
 
     //check if there are no conflicting or pieces, or pieces outside the board
