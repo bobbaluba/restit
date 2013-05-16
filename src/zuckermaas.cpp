@@ -18,6 +18,7 @@ std::vector<float> f(const State& x, const BorisGoal& u);
 float r(const State& x, const BorisGoal& u);
 std::vector<float> z_tplus1(const std::vector<float> &z, float beta, const std::vector<float> &theta, const State& xtplus1, const BorisGoal &utplus1);
 std::vector<float> delta_tplus1(const std::vector<float> &ztplus1, std::vector<float> deltat, const State& xtplus1, const BorisGoal& utplus1, float t);
+BorisGoal pie(const State& x, const std::vector<float> &theta);
 
 
 float operator* (std::vector<float>& lhs, std::vector<float>& rhs){
@@ -66,40 +67,24 @@ std::vector<float> operator- (const std::vector<float>& lhs, const std::vector<f
     return lhs + (-rhs);
 }
 ZuckerMaas::ZuckerMaas(float alpha):zt(22, 0), delta(22, 0), alpha(alpha), beta(0.5), t(0){
+    initializeParameterVector(22);
 }
 
 BorisGoal ZuckerMaas::getGoal(const State &currentState){
-    std::vector<BorisGoal> actions = currentState.getLegalBorisGoals();
-    float maxScore = std::numeric_limits<float>::lowest();
-    BorisGoal bestAction = actions[0];
-    std::vector<float> featuresOfChosenAction; //not needed ?
-    for(std::vector<BorisGoal>::iterator it = actions.begin(); it!=actions.end(); ++it){
-        const BorisGoal& action = *it;
+    BorisGoal bestAction = pie(currentState, theta);
 
-        std::vector<float> features = f(currentState, action);
-
-        //create parameter vector
-        std::vector<float> parameterVector = getParameterVector(features.size());
-
-        float score = calculateQuality(parameterVector, features);
-
-        if(score>maxScore){
-            maxScore = score;
-            bestAction = action;
-            featuresOfChosenAction = features;
-        }
-    }
     //reinforce step
-    //updateWeights(currentState, bestAction);
-
     const BorisGoal &utplus1 = bestAction;
-    std::vector<float> &theta = parameters;
     const State& xtplus1 = currentState;
 
     zt = z_tplus1(zt,beta,theta,xtplus1,utplus1); //not currentState?
     delta = delta_tplus1(zt, delta, xtplus1, utplus1,t);
 
+    assert(delta[0]<100000 && delta[0]>-100000);
+
     theta = theta + (alpha * delta);
+
+    assert(theta[0]<100000 && theta[0]>-100000);
 
     ++t;
     return bestAction;
@@ -165,7 +150,9 @@ std::vector<float> grad_Q(const std::vector<float> theta, std::vector<float> fea
 
 //q
 float q(const std::vector<float> theta, const State& x, const BorisGoal& u){
-    return l(theta, x, u)/Z(theta, x);
+    float quality = l(theta, x, u)/Z(theta, x);
+    assert(quality>0 && quality<=1);
+    return quality;
 }
 
 
@@ -193,37 +180,46 @@ float r(const State& x, const BorisGoal& u){
 
 //z_t+1
 std::vector<float> z_tplus1(const std::vector<float> &z, float beta, const std::vector<float> &theta, const State& xtplus1, const BorisGoal &utplus1){
-    return beta * z + grad_q(theta, xtplus1, utplus1)/q(theta, xtplus1, utplus1);
+    std::vector<float> ret = beta * z + grad_q(theta, xtplus1, utplus1)/q(theta, xtplus1, utplus1);
+    if(ret[0]>100000 || ret[0]<-100000){
+        beta * z + grad_q(theta, xtplus1, utplus1)/q(theta, xtplus1, utplus1);
+    }
+    return ret;
 }
 
 //delta_t+1
 std::vector<float> delta_tplus1(const std::vector<float> &ztplus1, std::vector<float> deltat, const State& xtplus1, const BorisGoal& utplus1, float t){
-    return deltat + t/(t+1) * (r(xtplus1, utplus1)*ztplus1-deltat);
+    std::vector<float> ret = deltat + t/(t+1) * (r(xtplus1, utplus1)*ztplus1-deltat);
+    return ret;
 }
 
-
-float ZuckerMaas::calculateQuality(const std::vector<float> &parameterVector, const std::vector<float> &features){
-    //evaluate state
-    float score = 0;
-    for(unsigned int i = 0; i < features.size(); ++i){
-        score += parameterVector[i] * features[i];
+BorisGoal pie(const State& x, const std::vector<float> &theta){
+    std::vector<BorisGoal> Us = x.getLegalBorisGoals();
+    assert(!Us.empty());
+    float actionValue = float(rand())/float(RAND_MAX);
+    float actionSum = 0.0f;
+    for(unsigned int i = 0; i<Us.size(); ++i){
+        float quality = q(theta, x, Us[i]);
+        actionSum += quality;
+        if(actionSum>=actionValue){
+            return Us[i];
+        }
     }
-    return score;
+    //no actions
+    assert(false);
 }
 
-
-std::vector<float> ZuckerMaas::getParameterVector(int size){
-    if(parameters.empty()){
+void ZuckerMaas::initializeParameterVector(int size){
+    if(theta.empty()){
         //create parameter vector
-        parameters.reserve(size);
+        theta.reserve(size);
         for(int i = 0; i<size; ++i){
             //parameters.push_back(-1 + (float)rand()/((float)RAND_MAX/(1+1)));
-            parameters.push_back(0);
+            theta.push_back(0);
         }
         //debug for a vector that performs reasonably well
         //set weight for numlinesremoved and number of holes
-        parameters[22-1] = 1; //linesremoved
-        parameters[22-2] = -1; //number of holes
+        theta[22-1] = 1; //linesremoved
+        theta[22-2] = -1; //number of holes
     }
-    return parameters;
 }
