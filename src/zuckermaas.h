@@ -7,7 +7,7 @@
 
 class ZuckerMaas : public BossOfBoris {
 private:
-    std::vector<float> parameters;
+    std::vector<float> theta; //policy parameters
     std::vector<float> zt; //current momentum
     std::vector<float> delta; //current step
     const float alpha; //learning rate 0.2 a good value?
@@ -20,7 +20,7 @@ public:
 private:
     float evaluateAction(BorisGoal action);
     std::vector<float> getFeatures(const State& currentState, const BorisGoal& action);
-    std::vector<float> getParameterVector(int size);
+    void initializeParameterVector(int size);
     float calculateQuality(const std::vector<float> &parameterVector, const std::vector<float> &features);
 };
 
