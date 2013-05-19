@@ -12,6 +12,7 @@ private:
     std::vector<TetrixShape> tiles;
 
 public:
+
     //create a new empty board
     BoardModel(int width, int height);
 
@@ -27,6 +28,7 @@ public:
     int getColumnHeightDifference(int x1, int x2) const;
     int getMaximumHeight() const;
     std::vector<double> getFeatures() const;
+    size_t getNumFeatures() const {return getFeatures().size();}
 
 
     //check if there are no conflicting or pieces, or pieces outside the board
