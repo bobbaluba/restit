@@ -6,9 +6,9 @@
 class Reinforcer {
 private:
     //StochyBoss greedyPlayer;
-    std::vector<float> parameterVector;
-    std::vector<float> momentum;
-    float beta; //falloff for momentum
+    std::vector<double> parameterVector;
+    std::vector<double> momentum;
+    double beta; //falloff for momentum
 public:
     Reinforcer();
 private:

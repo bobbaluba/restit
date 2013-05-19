@@ -5,18 +5,18 @@
 
 class StochyBoss : public BossOfBoris {
 private:
-    std::vector<float> parameterVector;
-    std::vector<float> delta;
-    const float learningRate;
+    std::vector<double> parameterVector;
+    std::vector<double> delta;
+    const double learningRate;
 public:
-    StochyBoss(float learningRate);
+    StochyBoss(double learningRate);
     virtual BorisGoal getGoal(const State &currentState);
-    void setParameterVector(const std::vector<float> vector){ parameterVector = vector; }
+    void setParameterVector(const std::vector<double> vector){ parameterVector = vector; }
 private:
-    float evaluateAction(BorisGoal action);
-    std::vector<float> getFeatures(const State& currentState, const BorisGoal& action);
-    std::vector<float> getParameterVector(int size);
-    float calculateQuality(const std::vector<float> parameterVector, const std::vector<float> features);
+    double evaluateAction(BorisGoal action);
+    std::vector<double> getFeatures(const State& currentState, const BorisGoal& action);
+    std::vector<double> getParameterVector(int size);
+    double calculateQuality(const std::vector<double> parameterVector, const std::vector<double> features);
 };
 
 #endif // STOCHYBOSS_H

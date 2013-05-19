@@ -4,23 +4,23 @@
 #include <limits>
 
 
-StochyBoss::StochyBoss(float learningRate) : learningRate(learningRate){
+StochyBoss::StochyBoss(double learningRate) : learningRate(learningRate){
 }
 
 BorisGoal StochyBoss::getGoal(const State &currentState){
 
     std::vector<BorisGoal> actions = currentState.getLegalBorisGoals();
-    float maxScore = std::numeric_limits<float>::lowest();
+    double maxScore = std::numeric_limits<double>::lowest();
     BorisGoal bestAction = actions[0];
     for(std::vector<BorisGoal>::iterator it = actions.begin(); it!=actions.end(); ++it){
         const BorisGoal& action = *it;
 
-        std::vector<float> features = getFeatures(currentState, action);
+        std::vector<double> features = getFeatures(currentState, action);
 
         //create parameter vector
-        std::vector<float> parameterVector = getParameterVector(features.size());
+        std::vector<double> parameterVector = getParameterVector(features.size());
 
-        float score = calculateQuality(parameterVector, features);
+        double score = calculateQuality(parameterVector, features);
 
         if(score>maxScore){
             maxScore = score;
@@ -30,35 +30,35 @@ BorisGoal StochyBoss::getGoal(const State &currentState){
     return bestAction;
 }
 
-float StochyBoss::calculateQuality(const std::vector<float> parameterVector, const std::vector<float> features){
+double StochyBoss::calculateQuality(const std::vector<double> parameterVector, const std::vector<double> features){
     //evaluate state
-    float score = 0;
+    double score = 0;
     for(unsigned int i = 0; i < features.size(); ++i){
         score += parameterVector[i] * features[i];
     }
     return score;
 }
 
-std::vector<float> StochyBoss::getFeatures(const State& currentState, const BorisGoal& action){
+std::vector<double> StochyBoss::getFeatures(const State& currentState, const BorisGoal& action){
     //gather features
     int linesRemoved;
     BoardModel nextBoard = currentState.applyAction(action, &linesRemoved);
-    std::vector<float> features = nextBoard.getFeatures();
+    std::vector<double> features = nextBoard.getFeatures();
     features.push_back(linesRemoved);
     return features;
 }
 
-std::vector<float> StochyBoss::getParameterVector(int size){
+std::vector<double> StochyBoss::getParameterVector(int size){
     if(parameterVector.empty()){
         //create parameter vector
         parameterVector.reserve(size);
         for(int i = 0; i<size; ++i){
-            parameterVector.push_back(-1 + (float)rand()/((float)RAND_MAX/(1+1)));
+            parameterVector.push_back(-1 + (double)rand()/((double)RAND_MAX/(1+1)));
         }
         //debug for a vector that performs reasonably well
         //set weight for numlinesremoved and number of holes
-        //parameterVector[22-1] = 1; //linesremoved
-        //parameterVector[22-2] = -1; //number of holes
+        //parameterVector[parameterVectro.size()-1] = 1; //linesremoved
+        //parameterVector[parameterVectro.size()-2] = -1; //number of holes
     }
     return parameterVector;
 }

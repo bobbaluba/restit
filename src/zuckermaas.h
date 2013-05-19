@@ -5,23 +5,24 @@
 
 #include <vector>
 
+typedef std::vector<double> Vector;
+
 class ZuckerMaas : public BossOfBoris {
 private:
-    std::vector<float> theta; //policy parameters
-    std::vector<float> zt; //current momentum
-    std::vector<float> delta; //current step
-    const float alpha; //learning rate 0.2 a good value?
-    const float beta; //momemntum importance factor
+    Vector theta; //policy parameters
+    Vector zt; //current momentum
+    Vector delta; //current step
+    const double alpha; //learning rate 0.2 a good value?
+    const double beta; //momemntum importance factor
     int t;
 public:
-    ZuckerMaas(float alpha);
+    ZuckerMaas(unsigned int boardFeatures, double learningRate = 0.05, double momentum = 0.9);
     virtual BorisGoal getGoal(const State &currentState);
-    //void setParameterVector(const std::vector<float> vector){ parameters = vector; }
+    //void setParameterVector(const Vector vector){ parameters = vector; }
 private:
-    float evaluateAction(BorisGoal action);
-    std::vector<float> getFeatures(const State& currentState, const BorisGoal& action);
-    void initializeParameterVector(int size);
-    float calculateQuality(const std::vector<float> &parameterVector, const std::vector<float> &features);
+    double evaluateAction(BorisGoal action);
+    void initializeTheta(int size);
+    double calculateQuality(const Vector &parameterVector, const Vector &features);
 };
 
 #endif // ZUCKERMAAS_H
