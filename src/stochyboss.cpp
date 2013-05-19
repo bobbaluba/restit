@@ -57,8 +57,8 @@ std::vector<double> StochyBoss::getParameterVector(int size){
         }
         //debug for a vector that performs reasonably well
         //set weight for numlinesremoved and number of holes
-        //parameterVector[22-1] = 1; //linesremoved
-        //parameterVector[22-2] = -1; //number of holes
+        //parameterVector[parameterVectro.size()-1] = 1; //linesremoved
+        //parameterVector[parameterVectro.size()-2] = -1; //number of holes
     }
     return parameterVector;
 }
