@@ -82,7 +82,7 @@ std::ostream& operator << (std::ostream& outs, const Vector& rhs){
     //TODO restore original precision
 }
 
-ZuckerMaas::ZuckerMaas(double alpha, unsigned int boardFeatures):zt(boardFeatures+1, 0), delta(boardFeatures+1, 0), alpha(0.1), beta(0.5), t(0){
+ZuckerMaas::ZuckerMaas(unsigned int boardFeatures, double learningRate, double momentum):zt(boardFeatures+1, 0), delta(boardFeatures+1, 0), alpha(learningRate), beta(momentum), t(0){
     initializeTheta(boardFeatures+1);
 }
 
