@@ -82,8 +82,8 @@ std::ostream& operator << (std::ostream& outs, const Vector& rhs){
     //TODO restore original precision
 }
 
-ZuckerMaas::ZuckerMaas(double alpha):zt(22, 0), delta(22, 0), alpha(0.1), beta(0.5), t(0){
-    initializeParameterVector(22);
+ZuckerMaas::ZuckerMaas(double alpha, unsigned int boardFeatures):zt(boardFeatures+1, 0), delta(boardFeatures+1, 0), alpha(0.1), beta(0.5), t(0){
+    initializeTheta(boardFeatures+1);
 }
 
 BorisGoal ZuckerMaas::getGoal(const State &currentState){
@@ -124,7 +124,7 @@ double Z(const Vector theta, const State& x){
 //grad Z
 Vector grad_Z(const Vector theta, const State& x){
     std::vector<BorisGoal> Us = U(x);
-    Vector gradZ(22, 0);
+    Vector gradZ(theta.size(), 0);
     for(unsigned int j=0; j<Us.size(); ++j){
         Vector gradlj = grad_l(theta, x, Us[j]);
         for(unsigned int i=0; i<gradlj.size(); ++i){
@@ -250,7 +250,7 @@ BorisGoal pie_hard(const State &x, const Vector &theta){
     return bestAction;
 }
 
-void ZuckerMaas::initializeParameterVector(int size){
+void ZuckerMaas::initializeTheta(int size){
     const bool goodParameters = false;
     if(theta.empty()){
         theta.reserve(size);
@@ -261,8 +261,8 @@ void ZuckerMaas::initializeParameterVector(int size){
             }
             //debug for a vector that performs reasonably well
             //set weight for numlinesremoved and number of holes
-            theta[22-1] = 1; //linesremoved
-            theta[22-2] = -1; //number of holes
+            theta[theta.size()-1] = 1; //linesremoved
+            theta[theta.size()-2] = -1; //number of holes
         } else {
             //create random parameter vector
             for(int i = 0; i<size; ++i){

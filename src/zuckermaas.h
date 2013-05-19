@@ -16,13 +16,12 @@ private:
     const double beta; //momemntum importance factor
     int t;
 public:
-    ZuckerMaas(double alpha);
+    ZuckerMaas(double alpha, unsigned int boardFeatures);
     virtual BorisGoal getGoal(const State &currentState);
     //void setParameterVector(const Vector vector){ parameters = vector; }
 private:
     double evaluateAction(BorisGoal action);
-    Vector getFeatures(const State& currentState, const BorisGoal& action);
-    void initializeParameterVector(int size);
+    void initializeTheta(int size);
     double calculateQuality(const Vector &parameterVector, const Vector &features);
 };
 
