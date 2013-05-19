@@ -5,7 +5,7 @@
 
 class Policy{
 public:
-    //virtual float evaluate(State state, Action action) = 0;
+    //virtual double evaluate(State state, Action action) = 0;
 };
 
 #endif // POLICY_H
