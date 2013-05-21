@@ -67,7 +67,7 @@ std::vector<double> operator- (const std::vector<double>& rhs){
 std::vector<double> operator- (const std::vector<double>& lhs, const std::vector<double>& rhs){
     return lhs + (-rhs);
 }
-ZuckerMaas::ZuckerMaas(double alpha):zt(22, 0), delta(22, 0), alpha(0.2), beta(0.5), t(0){
+ZuckerMaas::ZuckerMaas(double alpha):zt(22, 0), delta(22, 0), alpha(0.1), beta(0.5), t(0){
     initializeParameterVector(22);
 }
 
@@ -248,7 +248,8 @@ void ZuckerMaas::initializeParameterVector(int size){
         } else {
             //create random parameter vector
             for(int i = 0; i<size; ++i){
-                theta.push_back(-1 + (double)rand()/((double)RAND_MAX/(1+1)));
+                //theta.push_back(-1 + (double)rand()/((double)RAND_MAX/(1+1)));
+                theta.push_back(0);
             }
         }
     }
