@@ -74,14 +74,10 @@ public slots:
     void pause(bool checked);
     void setAISpeed(int speed);
     void setAutoPlay(bool value);
-    void setInvisiblePlay(bool value);
 
 signals:
     void levelChanged(int level);
     void linesRemovedChanged(int numLines);
-    void maxLinesRemovedChanged(int numGames);
-    void avgLinesRemovedChanged(double lines);
-    void gamesPlayedChanged(int numGames);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -104,10 +100,6 @@ private:
     QPointer<QLabel> nextPieceLabel;
     //int score;
 
-    bool invisible;
-    int gamesPlayed;
-    int maxLinesRemoved;
-    int totalLinesRemoved;
 
     GameModel gameModel; //model
     ComplexTetris tetris; //controller

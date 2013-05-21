@@ -45,15 +45,11 @@
 #include "tetrixboard.h"
 
 TetrixBoard::TetrixBoard(QWidget *parent) : QFrame(parent),
-    invisible(false),
-    gamesPlayed(0),
-    maxLinesRemoved(0),
-    totalLinesRemoved(0),
     gameModel(BoardWidth, BoardHeight),
     tetris(&gameModel),
     locoBoss(BoardWidth),
     stochyBoss(0.2), //learning rate, put in named constant
-    zuckerBoss(gameModel.getBoard().getNumFeatures()),
+    zuckerBoss(0.02),
     boris(&zuckerBoss, &tetris),
     borisIsPlaying(true),
     borisInterval(0),
@@ -81,28 +77,10 @@ QSize TetrixBoard::minimumSizeHint() const
 }
 
 void TetrixBoard::start(){
-    emit gamesPlayedChanged(gamesPlayed);
-
-    //update total lines
-    if(tetris.getLinesRemoved() > 0){
-        totalLinesRemoved += tetris.getLinesRemoved();
-    }
-
-    //update average
-    emit avgLinesRemovedChanged(double(totalLinesRemoved) / double(gamesPlayed));
-
-    //update maximum if appropriate
-    if(tetris.getLinesRemoved() > maxLinesRemoved){
-        maxLinesRemoved = tetris.getLinesRemoved();
-        emit maxLinesRemovedChanged(maxLinesRemoved);
-    }
-
     tetris.startNewGame();
     timer.start(tetris.getTimeoutTime(), this);
     borisTimer.start(borisInterval, this);
     refreshGUI();
-    gamesPlayed++;
-
 }
 
 void TetrixBoard::pause(bool checked){
@@ -117,13 +95,6 @@ void TetrixBoard::setAISpeed(int speed){
 
 void TetrixBoard::setAutoPlay(bool value){
     autoPlay = value;
-    if(autoPlay){
-        start();
-    }
-}
-
-void TetrixBoard::setInvisiblePlay(bool value){
-    invisible = value;
 }
 
 
@@ -197,14 +168,14 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
     if (event->timerId() == timer.timerId()) {
         tetris.timeoutElapsed();
         timer.start(tetris.getTimeoutTime(), this);
-        if(!invisible)refreshGUI();
+        refreshGUI();
         if (!tetris.isStarted() && autoPlay){
             start();
         }
     } else if (event->timerId() == borisTimer.timerId()) {
         if(tetris.isStarted() && !tetris.isPaused() && borisIsPlaying){
             boris.tick();
-            if(!invisible)refreshGUI();
+            refreshGUI();
         }
         if (!tetris.isStarted() && autoPlay){
             start();

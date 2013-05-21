@@ -59,10 +59,6 @@ TetrixWindow::TetrixWindow()
     linesLcd = new QLCDNumber(5);
     linesLcd->setSegmentStyle(QLCDNumber::Filled);
 
-    QLCDNumber* tetrominoesPlayedLCD = new QLCDNumber(5);
-    tetrominoesPlayedLCD->setSegmentStyle(QLCDNumber::Filled);
-
-
     startButton = new QPushButton(tr("&Start"));
     startButton->setFocusPolicy(Qt::NoFocus);
     quitButton = new QPushButton(tr("&Quit"));
@@ -76,101 +72,59 @@ TetrixWindow::TetrixWindow()
     QRadioButton *noneRadio = new QRadioButton(tr("None"));
     QRadioButton *greedyRadio = new QRadioButton(tr("Greedy"));
     QRadioButton *superAwesomeRadio = new QRadioButton(tr("Super Awesome"));
-    noneRadio->setChecked(true);
 
     QCheckBox *autoPlayCheckBox = new QCheckBox(tr("Auto Play"));
 
-    QCheckBox *invisiblePlayCheckBox = new QCheckBox(tr("Play without gui"));
+    noneRadio->setChecked(true);
+
+    QVBoxLayout *vbox = new QVBoxLayout;
+    vbox->addWidget(noneRadio);
+    vbox->addWidget(greedyRadio);
+    vbox->addWidget(superAwesomeRadio);
+
+    vbox->addWidget(autoPlayCheckBox);
+
+    //vbox->addStretch(1);
+
+    aiSelector->setLayout(vbox);
+
+
+
+
 
     QSlider *speedSlider = new QSlider(Qt::Horizontal, 0);
     speedSlider->setRange(0,100);
     speedSlider->setValue(100);
 
-
-    QVBoxLayout *aiSelectorLayout = new QVBoxLayout;
-    aiSelectorLayout->addWidget(noneRadio);
-    aiSelectorLayout->addWidget(greedyRadio);
-    aiSelectorLayout->addWidget(superAwesomeRadio);
-    aiSelectorLayout->addWidget(autoPlayCheckBox);
-    aiSelectorLayout->addWidget(invisiblePlayCheckBox);
-    aiSelectorLayout->addWidget(speedSlider);
-
-    //vbox->addStretch(1);
-
-    aiSelector->setLayout(aiSelectorLayout);
-
-    //statistics box
-    QGroupBox *aiStatistics = new QGroupBox(tr("Statistics"));
-
-    QLabel *numGamesDescription = new QLabel(tr("Games played"));
-    QLCDNumber *numGames = new QLCDNumber(7);
-
-    QLabel *totalMovesDescription = new QLabel(tr("Total moves"));
-    QLCDNumber *totalMoves = new QLCDNumber(7);
-
-    QLabel *maxLinesRemovedDescription = new QLabel(tr("Maximum lines removed"));
-    QLCDNumber *maxLinesRemoved = new QLCDNumber(7);
-
-    QLabel *avgLinesRemovedDescription = new QLabel(tr("Average lines removed"));
-    QLCDNumber *avgLinesRemoved = new QLCDNumber(7);
-
-    QGridLayout *aiStatisticsLayout = new QGridLayout;
-
-    aiStatisticsLayout->addWidget(numGamesDescription, 0, 0);
-    aiStatisticsLayout->addWidget(numGames, 0, 1);
-    aiStatisticsLayout->addWidget(totalMovesDescription, 1, 0);
-    aiStatisticsLayout->addWidget(totalMoves, 1, 1);
-    aiStatisticsLayout->addWidget(maxLinesRemovedDescription, 2, 0);
-    aiStatisticsLayout->addWidget(maxLinesRemoved, 2, 1);
-    aiStatisticsLayout->addWidget(avgLinesRemovedDescription, 3, 0);
-    aiStatisticsLayout->addWidget(avgLinesRemoved, 3, 1);
-
-    aiStatistics->setLayout(aiStatisticsLayout);
-
-
-    //tetris
     connect(startButton, SIGNAL(clicked()), board, SLOT(start()));
     connect(quitButton , SIGNAL(clicked()), qApp, SLOT(quit()));
     connect(pauseButton, SIGNAL(toggled(bool)), board, SLOT(pause(bool)));
     //connect(board, SIGNAL(scoreChanged(int)), scoreLcd, SLOT(display(int)));
     connect(board, SIGNAL(levelChanged(int)), levelLcd, SLOT(display(int)));
     connect(board, SIGNAL(linesRemovedChanged(int)), linesLcd, SLOT(display(int)));
-
-    //connect ai stuff
     connect(speedSlider, SIGNAL(valueChanged(int)), board, SLOT(setAISpeed(int)));
+
     connect(autoPlayCheckBox, SIGNAL(toggled(bool)), board, SLOT(setAutoPlay(bool)));
-    connect(invisiblePlayCheckBox, SIGNAL(toggled(bool)), board, SLOT(setInvisiblePlay(bool)));
-    connect(board, SIGNAL(gamesPlayedChanged(int)), numGames, SLOT(display(int)));
-    connect(board, SIGNAL(maxLinesRemovedChanged(int)), maxLinesRemoved, SLOT(display(int)));
-    connect(board, SIGNAL(avgLinesRemovedChanged(double)), avgLinesRemoved, SLOT(display(double)));
 
-    //tetris
-    QGridLayout *tetrisLayout = new QGridLayout;
+
+    QGridLayout *layout = new QGridLayout;
     //layout->addWidget(createLabel(tr("NEXT")), 0, 0);
-    tetrisLayout->addWidget(nextPieceLabel, 1, 0);
-    tetrisLayout->addWidget(createLabel(tr("LEVEL")), 2, 0);
-    tetrisLayout->addWidget(levelLcd, 3, 0);
-    tetrisLayout->addWidget(startButton, 4, 0);
-    tetrisLayout->addWidget(board, 0, 1, 6, 1);
+    layout->addWidget(nextPieceLabel, 1, 0);
+    layout->addWidget(createLabel(tr("LEVEL")), 2, 0);
+    layout->addWidget(levelLcd, 3, 0);
+    layout->addWidget(startButton, 4, 0);
+    layout->addWidget(board, 0, 1, 6, 1);
     //layout->addWidget(createLabel(tr("SCORE")), 0, 2);
-    tetrisLayout->addWidget(createLabel(tr("LINES REMOVED")), 2, 2);
-    tetrisLayout->addWidget(linesLcd, 3, 2);
-    tetrisLayout->addWidget(quitButton, 4, 2);
-    tetrisLayout->addWidget(pauseButton, 5, 2);
-
-    //our ai stuff
-    QGridLayout *AILayout = new QGridLayout;
-    AILayout->addWidget(aiSelector, 1, 0);
-    AILayout->addWidget(aiStatistics, 2, 0);
-
-    //combine layouts
-    QHBoxLayout *boxLayout = new QHBoxLayout;
-    boxLayout->addLayout(tetrisLayout, 3.5);
-    boxLayout->addLayout(AILayout, 1.5);
-    setLayout(boxLayout);
+    layout->addWidget(aiSelector, 1, 2);
+    layout->addWidget(createLabel(tr("LINES REMOVED")), 2, 2);
+    layout->addWidget(linesLcd, 3, 2);
+    layout->addWidget(quitButton, 4, 2);
+    layout->addWidget(pauseButton, 5, 2);
+    layout->addWidget(speedSlider, 6, 0, 1, 3);
+    setLayout(layout);
 
     setWindowTitle(tr("Tetrix"));
-    resize(1100, 500);
+    resize(550, 370);
 }
 
 QLabel *TetrixWindow::createLabel(const QString &text)
