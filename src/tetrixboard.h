@@ -53,6 +53,7 @@
 #include <QFrame>
 #include <QPointer>
 #include <complextetris.h>
+#include <array>
 
 
 class QLabel;
@@ -81,6 +82,7 @@ signals:
     void linesRemovedChanged(int numLines);
     void maxLinesRemovedChanged(int numGames);
     void avgLinesRemovedChanged(double lines);
+    void movingAvgLinesChanged(double lines);
     void gamesPlayedChanged(int numGames);
 
 protected:
@@ -99,6 +101,7 @@ private:
     void showNextPiece();
     void refreshGUI();
     void drawSquare(QPainter &painter, int x, int y, TetrixShape shape);
+    void onGameOver();
 
     QBasicTimer timer, borisTimer;
     QPointer<QLabel> nextPieceLabel;
@@ -108,6 +111,8 @@ private:
     int gamesPlayed;
     int maxLinesRemoved;
     int totalLinesRemoved;
+    enum { NumGamesMovingAverage = 10 };
+    std::array<int, NumGamesMovingAverage> lastLinesRemoved;
 
     GameModel gameModel; //model
     ComplexTetris tetris; //controller

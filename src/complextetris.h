@@ -12,6 +12,7 @@ private:
     int curY;
     bool started;
     bool paused;
+    bool gameOver;
 public:
     ComplexTetris(GameModel* game);
     bool rotateCCW();
@@ -26,7 +27,8 @@ public:
     //getters
     State getState(){return State(game->getBoard(), game->getCurrentPiece());}
     bool isPaused() const { return paused; }
-    bool isStarted() const { return started; }
+    bool isGameOver() const { return gameOver; }
+    bool hasStarted() const { return started; }
     int getLinesRemoved() const { return numLinesRemoved; }
     int getLevel() const { return 1 + numLinesRemoved / 10; }
     int getTimeoutTime() const { return 1000 / getLevel(); }

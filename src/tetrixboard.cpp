@@ -81,8 +81,15 @@ QSize TetrixBoard::minimumSizeHint() const
 }
 
 void TetrixBoard::start(){
-    emit gamesPlayedChanged(gamesPlayed);
+    tetris.startNewGame();
+    timer.start(tetris.getTimeoutTime(), this);
+    borisTimer.start(borisInterval, this);
+    refreshGUI();
+}
 
+void TetrixBoard::onGameOver(){
+    gamesPlayed++;
+    emit gamesPlayedChanged(gamesPlayed);
     //update total lines
     if(tetris.getLinesRemoved() > 0){
         totalLinesRemoved += tetris.getLinesRemoved();
@@ -96,13 +103,6 @@ void TetrixBoard::start(){
         maxLinesRemoved = tetris.getLinesRemoved();
         emit maxLinesRemovedChanged(maxLinesRemoved);
     }
-
-    tetris.startNewGame();
-    timer.start(tetris.getTimeoutTime(), this);
-    borisTimer.start(borisInterval, this);
-    refreshGUI();
-    gamesPlayed++;
-
 }
 
 void TetrixBoard::pause(bool checked){
@@ -165,7 +165,7 @@ void TetrixBoard::paintEvent(QPaintEvent *event)
 
 void TetrixBoard::keyPressEvent(QKeyEvent *event)
 {
-    if (!tetris.isStarted() || tetris.isPaused()) {
+    if (!tetris.hasStarted() || tetris.isPaused()) {
         QFrame::keyPressEvent(event);
         return;
     }
@@ -198,19 +198,22 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
         tetris.timeoutElapsed();
         timer.start(tetris.getTimeoutTime(), this);
         if(!invisible)refreshGUI();
-        if (!tetris.isStarted() && autoPlay){
-            start();
-        }
     } else if (event->timerId() == borisTimer.timerId()) {
-        if(tetris.isStarted() && !tetris.isPaused() && borisIsPlaying){
+        if(tetris.hasStarted() && !tetris.isPaused() && borisIsPlaying){
             boris.tick();
             if(!invisible)refreshGUI();
         }
-        if (!tetris.isStarted() && autoPlay){
+        if (!tetris.hasStarted() && autoPlay){
             start();
         }
     } else {
         QFrame::timerEvent(event);
+    }
+    if(tetris.isGameOver()){
+        onGameOver();
+        if (autoPlay){
+            start();
+        }
     }
 }
 
