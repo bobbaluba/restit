@@ -98,7 +98,20 @@ void TetrixBoard::onGameOver(){
     }
 
     //update average
-    emit avgLinesRemovedChanged(double(totalLinesRemoved) / double(gamesPlayed));
+    double currentAvg = double(totalLinesRemoved) / double(gamesPlayed);
+    emit avgLinesRemovedChanged(currentAvg);
+
+    //update moving average
+    lastLinesRemoved[gamesPlayed % NumGamesMovingAverage] = tetris.getLinesRemoved();
+    if(gamesPlayed >= 10){
+        double sumAvgGames = 0;
+        for(int i = 0; i < NumGamesMovingAverage; ++i){
+            sumAvgGames += lastLinesRemoved[i];
+        }
+        double movingAvg = sumAvgGames/double(NumGamesMovingAverage);
+        emit movingAvgLinesChanged(movingAvg);
+    }
+
 
     //update maximum if appropriate
     if(tetris.getLinesRemoved() > maxLinesRemoved){

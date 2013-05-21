@@ -252,7 +252,7 @@ BorisGoal pie_hard(const State &x, const Vector &theta){
 }
 
 void ZuckerMaas::initializeTheta(int size){
-    const bool goodParameters = false;
+    const bool goodParameters = true;
     if(theta.empty()){
         theta.reserve(size);
         if(goodParameters){
