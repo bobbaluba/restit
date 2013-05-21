@@ -114,6 +114,9 @@ TetrixWindow::TetrixWindow()
     QLabel *avgLinesRemovedDescription = new QLabel(tr("Average lines removed"));
     QLCDNumber *avgLinesRemoved = new QLCDNumber(7);
 
+    QLabel *movingAvgLinesRemovedDescription = new QLabel(tr("Moving average lines removed"));
+    QLCDNumber *movingAvgLinesRemoved = new QLCDNumber(7);
+
     QGridLayout *aiStatisticsLayout = new QGridLayout;
 
     aiStatisticsLayout->addWidget(numGamesDescription, 0, 0);
@@ -124,6 +127,8 @@ TetrixWindow::TetrixWindow()
     aiStatisticsLayout->addWidget(maxLinesRemoved, 2, 1);
     aiStatisticsLayout->addWidget(avgLinesRemovedDescription, 3, 0);
     aiStatisticsLayout->addWidget(avgLinesRemoved, 3, 1);
+    aiStatisticsLayout->addWidget(movingAvgLinesRemovedDescription, 4, 0);
+    aiStatisticsLayout->addWidget(movingAvgLinesRemoved, 4, 1);
 
     aiStatistics->setLayout(aiStatisticsLayout);
 
@@ -143,6 +148,7 @@ TetrixWindow::TetrixWindow()
     connect(board, SIGNAL(gamesPlayedChanged(int)), numGames, SLOT(display(int)));
     connect(board, SIGNAL(maxLinesRemovedChanged(int)), maxLinesRemoved, SLOT(display(int)));
     connect(board, SIGNAL(avgLinesRemovedChanged(double)), avgLinesRemoved, SLOT(display(double)));
+    connect(board, SIGNAL(movingAvgLinesChanged(double)), movingAvgLinesRemoved, SLOT(display(double)));
 
     //tetris
     QGridLayout *tetrisLayout = new QGridLayout;

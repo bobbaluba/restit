@@ -51,6 +51,7 @@ TetrixBoard::TetrixBoard(QWidget *parent) : QFrame(parent),
     totalLinesRemoved(0),
     gameModel(BoardWidth, BoardHeight),
     tetris(&gameModel),
+    gameOver(false),
     locoBoss(BoardWidth),
     stochyBoss(0.2), //learning rate, put in named constant
     zuckerBoss(gameModel.getBoard().getNumFeatures()),
@@ -81,28 +82,42 @@ QSize TetrixBoard::minimumSizeHint() const
 }
 
 void TetrixBoard::start(){
-    emit gamesPlayedChanged(gamesPlayed);
+    gameOver = false;
+    tetris.startNewGame();
+    timer.start(tetris.getTimeoutTime(), this);
+    borisTimer.start(borisInterval, this);
+    refreshGUI();
+}
 
+void TetrixBoard::onGameOver(){
+    gamesPlayed++;
+    emit gamesPlayedChanged(gamesPlayed);
     //update total lines
     if(tetris.getLinesRemoved() > 0){
         totalLinesRemoved += tetris.getLinesRemoved();
     }
 
     //update average
-    emit avgLinesRemovedChanged(double(totalLinesRemoved) / double(gamesPlayed));
+    double currentAvg = double(totalLinesRemoved) / double(gamesPlayed);
+    emit avgLinesRemovedChanged(currentAvg);
+
+    //update moving average
+    lastLinesRemoved[gamesPlayed % NumGamesMovingAverage] = tetris.getLinesRemoved();
+    if(gamesPlayed >= 10){
+        double sumAvgGames = 0;
+        for(int i = 0; i < NumGamesMovingAverage; ++i){
+            sumAvgGames += lastLinesRemoved[i];
+        }
+        double movingAvg = sumAvgGames/double(NumGamesMovingAverage);
+        emit movingAvgLinesChanged(movingAvg);
+    }
+
 
     //update maximum if appropriate
     if(tetris.getLinesRemoved() > maxLinesRemoved){
         maxLinesRemoved = tetris.getLinesRemoved();
         emit maxLinesRemovedChanged(maxLinesRemoved);
     }
-
-    tetris.startNewGame();
-    timer.start(tetris.getTimeoutTime(), this);
-    borisTimer.start(borisInterval, this);
-    refreshGUI();
-    gamesPlayed++;
-
 }
 
 void TetrixBoard::pause(bool checked){
@@ -165,7 +180,7 @@ void TetrixBoard::paintEvent(QPaintEvent *event)
 
 void TetrixBoard::keyPressEvent(QKeyEvent *event)
 {
-    if (!tetris.isStarted() || tetris.isPaused()) {
+    if (!tetris.hasStarted() || tetris.isPaused()) {
         QFrame::keyPressEvent(event);
         return;
     }
@@ -198,19 +213,23 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
         tetris.timeoutElapsed();
         timer.start(tetris.getTimeoutTime(), this);
         if(!invisible)refreshGUI();
-        if (!tetris.isStarted() && autoPlay){
-            start();
-        }
     } else if (event->timerId() == borisTimer.timerId()) {
-        if(tetris.isStarted() && !tetris.isPaused() && borisIsPlaying){
+        if(tetris.hasStarted() && !tetris.isGameOver() && !tetris.isPaused() && borisIsPlaying){
             boris.tick();
             if(!invisible)refreshGUI();
         }
-        if (!tetris.isStarted() && autoPlay){
+        if (!tetris.hasStarted() && autoPlay){
             start();
         }
     } else {
         QFrame::timerEvent(event);
+    }
+    if(tetris.isGameOver() && !gameOver){
+        gameOver = true;
+        onGameOver();
+        if (autoPlay){
+            start();
+        }
     }
 }
 

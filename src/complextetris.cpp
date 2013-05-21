@@ -4,7 +4,8 @@ ComplexTetris::ComplexTetris(GameModel *game):
     game(game),
     numLinesRemoved(0),
     started(false),
-    paused(false)
+    paused(false),
+    gameOver(false)
 {
     TetrixPiece piece = TetrixPiece::getRandomPiece();
     game->setNextPiece(piece);
@@ -39,6 +40,7 @@ void ComplexTetris::drop(){
 void ComplexTetris::startNewGame(){
     paused = false;
     started = true;
+    gameOver = false;
     numLinesRemoved = 0;
     BoardModel emptyBoard(game->getWidth(), game->getHeight());
     game->setBoard(emptyBoard);
@@ -47,14 +49,14 @@ void ComplexTetris::startNewGame(){
 }
 
 void ComplexTetris::setPaused(bool paused){
-    if (!isStarted()){
+    if (!hasStarted()){
         return;
     }
     this->paused = paused;
 }
 
 void ComplexTetris::timeoutElapsed(){
-    if(isStarted() && !isPaused()){
+    if(hasStarted() && !isPaused() && !isGameOver()){
         oneLineDown();
     }
 }
@@ -94,6 +96,6 @@ void ComplexTetris::newPiece(){
 
     if (!tryMove(curPiece(), curX, curY)) {
         //game over
-        started = false;
+        gameOver = true;
     }
 }
