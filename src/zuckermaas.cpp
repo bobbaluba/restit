@@ -179,7 +179,7 @@ double q(const Vector theta, const State& x, const BorisGoal& u){
 
 //grad q
 Vector grad_q(const Vector &theta, const State& x, const BorisGoal &u){
-    return -1.0f/double(pow(Z(theta, x),2))*grad_Z(theta, x) * l(theta, x, u) + grad_l(theta, x, u) / Z(theta, x);
+    return -1.0/double(pow(Z(theta, x),2))*grad_Z(theta, x) * l(theta, x, u) + grad_l(theta, x, u) / Z(theta, x);
 }
 
 //f
@@ -222,7 +222,7 @@ BorisGoal pie_soft(const State& x, const Vector &theta){
     std::vector<BorisGoal> Us = x.getLegalBorisGoals();
     assert(!Us.empty());
     double actionValue = double(rand())/double(RAND_MAX);
-    double actionSum = 0.0f;
+    double actionSum = 0.0;
     for(unsigned int i = 0; i<Us.size(); ++i){
         double quality = q(theta, x, Us[i]);
         actionSum += quality;
