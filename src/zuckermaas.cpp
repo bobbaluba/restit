@@ -183,10 +183,14 @@ double r(const State& x, const BorisGoal& u){
 
 //z_t+1
 std::vector<double> z_tplus1(const std::vector<double> &z, double beta, const std::vector<double> &theta, const State& xtplus1, const BorisGoal &utplus1){
-    std::vector<double> ret = beta * z + grad_q(theta, xtplus1, utplus1)/q(theta, xtplus1, utplus1);
-    //if(ret[0]>100000 || ret[0]<-100000){
-    //    beta * z + grad_q(theta, xtplus1, utplus1)/q(theta, xtplus1, utplus1);
-    //}
+    std::vector<double>sum(theta.size(), 0);
+    std::vector<BorisGoal> Us = xtplus1.getLegalBorisGoals();
+    for(unsigned int i = 0; i<Us.size(); ++i){
+        sum = sum + grad_Q(theta,f(xtplus1,Us[i])) * q(theta, xtplus1, Us[i]);
+    }
+    std::vector<double> normalizedGradient = grad_Q(theta, f(xtplus1,utplus1)) - sum;
+    std::vector<double> ret = beta * z + normalizedGradient;
+    //std::vector<double> ret = beta * z + grad_q(theta, xtplus1, utplus1)/q(theta, xtplus1, utplus1);
     return ret;
 }
 
