@@ -16,7 +16,7 @@ private:
     const double beta; //momemntum importance factor
     int t;
 public:
-    ZuckerMaas(unsigned int boardFeatures, double learningRate = 0.05, double momentum = 0.9);
+    ZuckerMaas(unsigned int boardFeatures, double learningRate = 0.1, double momentum = 0.5);
     virtual BorisGoal getGoal(const State &currentState);
     //void setParameterVector(const Vector vector){ parameters = vector; }
 private:

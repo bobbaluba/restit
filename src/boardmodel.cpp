@@ -37,7 +37,7 @@ int BoardModel::getColumnHeightDifference(int x1, int x2) const {
 }
 
 int BoardModel::getMaximumHeight() const {
-    for(int y = height - 1; y<=0; --y){
+    for(int y = height - 1; y>=0; --y){
         for(int x = 0; x < width; ++x){
             if(!isEmpty(x,y)){
                 return y;

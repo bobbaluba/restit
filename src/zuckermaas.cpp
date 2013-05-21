@@ -6,6 +6,7 @@
 #include <iostream>
 #include <iomanip>
 
+
 double Z(const Vector theta, const State& x);
 Vector grad_Z(const Vector theta, const State& x);
 std::vector<BorisGoal> U(const State& x);
@@ -109,6 +110,7 @@ BorisGoal ZuckerMaas::getGoal(const State &currentState){
     return bestAction;
 }
 
+
 //Z
 double Z(const Vector theta, const State& x){
     std::vector<BorisGoal> Us = U(x);
@@ -177,7 +179,7 @@ double q(const Vector theta, const State& x, const BorisGoal& u){
 
 //grad q
 Vector grad_q(const Vector &theta, const State& x, const BorisGoal &u){
-    return -1.0f/double(pow(Z(theta, x),2))*grad_Z(theta, x) * l(theta, x, u) + grad_l(theta, x, u) / Z(theta, x);
+    return -1.0/double(pow(Z(theta, x),2))*grad_Z(theta, x) * l(theta, x, u) + grad_l(theta, x, u) / Z(theta, x);
 }
 
 //f
@@ -199,10 +201,14 @@ double r(const State& x, const BorisGoal& u){
 
 //z_t+1
 Vector z_tplus1(const Vector &z, double beta, const Vector &theta, const State& xtplus1, const BorisGoal &utplus1){
-    Vector ret = beta * z + grad_q(theta, xtplus1, utplus1)/q(theta, xtplus1, utplus1);
-    //if(ret[0]>100000 || ret[0]<-100000){
-    //    beta * z + grad_q(theta, xtplus1, utplus1)/q(theta, xtplus1, utplus1);
-    //}
+    Vector sum(theta.size(), 0);
+    std::vector<BorisGoal> Us = xtplus1.getLegalBorisGoals();
+    for(unsigned int i = 0; i<Us.size(); ++i){
+        sum = sum + grad_Q(theta,f(xtplus1,Us[i])) * q(theta, xtplus1, Us[i]);
+    }
+    Vector normalizedGradient = grad_Q(theta, f(xtplus1,utplus1)) - sum;
+    Vector ret = beta * z + normalizedGradient;
+    //Vector ret = beta * z + grad_q(theta, xtplus1, utplus1)/q(theta, xtplus1, utplus1); //floating point error version
     return ret;
 }
 
@@ -216,7 +222,7 @@ BorisGoal pie_soft(const State& x, const Vector &theta){
     std::vector<BorisGoal> Us = x.getLegalBorisGoals();
     assert(!Us.empty());
     double actionValue = double(rand())/double(RAND_MAX);
-    double actionSum = 0.0f;
+    double actionSum = 0.0;
     for(unsigned int i = 0; i<Us.size(); ++i){
         double quality = q(theta, x, Us[i]);
         actionSum += quality;
@@ -245,7 +251,7 @@ BorisGoal pie_hard(const State &x, const Vector &theta){
 }
 
 void ZuckerMaas::initializeTheta(int size){
-    const bool goodParameters = true;
+    const bool goodParameters = false;
     if(theta.empty()){
         theta.reserve(size);
         if(goodParameters){
@@ -260,7 +266,8 @@ void ZuckerMaas::initializeTheta(int size){
         } else {
             //create random parameter vector
             for(int i = 0; i<size; ++i){
-                theta.push_back(-1 + (double)rand()/((double)RAND_MAX/(1+1)));
+                //theta.push_back(-1 + (double)rand()/((double)RAND_MAX/(1+1)));
+                theta.push_back(0);
             }
         }
     }
