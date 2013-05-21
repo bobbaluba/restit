@@ -56,7 +56,7 @@ void ComplexTetris::setPaused(bool paused){
 }
 
 void ComplexTetris::timeoutElapsed(){
-    if(hasStarted() && !isPaused()){
+    if(hasStarted() && !isPaused() && !isGameOver()){
         oneLineDown();
     }
 }

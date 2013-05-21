@@ -116,6 +116,7 @@ private:
 
     GameModel gameModel; //model
     ComplexTetris tetris; //controller
+    bool gameOver;
 
     //ai
     GreedyBoss greedyBoss;

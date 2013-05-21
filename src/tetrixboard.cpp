@@ -51,6 +51,7 @@ TetrixBoard::TetrixBoard(QWidget *parent) : QFrame(parent),
     totalLinesRemoved(0),
     gameModel(BoardWidth, BoardHeight),
     tetris(&gameModel),
+    gameOver(false),
     locoBoss(BoardWidth),
     stochyBoss(0.2), //learning rate, put in named constant
     zuckerBoss(gameModel.getBoard().getNumFeatures()),
@@ -81,6 +82,7 @@ QSize TetrixBoard::minimumSizeHint() const
 }
 
 void TetrixBoard::start(){
+    gameOver = false;
     tetris.startNewGame();
     timer.start(tetris.getTimeoutTime(), this);
     borisTimer.start(borisInterval, this);
@@ -199,7 +201,7 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
         timer.start(tetris.getTimeoutTime(), this);
         if(!invisible)refreshGUI();
     } else if (event->timerId() == borisTimer.timerId()) {
-        if(tetris.hasStarted() && !tetris.isPaused() && borisIsPlaying){
+        if(tetris.hasStarted() && !tetris.isGameOver() && !tetris.isPaused() && borisIsPlaying){
             boris.tick();
             if(!invisible)refreshGUI();
         }
@@ -209,7 +211,8 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
     } else {
         QFrame::timerEvent(event);
     }
-    if(tetris.isGameOver()){
+    if(tetris.isGameOver() && !gameOver){
+        gameOver = true;
         onGameOver();
         if (autoPlay){
             start();
