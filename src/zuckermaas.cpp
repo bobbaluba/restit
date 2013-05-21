@@ -172,7 +172,8 @@ Vector grad_Q(const Vector theta, Vector features){
 //q
 double q(const Vector theta, const State& x, const BorisGoal& u){
     double quality = l(theta, x, u)/Z(theta, x);
-    assert(quality>0 && quality<=1);
+    assert(quality>=0);
+    assert(quality<=1);
     return quality;
 }
 
