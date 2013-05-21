@@ -50,6 +50,7 @@ TetrixWindow::TetrixWindow()
     nextPieceLabel = new QLabel;
     nextPieceLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
     nextPieceLabel->setAlignment(Qt::AlignCenter);
+    nextPieceLabel->setMinimumHeight(100);
     board->setNextPieceLabel(nextPieceLabel);
 
     scoreLcd = new QLCDNumber(5);
@@ -152,17 +153,20 @@ TetrixWindow::TetrixWindow()
 
     //tetris
     QGridLayout *tetrisLayout = new QGridLayout;
-    //layout->addWidget(createLabel(tr("NEXT")), 0, 0);
-    tetrisLayout->addWidget(nextPieceLabel, 1, 0);
-    tetrisLayout->addWidget(createLabel(tr("LEVEL")), 2, 0);
-    tetrisLayout->addWidget(levelLcd, 3, 0);
-    tetrisLayout->addWidget(startButton, 4, 0);
-    tetrisLayout->addWidget(board, 0, 1, 6, 1);
-    //layout->addWidget(createLabel(tr("SCORE")), 0, 2);
-    tetrisLayout->addWidget(createLabel(tr("LINES REMOVED")), 2, 2);
-    tetrisLayout->addWidget(linesLcd, 3, 2);
-    tetrisLayout->addWidget(quitButton, 4, 2);
-    tetrisLayout->addWidget(pauseButton, 5, 2);
+    tetrisLayout->addWidget(board, 0, 0, 8, 1);
+
+    int y=0;
+    tetrisLayout->addWidget(createLabel(tr("LEVEL")), y++, 1);
+    tetrisLayout->addWidget(levelLcd, y++, 1);
+    tetrisLayout->addWidget(createLabel(tr("LINES")), y++, 1);
+    tetrisLayout->addWidget(linesLcd, y++, 1);
+    tetrisLayout->addWidget(createLabel(tr("NEXT")), y++, 1);
+    tetrisLayout->addWidget(nextPieceLabel, y++, 1);
+    tetrisLayout->addWidget(quitButton, y++, 1);
+    tetrisLayout->addWidget(pauseButton, y++, 1);
+    tetrisLayout->addWidget(startButton, y++, 1);
+    tetrisLayout->setColumnStretch(0, 2);
+    tetrisLayout->setColumnStretch(1, 1);
 
     //our ai stuff
     QGridLayout *AILayout = new QGridLayout;
@@ -174,9 +178,11 @@ TetrixWindow::TetrixWindow()
     boxLayout->addLayout(tetrisLayout, 3.5);
     boxLayout->addLayout(AILayout, 1.5);
     setLayout(boxLayout);
+    boxLayout->setStretch(0, 3);
+    boxLayout->setStretch(1, 1);
 
     setWindowTitle(tr("Tetrix"));
-    resize(1100, 500);
+    resize(700, 500);
 }
 
 QLabel *TetrixWindow::createLabel(const QString &text)
