@@ -3,6 +3,8 @@
 #include <cassert>
 #include <limits>
 #include <cmath>
+#include <iostream>
+#include <iomanip>
 
 
 double Z(const Vector theta, const State& x);
@@ -67,6 +69,19 @@ Vector operator- (const Vector& rhs){
 Vector operator- (const Vector& lhs, const Vector& rhs){
     return lhs + (-rhs);
 }
+
+std::ostream& operator << (std::ostream& outs, const Vector& rhs){
+    outs << std::setprecision(2);
+    outs << "[";
+    for (Vector::const_iterator ii = rhs.begin(); ii != rhs.end(); ++ii)
+    {
+        outs << " " << *ii;
+    }
+    outs << " ]";
+    return outs;
+    //TODO restore original precision
+}
+
 ZuckerMaas::ZuckerMaas(double alpha):zt(22, 0), delta(22, 0), alpha(0.1), beta(0.5), t(0){
     initializeParameterVector(22);
 }
@@ -89,9 +104,12 @@ BorisGoal ZuckerMaas::getGoal(const State &currentState){
 
     theta = theta + (alpha * delta);
 
+    std::cout << theta << std::endl;
+
     ++t;
     return bestAction;
 }
+
 
 //Z
 double Z(const Vector theta, const State& x){
@@ -222,7 +240,7 @@ BorisGoal pie_hard(const State &x, const Vector &theta){
     assert(!Us.empty());
     BorisGoal bestAction = Us[rand()%Us.size()];
     float bestQuality = std::numeric_limits<double>::lowest();
-    for(int i=0; i<Us.size(); ++i){
+    for(unsigned int i=0; i<Us.size(); ++i){
         float quality = Q(theta, f(x, Us[i]));
         if(quality>bestQuality){
             bestQuality = quality;
