@@ -3,7 +3,10 @@ restit
 
 A reinforcement learner for tetris.
 
-Demo on youtube:
+
+Video demonstation
+------------------
+
 [![Youtube video](http://img.youtube.com/vi/eblep6rzEAU/0.jpg)](http://www.youtube.com/watch?v=eblep6rzEAU)
 
 
