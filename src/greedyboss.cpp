@@ -6,14 +6,14 @@ GreedyBoss::GreedyBoss(){
 
 }
 
-BorisGoal GreedyBoss::getGoal(const State &currentState){
-    std::vector<BorisGoal> actions = currentState.getLegalActions();
+SimpleAction GreedyBoss::getGoal(const State &currentState){
+    std::vector<SimpleAction> actions = currentState.getLegalActions();
     int maxNumLinesRemoved;
     int minimumNumberOfHoles = currentState.applyAction(actions[0], &maxNumLinesRemoved).getHoles();
-    BorisGoal bestAction = actions[0];
-    for(std::vector<BorisGoal>::iterator it = actions.begin(); it!=actions.end(); ++it){
+    SimpleAction bestAction = actions[0];
+    for(std::vector<SimpleAction>::iterator it = actions.begin(); it!=actions.end(); ++it){
         //check each move and number of lines removed
-        const BorisGoal& action = *it;
+        const SimpleAction& action = *it;
         int linesRemoved;
         int holes = currentState.applyAction(action, &linesRemoved).getHoles();
         if(linesRemoved>maxNumLinesRemoved){

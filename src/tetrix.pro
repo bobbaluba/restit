@@ -7,7 +7,7 @@ HEADERS       = tetrixboard.h \
     policy.h \
     state.h \
     boris.h \
-    borisgoal.h \
+    simpleaction.h \
     bossofboris.h \
     locoboss.h \
     greedyboss.h \
@@ -25,7 +25,7 @@ HEADERS       = tetrixboard.h \
     policy.cpp \
     state.cpp \
     boris.cpp \
-    borisgoal.cpp \
+    simpleaction.cpp \
     bossofboris.cpp \
     locoboss.cpp \
     greedyboss.cpp \

@@ -9,26 +9,26 @@
 
 double Z(const Vector theta, const State& x);
 Vector grad_Z(const Vector theta, const State& x);
-std::vector<BorisGoal> U(const State& x);
-double l(const Vector theta, const State& x, const BorisGoal& u);
-Vector grad_l(const Vector theta, const State& x, const BorisGoal& u);
+std::vector<SimpleAction> U(const State& x);
+double l(const Vector theta, const State& x, const SimpleAction& u);
+Vector grad_l(const Vector theta, const State& x, const SimpleAction& u);
 double Q(const Vector theta, Vector features);
 Vector grad_Q(const Vector theta, Vector features);
-double q(const Vector theta, const State& x, const BorisGoal& u);
-Vector grad_q(const Vector &theta, const State& x, const BorisGoal &u);
-Vector f(const State& x, const BorisGoal& u);
-double r(const State& x, const BorisGoal& u);
-Vector z_tplus1(const Vector &z, double beta, const Vector &theta, const State& xtplus1, const BorisGoal &utplus1);
-Vector delta_tplus1(const Vector &ztplus1, Vector deltat, const State& xtplus1, const BorisGoal& utplus1, double t);
-BorisGoal pie_hard(const State& x, const Vector &theta);
-BorisGoal pie_soft(const State& x, const Vector &theta);
+double q(const Vector theta, const State& x, const SimpleAction& u);
+Vector grad_q(const Vector &theta, const State& x, const SimpleAction &u);
+Vector f(const State& x, const SimpleAction& u);
+double r(const State& x, const SimpleAction& u);
+Vector z_tplus1(const Vector &z, double beta, const Vector &theta, const State& xtplus1, const SimpleAction &utplus1);
+Vector delta_tplus1(const Vector &ztplus1, Vector deltat, const State& xtplus1, const SimpleAction& utplus1, double t);
+SimpleAction pie_hard(const State& x, const Vector &theta);
+SimpleAction pie_soft(const State& x, const Vector &theta);
 
 ZuckerMaas::ZuckerMaas(unsigned int boardFeatures, double learningRate, double momentum):zt(boardFeatures+1, 0), delta(boardFeatures+1, 0), alpha(learningRate), beta(momentum), t(0){
     initializeTheta(boardFeatures+1);
 }
 
-BorisGoal ZuckerMaas::getGoal(const State &currentState){
-    BorisGoal bestAction;
+SimpleAction ZuckerMaas::getGoal(const State &currentState){
+    SimpleAction bestAction;
     const bool softmax = true;
     if(softmax){
         bestAction = pie_soft(currentState, theta);
@@ -37,7 +37,7 @@ BorisGoal ZuckerMaas::getGoal(const State &currentState){
     }
 
     //reinforce step
-    const BorisGoal &utplus1 = bestAction;
+    const SimpleAction &utplus1 = bestAction;
     const State& xtplus1 = currentState;
 
     zt = z_tplus1(zt,beta,theta,xtplus1,utplus1); //not currentState?
@@ -54,7 +54,7 @@ BorisGoal ZuckerMaas::getGoal(const State &currentState){
 
 //Z
 double Z(const Vector theta, const State& x){
-    std::vector<BorisGoal> Us = U(x);
+    std::vector<SimpleAction> Us = U(x);
     double sum = 0;
     for(unsigned int i=0; i< Us.size(); ++i){
         sum += l(theta, x, Us[i]);
@@ -64,7 +64,7 @@ double Z(const Vector theta, const State& x){
 
 //grad Z
 Vector grad_Z(const Vector theta, const State& x){
-    std::vector<BorisGoal> Us = U(x);
+    std::vector<SimpleAction> Us = U(x);
     Vector gradZ(theta.size(), 0);
     for(unsigned int j=0; j<Us.size(); ++j){
         Vector gradlj = grad_l(theta, x, Us[j]);
@@ -76,17 +76,17 @@ Vector grad_Z(const Vector theta, const State& x){
 }
 
 //U
-std::vector<BorisGoal> U(const State& x){
+std::vector<SimpleAction> U(const State& x){
     return x.getLegalActions();
 }
 
 //l
-double l(const Vector theta, const State& x, const BorisGoal& u){
+double l(const Vector theta, const State& x, const SimpleAction& u){
     return exp(Q(theta, f(x, u)));
 }
 
 //grad l
-Vector grad_l(const Vector theta, const State& x, const BorisGoal& u){
+Vector grad_l(const Vector theta, const State& x, const SimpleAction& u){
     //ugly way of multiplying scalar by a vector
     Vector gradl = grad_Q(theta, f(x, u));
     double scalar = l(theta, x, u);
@@ -111,7 +111,7 @@ Vector grad_Q(const Vector theta, Vector features){
 }
 
 //q
-double q(const Vector theta, const State& x, const BorisGoal& u){
+double q(const Vector theta, const State& x, const SimpleAction& u){
     double quality = l(theta, x, u)/Z(theta, x);
     assert(quality>=0);
     assert(quality<=1);
@@ -120,12 +120,12 @@ double q(const Vector theta, const State& x, const BorisGoal& u){
 
 
 //grad q
-Vector grad_q(const Vector &theta, const State& x, const BorisGoal &u){
+Vector grad_q(const Vector &theta, const State& x, const SimpleAction &u){
     return -1.0/double(pow(Z(theta, x),2))*grad_Z(theta, x) * l(theta, x, u) + grad_l(theta, x, u) / Z(theta, x);
 }
 
 //f
-Vector f(const State& x, const BorisGoal& u){
+Vector f(const State& x, const SimpleAction& u){
     //gather features
     int linesRemoved;
     BoardModel nextBoard = x.applyAction(u, &linesRemoved);
@@ -135,16 +135,16 @@ Vector f(const State& x, const BorisGoal& u){
 }
 
 //r - probably not needed
-double r(const State& x, const BorisGoal& u){
+double r(const State& x, const SimpleAction& u){
     int numLinesRemoved;
     x.applyAction(u, &numLinesRemoved);
     return numLinesRemoved;
 }
 
 //z_t+1
-Vector z_tplus1(const Vector &z, double beta, const Vector &theta, const State& xtplus1, const BorisGoal &utplus1){
+Vector z_tplus1(const Vector &z, double beta, const Vector &theta, const State& xtplus1, const SimpleAction &utplus1){
     Vector sum(theta.size(), 0);
-    std::vector<BorisGoal> Us = xtplus1.getLegalActions();
+    std::vector<SimpleAction> Us = xtplus1.getLegalActions();
     for(unsigned int i = 0; i<Us.size(); ++i){
         sum = sum + grad_Q(theta,f(xtplus1,Us[i])) * q(theta, xtplus1, Us[i]);
     }
@@ -155,13 +155,13 @@ Vector z_tplus1(const Vector &z, double beta, const Vector &theta, const State& 
 }
 
 //delta_t+1
-Vector delta_tplus1(const Vector &ztplus1, Vector deltat, const State& xtplus1, const BorisGoal& utplus1, double t){
+Vector delta_tplus1(const Vector &ztplus1, Vector deltat, const State& xtplus1, const SimpleAction& utplus1, double t){
     Vector ret = deltat + t/(t+1) * (r(xtplus1, utplus1)*ztplus1-deltat);
     return ret;
 }
 
-BorisGoal pie_soft(const State& x, const Vector &theta){
-    std::vector<BorisGoal> Us = x.getLegalActions();
+SimpleAction pie_soft(const State& x, const Vector &theta){
+    std::vector<SimpleAction> Us = x.getLegalActions();
     assert(!Us.empty());
     double actionValue = double(rand())/double(RAND_MAX);
     double actionSum = 0.0;
@@ -176,11 +176,11 @@ BorisGoal pie_soft(const State& x, const Vector &theta){
     assert(false);
 }
 
-BorisGoal pie_hard(const State &x, const Vector &theta){
+SimpleAction pie_hard(const State &x, const Vector &theta){
     //hardmax
-    std::vector<BorisGoal> Us = x.getLegalActions();
+    std::vector<SimpleAction> Us = x.getLegalActions();
     assert(!Us.empty());
-    BorisGoal bestAction = Us[rand()%Us.size()];
+    SimpleAction bestAction = Us[rand()%Us.size()];
     float bestQuality = std::numeric_limits<double>::lowest();
     for(unsigned int i=0; i<Us.size(); ++i){
         float quality = Q(theta, f(x, Us[i]));

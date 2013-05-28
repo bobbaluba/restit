@@ -10,7 +10,7 @@ private:
     const int boardWidth;
 public:
     LocoBoss(int boardWidth);
-    virtual BorisGoal getGoal(const State& currentState);
+    virtual SimpleAction getGoal(const State& currentState);
 };
 
 #endif // LOCOBOSS_H
