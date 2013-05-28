@@ -7,6 +7,7 @@
 
 typedef std::vector<double> Vector;
 std::ostream& operator << (std::ostream& outs, const Vector& rhs);
+std::istream& operator >> (std::istream& ins, Vector& rhs);
 
 class ZuckerMaas : public BossOfBoris {
 private:

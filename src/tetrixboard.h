@@ -76,6 +76,7 @@ public slots:
     void setAISpeed(int speed);
     void setAutoPlay(bool value);
     void setInvisiblePlay(bool value);
+    void setParameters(QString newParameters);
 
 signals:
     void levelChanged(int level);

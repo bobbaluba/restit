@@ -82,6 +82,17 @@ std::ostream& operator << (std::ostream& outs, const Vector& rhs){
     //TODO restore original precision
 }
 
+std::istream& operator >> (std::istream& ins, Vector& rhs){
+    std::string tmp;
+    ins >> tmp; // "["
+    ins >> tmp; // "first value"
+    while(tmp != "]"){
+        rhs.push_back(atof(tmp.c_str()));
+        ins >> tmp;
+    }
+    return ins;
+}
+
 ZuckerMaas::ZuckerMaas(unsigned int boardFeatures, double learningRate, double momentum):zt(boardFeatures+1, 0), delta(boardFeatures+1, 0), alpha(learningRate), beta(momentum), t(0){
     initializeTheta(boardFeatures+1);
 }
