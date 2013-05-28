@@ -1,22 +1,21 @@
 #ifndef STOCHYBOSS_H
 #define STOCHYBOSS_H
 
+#include "vector.h"
 #include "bossofboris.h"
 
 class StochyBoss : public BossOfBoris {
 private:
-    std::vector<double> parameterVector;
-    std::vector<double> delta;
-    const double learningRate;
+    std::vector<double> theta;
 public:
-    StochyBoss(double learningRate);
+    StochyBoss();
     virtual BorisGoal getGoal(const State &currentState);
-    void setParameterVector(const std::vector<double> vector){ parameterVector = vector; }
+    void setTheta(const std::vector<double> vector){ theta = vector; }
 private:
     double evaluateAction(BorisGoal action);
     std::vector<double> getFeatures(const State& currentState, const BorisGoal& action);
-    std::vector<double> getParameterVector(int size);
-    double calculateQuality(const std::vector<double> parameterVector, const std::vector<double> features);
+    std::vector<double> createParameterVector(int size);
+    double calculateQuality(const Vector &theta, const Vector &features);
 };
 
 #endif // STOCHYBOSS_H

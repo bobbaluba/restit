@@ -54,7 +54,7 @@ TetrixBoard::TetrixBoard(QWidget *parent) : QFrame(parent),
     tetris(&gameModel),
     gameOver(false),
     locoBoss(BoardWidth),
-    stochyBoss(0.2), //learning rate, put in named constant
+    stochyBoss(),
     zuckerBoss(gameModel.getBoard().getNumFeatures()),
     boris(&zuckerBoss, &tetris),
     borisIsPlaying(true),
