@@ -25,7 +25,7 @@ BorisGoal StochyBoss::getGoal(const State &currentState){
             BoardModel finalBoard = nextBoard.applyAction(secondActions[i], currentState.getNextPiece(), &numLinesRemovedSecond);
             int finalLinesRemoved = numLinesRemovedSecond + numLinesRemoved;
 
-            Vector features = nextBoard.getFeatures();
+            Vector features = finalBoard.getFeatures();
             features.push_back(finalLinesRemoved);
 
             double score = calculateQuality(theta, features);

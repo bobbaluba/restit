@@ -50,7 +50,7 @@ Vector operator- (const Vector& lhs, const Vector& rhs){
 }
 
 std::ostream& operator << (std::ostream& outs, const Vector& rhs){
-    outs << std::setprecision(2);
+    outs << std::setprecision(4);
     outs << "[";
     for (Vector::const_iterator ii = rhs.begin(); ii != rhs.end(); ++ii)
     {
