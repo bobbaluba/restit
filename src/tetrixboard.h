@@ -77,6 +77,9 @@ public slots:
     void setAutoPlay(bool value);
     void setInvisiblePlay(bool value);
     void setParameters(QString newParameters);
+    void setNoAI(bool enabled);
+    void setGreedyAI(bool enabled);
+    void setZuckerAI(bool enabled);
 
 signals:
     void levelChanged(int level);
@@ -121,7 +124,7 @@ private:
     bool gameOver;
 
     //ai
-    GreedyBoss greedyBoss;
+    //GreedyBoss greedyBoss; //replaced by stochy
     LocoBoss locoBoss;
     StochyBoss stochyBoss;
     ZuckerMaas zuckerBoss;

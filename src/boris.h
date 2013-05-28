@@ -21,6 +21,7 @@ public:
     void tick(); //called whenever boris can do an action
     void updatePlan();
     Boris::Action getNextAction();
+    void setBoss(BossOfBoris* boss);
 };
 
 #endif // BORIS_H
