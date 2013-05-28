@@ -77,7 +77,7 @@ Vector grad_Z(const Vector theta, const State& x){
 
 //U
 std::vector<BorisGoal> U(const State& x){
-    return x.getLegalBorisGoals();
+    return x.getLegalActions();
 }
 
 //l
@@ -144,7 +144,7 @@ double r(const State& x, const BorisGoal& u){
 //z_t+1
 Vector z_tplus1(const Vector &z, double beta, const Vector &theta, const State& xtplus1, const BorisGoal &utplus1){
     Vector sum(theta.size(), 0);
-    std::vector<BorisGoal> Us = xtplus1.getLegalBorisGoals();
+    std::vector<BorisGoal> Us = xtplus1.getLegalActions();
     for(unsigned int i = 0; i<Us.size(); ++i){
         sum = sum + grad_Q(theta,f(xtplus1,Us[i])) * q(theta, xtplus1, Us[i]);
     }
@@ -161,7 +161,7 @@ Vector delta_tplus1(const Vector &ztplus1, Vector deltat, const State& xtplus1, 
 }
 
 BorisGoal pie_soft(const State& x, const Vector &theta){
-    std::vector<BorisGoal> Us = x.getLegalBorisGoals();
+    std::vector<BorisGoal> Us = x.getLegalActions();
     assert(!Us.empty());
     double actionValue = double(rand())/double(RAND_MAX);
     double actionSum = 0.0;
@@ -178,7 +178,7 @@ BorisGoal pie_soft(const State& x, const Vector &theta){
 
 BorisGoal pie_hard(const State &x, const Vector &theta){
     //hardmax
-    std::vector<BorisGoal> Us = x.getLegalBorisGoals();
+    std::vector<BorisGoal> Us = x.getLegalActions();
     assert(!Us.empty());
     BorisGoal bestAction = Us[rand()%Us.size()];
     float bestQuality = std::numeric_limits<double>::lowest();

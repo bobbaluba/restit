@@ -94,6 +94,29 @@ BoardModel BoardModel::placePiece(const TetrixPiece &piece, int x, int y, int *n
     return copy;
 }
 
+BoardModel BoardModel::applyAction(BorisGoal action, const TetrixPiece& piece, int *numLinesRemoved) const{
+    TetrixPiece tmpPiece = piece;
+    for(int i=0; i<action.rotation; ++i){
+        tmpPiece = tmpPiece.rotatedLeft();
+    }
+    return dropPiece(tmpPiece, action.position, numLinesRemoved);
+}
+
+const std::vector<BorisGoal> BoardModel::getLegalActions(const TetrixPiece currentPiece) const {
+    std::vector<BorisGoal> legalActions;
+    TetrixPiece piece = currentPiece;
+    for(int i=0; i<4; ++i){
+        //check each x position
+        for(int j = -piece.minX(); j < getWidth() - piece.maxX(); ++j){
+            if(canDropIntoColumn(piece, j)){
+                legalActions.push_back(BorisGoal{i, j});
+            }
+        }
+        piece = piece.rotatedLeft();
+    }
+    return legalActions;
+}
+
 int BoardModel::placePiece(const TetrixPiece &piece, int x, int y){
     for (int i = 0; i < 4; ++i) {
         int currentX = x + piece.x(i);

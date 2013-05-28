@@ -7,7 +7,7 @@ GreedyBoss::GreedyBoss(){
 }
 
 BorisGoal GreedyBoss::getGoal(const State &currentState){
-    std::vector<BorisGoal> actions = currentState.getLegalBorisGoals();
+    std::vector<BorisGoal> actions = currentState.getLegalActions();
     int maxNumLinesRemoved;
     int minimumNumberOfHoles = currentState.applyAction(actions[0], &maxNumLinesRemoved).getHoles();
     BorisGoal bestAction = actions[0];

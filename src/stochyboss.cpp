@@ -2,29 +2,38 @@
 
 #include <vector>
 #include <limits>
+#include <cassert>
 
 
 StochyBoss::StochyBoss(){
 }
 
 BorisGoal StochyBoss::getGoal(const State &currentState){
-
-    std::vector<BorisGoal> actions = currentState.getLegalBorisGoals();
+    assert(!theta.empty());
+    std::vector<BorisGoal> actions = currentState.getLegalActions();
     double maxScore = std::numeric_limits<double>::lowest();
     BorisGoal bestAction = actions[0];
     for(std::vector<BorisGoal>::iterator it = actions.begin(); it!=actions.end(); ++it){
-        const BorisGoal& action = *it;
+        const BorisGoal& firstAction = *it;
 
-        Vector features = getFeatures(currentState, action);
+        int numLinesRemoved;
+        BoardModel nextBoard = currentState.applyAction(firstAction, &numLinesRemoved);
+        std::vector<BorisGoal> secondActions = nextBoard.getLegalActions(currentState.getNextPiece());
 
-        //create parameter vector
-        Vector parameterVector = createParameterVector(features.size());
+        for(unsigned int i = 0; i<secondActions.size(); ++i){
+            int numLinesRemovedSecond;
+            BoardModel finalBoard = nextBoard.applyAction(secondActions[i], currentState.getNextPiece(), &numLinesRemovedSecond);
+            int finalLinesRemoved = numLinesRemovedSecond + numLinesRemoved;
 
-        double score = calculateQuality(parameterVector, features);
+            Vector features = nextBoard.getFeatures();
+            features.push_back(finalLinesRemoved);
 
-        if(score>maxScore){
-            maxScore = score;
-            bestAction = action;
+            double score = calculateQuality(theta, features);
+
+            if(score>maxScore){
+                maxScore = score;
+                bestAction = firstAction;
+            }
         }
     }
     return bestAction;
@@ -39,15 +48,7 @@ double StochyBoss::calculateQuality(const Vector& theta, const Vector& features)
     return score;
 }
 
-std::vector<double> StochyBoss::getFeatures(const State& currentState, const BorisGoal& action){
-    //gather features
-    int linesRemoved;
-    BoardModel nextBoard = currentState.applyAction(action, &linesRemoved);
-    std::vector<double> features = nextBoard.getFeatures();
-    features.push_back(linesRemoved);
-    return features;
-}
-
+//not used?
 std::vector<double> StochyBoss::createParameterVector(int size){
     if(theta.empty()){
         //create parameter vector
