@@ -53,11 +53,9 @@ TetrixWindow::TetrixWindow()
     nextPieceLabel->setMinimumHeight(100);
     board->setNextPieceLabel(nextPieceLabel);
 
-    scoreLcd = new QLCDNumber(5);
-    scoreLcd->setSegmentStyle(QLCDNumber::Filled);
-    levelLcd = new QLCDNumber(3);
+    levelLcd = new QLCDNumber(7);
     levelLcd->setSegmentStyle(QLCDNumber::Filled);
-    linesLcd = new QLCDNumber(5);
+    linesLcd = new QLCDNumber(7);
     linesLcd->setSegmentStyle(QLCDNumber::Filled);
 
     QLCDNumber* tetrominoesPlayedLCD = new QLCDNumber(5);
