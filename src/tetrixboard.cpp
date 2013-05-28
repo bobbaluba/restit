@@ -142,6 +142,15 @@ void TetrixBoard::setInvisiblePlay(bool value){
     invisible = value;
 }
 
+void TetrixBoard::setParameters(QString newParameters){
+    std::stringstream ss;
+    ss << newParameters.toStdString();
+    Vector newTheta;
+    ss >> newTheta;
+    zuckerBoss.setTheta(newTheta);
+    emit parametersChanged(newParameters);
+}
+
 void TetrixBoard::paintEvent(QPaintEvent *event)
 {
     QFrame::paintEvent(event);

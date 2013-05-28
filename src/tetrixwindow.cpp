@@ -154,6 +154,7 @@ TetrixWindow::TetrixWindow()
     connect(board, SIGNAL(avgLinesRemovedChanged(double)), avgLinesRemoved, SLOT(display(double)));
     connect(board, SIGNAL(movingAvgLinesChanged(double)), movingAvgLinesRemoved, SLOT(display(double)));
     connect(board, SIGNAL(parametersChanged(QString)), paramView, SLOT(setText(QString)));
+    connect(paramEdit, SIGNAL(textEdited(QString)), board, SLOT(setParameters(QString)));
 
     //tetris
     QGridLayout *tetrisLayout = new QGridLayout;
