@@ -25,7 +25,7 @@ public:
     void timeoutElapsed();
 
     //getters
-    State getState(){return State(game->getBoard(), game->getCurrentPiece());}
+    State getState(){return State(game->getBoard(), game->getCurrentPiece(), game->getNextPiece());}
     bool isPaused() const { return paused; }
     bool isGameOver() const { return gameOver; }
     bool hasStarted() const { return started; }
