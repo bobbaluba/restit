@@ -41,6 +41,7 @@
 #include <QtGui>
 
 #include <cassert>
+#include <sstream>
 
 #include "tetrixboard.h"
 
@@ -141,8 +142,6 @@ void TetrixBoard::setInvisiblePlay(bool value){
     invisible = value;
 }
 
-
-
 void TetrixBoard::paintEvent(QPaintEvent *event)
 {
     QFrame::paintEvent(event);
@@ -210,9 +209,11 @@ void TetrixBoard::keyPressEvent(QKeyEvent *event)
 
 void TetrixBoard::timerEvent(QTimerEvent *event){
     if (event->timerId() == timer.timerId()) {
-        tetris.timeoutElapsed();
-        timer.start(tetris.getTimeoutTime(), this);
-        if(!invisible)refreshGUI();
+        if(!tetris.isPaused()){
+            tetris.timeoutElapsed();
+            timer.start(tetris.getTimeoutTime(), this);
+            if(!invisible)refreshGUI();
+        }
     } else if (event->timerId() == borisTimer.timerId()) {
         if(tetris.hasStarted() && !tetris.isGameOver() && !tetris.isPaused() && borisIsPlaying){
             boris.tick();
@@ -258,6 +259,13 @@ void TetrixBoard::showNextPiece()
 void TetrixBoard::refreshGUI(){
     emit levelChanged(tetris.getLevel());
     emit linesRemovedChanged(tetris.getLinesRemoved());
+
+    Vector parameters(zuckerBoss.getTheta());
+    std::stringstream ss;
+    ss << parameters;
+    QString parametersString(ss.str().c_str());
+    emit parametersChanged(parametersString);
+
     update();
     showNextPiece();
 }

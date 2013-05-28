@@ -84,6 +84,7 @@ signals:
     void avgLinesRemovedChanged(double lines);
     void movingAvgLinesChanged(double lines);
     void gamesPlayedChanged(int numGames);
+    void parametersChanged(QString newParameters);
 
 protected:
     void paintEvent(QPaintEvent *event);
