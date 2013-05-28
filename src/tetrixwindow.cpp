@@ -102,22 +102,16 @@ TetrixWindow::TetrixWindow()
 
     //statistics box
     QGroupBox *aiStatistics = new QGroupBox(tr("Statistics"));
-
     QLabel *numGamesDescription = new QLabel(tr("Games played"));
     QLCDNumber *numGames = new QLCDNumber(7);
-
     QLabel *totalMovesDescription = new QLabel(tr("Total moves"));
     QLCDNumber *totalMoves = new QLCDNumber(7);
-
     QLabel *maxLinesRemovedDescription = new QLabel(tr("Maximum lines removed"));
     QLCDNumber *maxLinesRemoved = new QLCDNumber(7);
-
     QLabel *avgLinesRemovedDescription = new QLabel(tr("Average lines removed"));
     QLCDNumber *avgLinesRemoved = new QLCDNumber(7);
-
     QLabel *movingAvgLinesRemovedDescription = new QLabel(tr("Moving average lines removed"));
     QLCDNumber *movingAvgLinesRemoved = new QLCDNumber(7);
-
     QGridLayout *aiStatisticsLayout = new QGridLayout;
 
     aiStatisticsLayout->addWidget(numGamesDescription, 0, 0);
@@ -133,6 +127,15 @@ TetrixWindow::TetrixWindow()
 
     aiStatistics->setLayout(aiStatisticsLayout);
 
+    //parameter loader
+    QLineEdit *paramView = new QLineEdit("test");
+    paramView->setReadOnly(true);
+    QLineEdit *paramEdit = new QLineEdit;
+    QPushButton *loadParamsButton = new QPushButton("Load");
+    QGridLayout *paramBox = new QGridLayout;
+    paramBox->addWidget(paramView, 0, 0);
+    paramBox->addWidget(paramEdit, 1, 0);
+    paramBox->addWidget(loadParamsButton, 0, 1, 2, 1);
 
     //tetris
     connect(startButton, SIGNAL(clicked()), board, SLOT(start()));
@@ -150,6 +153,7 @@ TetrixWindow::TetrixWindow()
     connect(board, SIGNAL(maxLinesRemovedChanged(int)), maxLinesRemoved, SLOT(display(int)));
     connect(board, SIGNAL(avgLinesRemovedChanged(double)), avgLinesRemoved, SLOT(display(double)));
     connect(board, SIGNAL(movingAvgLinesChanged(double)), movingAvgLinesRemoved, SLOT(display(double)));
+    connect(board, SIGNAL(parametersChanged(QString)), paramView, SLOT(setText(QString)));
 
     //tetris
     QGridLayout *tetrisLayout = new QGridLayout;
@@ -174,12 +178,14 @@ TetrixWindow::TetrixWindow()
     AILayout->addWidget(aiStatistics, 2, 0);
 
     //combine layouts
-    QHBoxLayout *boxLayout = new QHBoxLayout;
-    boxLayout->addLayout(tetrisLayout, 3.5);
-    boxLayout->addLayout(AILayout, 1.5);
+    QGridLayout *boxLayout = new QGridLayout;
+    boxLayout->addLayout(tetrisLayout, 0, 0);
+    boxLayout->setColumnStretch(0, 3.5);
+    boxLayout->addLayout(AILayout, 0, 1);
+    boxLayout->setColumnStretch(1, 1.5);
+    boxLayout->addLayout(paramBox, 1, 0, 1, 2);
+
     setLayout(boxLayout);
-    boxLayout->setStretch(0, 3);
-    boxLayout->setStretch(1, 1);
 
     setWindowTitle(tr("Tetrix"));
     resize(700, 500);
