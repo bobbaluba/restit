@@ -2,12 +2,7 @@
 #define ZUCKERMAAS_H
 
 #include "bossofboris.h"
-
-#include <vector>
-
-typedef std::vector<double> Vector;
-std::ostream& operator << (std::ostream& outs, const Vector& rhs);
-std::istream& operator >> (std::istream& ins, Vector& rhs);
+#include "vector.h"
 
 class ZuckerMaas : public BossOfBoris {
 private:
