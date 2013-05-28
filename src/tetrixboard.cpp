@@ -54,7 +54,7 @@ TetrixBoard::TetrixBoard(QWidget *parent) : QFrame(parent),
     tetris(&gameModel),
     gameOver(false),
     locoBoss(BoardWidth),
-    stochyBoss(0.2), //learning rate, put in named constant
+    stochyBoss(),
     zuckerBoss(gameModel.getBoard().getNumFeatures()),
     boris(&zuckerBoss, &tetris),
     borisIsPlaying(true),
@@ -150,6 +150,26 @@ void TetrixBoard::setParameters(QString newParameters){
     zuckerBoss.setTheta(newTheta);
     emit parametersChanged(newParameters);
 }
+
+void TetrixBoard::setNoAI(bool enabled){
+    if(enabled){
+        boris.setBoss(NULL);
+    }
+}
+
+void TetrixBoard::setZuckerAI(bool enabled){
+    if(enabled){
+        boris.setBoss(&zuckerBoss);
+    }
+}
+
+void TetrixBoard::setGreedyAI(bool enabled){
+    if(enabled){
+        stochyBoss.setTheta(zuckerBoss.getTheta());
+        boris.setBoss(&stochyBoss);
+    }
+}
+
 
 void TetrixBoard::paintEvent(QPaintEvent *event)
 {

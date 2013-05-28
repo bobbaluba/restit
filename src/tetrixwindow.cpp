@@ -76,8 +76,8 @@ TetrixWindow::TetrixWindow()
 
     QRadioButton *noneRadio = new QRadioButton(tr("None"));
     QRadioButton *greedyRadio = new QRadioButton(tr("Greedy"));
-    QRadioButton *superAwesomeRadio = new QRadioButton(tr("Super Awesome"));
-    noneRadio->setChecked(true);
+    QRadioButton *reinforcementRadio = new QRadioButton(tr("Reinforcement"));
+    reinforcementRadio->setChecked(true);
 
     QCheckBox *autoPlayCheckBox = new QCheckBox(tr("Auto Play"));
 
@@ -91,7 +91,7 @@ TetrixWindow::TetrixWindow()
     QVBoxLayout *aiSelectorLayout = new QVBoxLayout;
     aiSelectorLayout->addWidget(noneRadio);
     aiSelectorLayout->addWidget(greedyRadio);
-    aiSelectorLayout->addWidget(superAwesomeRadio);
+    aiSelectorLayout->addWidget(reinforcementRadio);
     aiSelectorLayout->addWidget(autoPlayCheckBox);
     aiSelectorLayout->addWidget(invisiblePlayCheckBox);
     aiSelectorLayout->addWidget(speedSlider);
@@ -155,6 +155,11 @@ TetrixWindow::TetrixWindow()
     connect(board, SIGNAL(movingAvgLinesChanged(double)), movingAvgLinesRemoved, SLOT(display(double)));
     connect(board, SIGNAL(parametersChanged(QString)), paramView, SLOT(setText(QString)));
     connect(paramEdit, SIGNAL(textEdited(QString)), board, SLOT(setParameters(QString)));
+
+    //connect ai selector
+    connect(noneRadio, SIGNAL(toggled(bool)), board, SLOT(setNoAI(bool)));
+    connect(reinforcementRadio, SIGNAL(toggled(bool)), board, SLOT(setZuckerAI(bool)));
+    connect(greedyRadio, SIGNAL(toggled(bool)), board, SLOT(setGreedyAI(bool)));
 
     //tetris
     QGridLayout *tetrisLayout = new QGridLayout;

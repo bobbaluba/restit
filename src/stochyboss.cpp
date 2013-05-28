@@ -4,7 +4,7 @@
 #include <limits>
 
 
-StochyBoss::StochyBoss(double learningRate) : learningRate(learningRate){
+StochyBoss::StochyBoss(){
 }
 
 BorisGoal StochyBoss::getGoal(const State &currentState){
@@ -15,10 +15,10 @@ BorisGoal StochyBoss::getGoal(const State &currentState){
     for(std::vector<BorisGoal>::iterator it = actions.begin(); it!=actions.end(); ++it){
         const BorisGoal& action = *it;
 
-        std::vector<double> features = getFeatures(currentState, action);
+        Vector features = getFeatures(currentState, action);
 
         //create parameter vector
-        std::vector<double> parameterVector = getParameterVector(features.size());
+        Vector parameterVector = createParameterVector(features.size());
 
         double score = calculateQuality(parameterVector, features);
 
@@ -30,11 +30,11 @@ BorisGoal StochyBoss::getGoal(const State &currentState){
     return bestAction;
 }
 
-double StochyBoss::calculateQuality(const std::vector<double> parameterVector, const std::vector<double> features){
+double StochyBoss::calculateQuality(const Vector& theta, const Vector& features){
     //evaluate state
     double score = 0;
     for(unsigned int i = 0; i < features.size(); ++i){
-        score += parameterVector[i] * features[i];
+        score += theta[i] * features[i];
     }
     return score;
 }
@@ -48,17 +48,13 @@ std::vector<double> StochyBoss::getFeatures(const State& currentState, const Bor
     return features;
 }
 
-std::vector<double> StochyBoss::getParameterVector(int size){
-    if(parameterVector.empty()){
+std::vector<double> StochyBoss::createParameterVector(int size){
+    if(theta.empty()){
         //create parameter vector
-        parameterVector.reserve(size);
+        theta.reserve(size);
         for(int i = 0; i<size; ++i){
-            parameterVector.push_back(-1 + (double)rand()/((double)RAND_MAX/(1+1)));
+            theta.push_back(-1 + (double)rand()/((double)RAND_MAX/(1+1)));
         }
-        //debug for a vector that performs reasonably well
-        //set weight for numlinesremoved and number of holes
-        //parameterVector[parameterVectro.size()-1] = 1; //linesremoved
-        //parameterVector[parameterVectro.size()-2] = -1; //number of holes
     }
-    return parameterVector;
+    return theta;
 }

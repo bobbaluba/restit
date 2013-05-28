@@ -9,7 +9,11 @@ Boris::Boris(BossOfBoris *boss, ComplexTetris *tetris) :
 
 void Boris::tick(){
     if(plan.empty()){
-        updatePlan();
+        if(boss != NULL){
+            updatePlan();
+        } else {
+            return;
+        }
     }
     Boris::Action nextMove = plan.back();
     bool moveSuccessful = true;
@@ -64,3 +68,7 @@ void Boris::updatePlan() {
     }
 }
 
+
+void Boris::setBoss(BossOfBoris *boss){
+    this->boss = boss;
+}
