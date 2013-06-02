@@ -122,7 +122,7 @@ double Q(const Vector &theta, const Vector &features){
 }
 
 //grad Q
-const Vector grad_Q(const Vector &theta, const Vector &features){
+const Vector grad_Q(const Vector & /*theta*/, const Vector &features){
     return features;
 }
 

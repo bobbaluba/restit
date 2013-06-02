@@ -1,5 +1,5 @@
 CONFIG += qt
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++11 -Wall -Werror -pedantic-errors -Wno-error=unused-local-typedefs
 HEADERS       = tetrixboard.h \
                  tetrixpiece.h \
 				 tetrixwindow.h \
