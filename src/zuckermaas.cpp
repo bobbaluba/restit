@@ -23,34 +23,48 @@ Vector z_tplus1(const Vector &z, double beta, const Vector &theta, const State& 
 Vector delta_tplus1(const Vector &ztplus1, Vector deltat, const State& xtplus1, const SimpleAction& utplus1, double t);
 SimpleAction pie_hard(const State& x, const Vector &theta);
 SimpleAction pie_soft(const State& x, const Vector &theta);
-SimpleAction pie_soft_lookahead(const State& x, const Vector &theta);
+std::pair<SimpleAction,SimpleAction> pie_soft_lookahead(const State& x, const Vector &theta);
 
 ZuckerMaas::ZuckerMaas(unsigned int boardFeatures, double learningRate, double momentum):zt(boardFeatures+1, 0), delta(boardFeatures+1, 0), alpha(learningRate), beta(momentum), t(0){
     initializeTheta(boardFeatures+1);
 }
 
 SimpleAction ZuckerMaas::getGoal(const State &currentState){
-    const bool lookAhead = false;
-    SimpleAction bestAction;
+    const bool lookAhead = true;
     if(lookAhead){
-        bestAction = pie_soft_lookahead(currentState, theta);
+        std::pair<SimpleAction,SimpleAction> bestActions(pie_soft_lookahead(currentState, theta));
+
+        //reinforce step
+        const SimpleAction &utplus1 = bestActions.second;
+        int discard;
+        const State xtplus1(currentState.applyAction(bestActions.first, &discard), currentState.getNextPiece(), currentState.getNextPiece());
+
+        zt = z_tplus1(zt,beta,theta,xtplus1,utplus1); //not currentState?
+        delta = delta_tplus1(zt, delta, xtplus1, utplus1,t);
+
+        theta = theta + (alpha * delta);
+
+        std::cout << theta << std::endl;
+
+        ++t;
+        return bestActions.first;
     } else {
-        bestAction = pie_soft(currentState, theta);
+        SimpleAction bestAction(pie_soft(currentState, theta));
+
+        //reinforce step
+        const SimpleAction &utplus1 = bestAction;
+        const State& xtplus1 = currentState;
+
+        zt = z_tplus1(zt,beta,theta,xtplus1,utplus1); //not currentState?
+        delta = delta_tplus1(zt, delta, xtplus1, utplus1,t);
+
+        theta = theta + (alpha * delta);
+
+        std::cout << theta << std::endl;
+
+        ++t;
+        return bestAction;
     }
-
-    //reinforce step
-    const SimpleAction &utplus1 = bestAction;
-    const State& xtplus1 = currentState;
-
-    zt = z_tplus1(zt,beta,theta,xtplus1,utplus1); //not currentState?
-    delta = delta_tplus1(zt, delta, xtplus1, utplus1,t);
-
-    theta = theta + (alpha * delta);
-
-    std::cout << theta << std::endl;
-
-    ++t;
-    return bestAction;
 }
 
 
@@ -216,7 +230,7 @@ SimpleAction pie_soft(const State& x, const Vector &theta){
     assert(false);
 }
 
-SimpleAction pie_soft_lookahead(const State& x, const Vector &theta){
+std::pair<SimpleAction,SimpleAction> pie_soft_lookahead(const State& x, const Vector &theta){
     std::vector<SimpleAction> Us = x.getLegalActions();
     Vector qualitiesExp;
     qualitiesExp.reserve(Us.size());
@@ -251,7 +265,10 @@ SimpleAction pie_soft_lookahead(const State& x, const Vector &theta){
         double probability = qualitiesExp[i]/qualitiesExpSum; //this is softmax
         actionSum += probability;
         if(actionSum>=actionValue){
-            return Us[i];
+            int discard;
+            State xtplus1(x.applyAction(Us[i], &discard), x.getNextPiece(), x.getNextPiece());
+            SimpleAction bestSecondAction = pie_hard(xtplus1, theta);
+            return std::pair<SimpleAction,SimpleAction>(Us[i], bestSecondAction);
         }
     }
     //no actions
