@@ -7,6 +7,7 @@
 #include <iomanip>
 
 
+//helper methods
 double Z(const Vector theta, const State& x);
 Vector grad_Z(const Vector theta, const State& x);
 std::vector<SimpleAction> U(const State& x);
@@ -226,7 +227,7 @@ SimpleAction pie_soft_lookahead(const State& x, const Vector &theta){
         std::vector<SimpleAction> secondActions(nextBoard.getLegalActions(x.getNextPiece()));
         double maxSecondScore = std::numeric_limits<double>::lowest();
 
-        for(int j=0; j<secondActions.size(); ++j){
+        for(unsigned int j=0; j<secondActions.size(); ++j){
             auto features = f(State(nextBoard, x.getNextPiece(), x.getNextPiece() /* dummy */), secondActions[j]);
             features[features.size()-1] += firstLinesRemoved;
             double secondScore = Q(theta, features);
