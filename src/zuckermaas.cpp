@@ -29,7 +29,7 @@ ZuckerMaas::ZuckerMaas(unsigned int boardFeatures, double learningRate, double m
 }
 
 SimpleAction ZuckerMaas::getGoal(const State &currentState){
-    const bool lookAhead = true;
+    const bool lookAhead = false;
     SimpleAction bestAction;
     if(lookAhead){
         bestAction = pie_soft_lookahead(currentState, theta);
@@ -112,12 +112,39 @@ Vector grad_Q(const Vector theta, Vector features){
 }
 
 //q
-double q(const Vector theta, const State& x, const SimpleAction& u){
-    double quality = l(theta, x, u)/Z(theta, x);
+//double q(const Vector theta, const State& x, const SimpleAction& u){
+//    double quality = l(theta, x, u)/Z(theta, x);
+//    assert(quality>=0);
+//    assert(quality<=1);
+//    return quality;
+//}
+
+//double q(const Vector theta, const State& x, const SimpleAction& u, double ZValue){
+//    double quality = l(theta, x, u)/ZValue;
+//    if(!(quality>=0) || !(quality<=1)){
+//        quality = l(theta, x, u)/Z(theta, x);;
+//    }
+//    assert(quality>=0);
+//    assert(quality<=1);
+//    return quality;
+//}
+
+double q(const Vector theta, const State& x, const SimpleAction& u, Vector QValues){
+    //double quality = l(theta, x, u)/ZValue;
+    //if(!(quality>=0) || !(quality<=1)){
+    //    quality = l(theta, x, u)/Z(theta, x);;
+    //}
+    const double QForChosenAction = Q(theta,f(x,u));
+    double denominator = 0;
+    for(unsigned int i = 0; i < QValues.size(); ++i){
+        denominator += exp(QValues[i]-QForChosenAction);
+    }
+    const double quality = 1/denominator;
     assert(quality>=0);
     assert(quality<=1);
     return quality;
 }
+
 
 
 //grad q
@@ -142,12 +169,22 @@ double r(const State& x, const SimpleAction& u){
     return numLinesRemoved;
 }
 
+Vector computeQValues(const State& x, const Vector& theta, const std::vector<SimpleAction>& Us){
+    Vector QValues;
+    for(unsigned int i=0; i<Us.size(); ++i){
+        const double QValue = Q(theta,f(x,Us[i]));
+        QValues.push_back(QValue);
+    }
+    return QValues;
+}
+
 //z_t+1
 Vector z_tplus1(const Vector &z, double beta, const Vector &theta, const State& xtplus1, const SimpleAction &utplus1){
     Vector sum(theta.size(), 0);
     std::vector<SimpleAction> Us = xtplus1.getLegalActions();
+    Vector QValues = computeQValues(xtplus1, theta, Us);
     for(unsigned int i = 0; i<Us.size(); ++i){
-        sum = sum + grad_Q(theta,f(xtplus1,Us[i])) * q(theta, xtplus1, Us[i]);
+        sum = sum + grad_Q(theta,f(xtplus1,Us[i])) * q(theta, xtplus1, Us[i], QValues);
     }
     Vector normalizedGradient = grad_Q(theta, f(xtplus1,utplus1)) - sum;
     Vector ret = beta * z + normalizedGradient;
@@ -166,8 +203,9 @@ SimpleAction pie_soft(const State& x, const Vector &theta){
     assert(!Us.empty());
     double actionValue = double(rand())/double(RAND_MAX);
     double actionSum = 0.0;
+    Vector QValues = computeQValues(x,theta,Us);
     for(unsigned int i = 0; i<Us.size(); ++i){
-        double quality = q(theta, x, Us[i]);
+        double quality = q(theta, x, Us[i], QValues);
         actionSum += quality;
         if(actionSum>=actionValue){
             return Us[i];
