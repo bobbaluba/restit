@@ -32,7 +32,7 @@ ZuckerMaas::ZuckerMaas(unsigned int boardFeatures, double learningRate, double m
 const SimpleAction ZuckerMaas::getGoal(const State &currentState){
     const bool lookAhead = true;
     if(lookAhead){
-        std::pair<SimpleAction,SimpleAction> bestActions(pie_soft_lookahead(currentState, theta));
+        const std::pair<SimpleAction,SimpleAction> bestActions(pie_soft_lookahead(currentState, theta));
 
         //reinforce step
         const SimpleAction &utplus1 = bestActions.second;
@@ -49,7 +49,7 @@ const SimpleAction ZuckerMaas::getGoal(const State &currentState){
         ++t;
         return bestActions.first;
     } else {
-        SimpleAction bestAction(pie_soft(currentState, theta));
+        const SimpleAction bestAction(pie_soft(currentState, theta));
 
         //reinforce step
         const SimpleAction &utplus1 = bestAction;
@@ -83,7 +83,7 @@ const Vector grad_Z(const Vector &theta, const State& x){
     std::vector<SimpleAction> Us = U(x);
     Vector gradZ(theta.size(), 0);
     for(unsigned int j=0; j<Us.size(); ++j){
-        Vector gradlj = grad_l(theta, x, Us[j]);
+        const Vector gradlj = grad_l(theta, x, Us[j]);
         for(unsigned int i=0; i<gradlj.size(); ++i){
             gradZ[i] += gradlj[i];
         }
