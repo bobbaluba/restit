@@ -6,7 +6,7 @@
 class GreedyBoss : public BossOfBoris{
 public:
     GreedyBoss();
-    virtual BorisGoal getGoal(const State &currentState);
+    virtual SimpleAction getGoal(const State &currentState);
 };
 
 #endif // GREEDYBOSS_H

@@ -1,7 +1,7 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include "borisgoal.h"
+#include "simpleaction.h"
 #include "boardmodel.h"
 
 #include <vector>
@@ -17,8 +17,8 @@ public:
         currentPiece(currentPiece),
         nextPiece(nextPiece)
     {}
-    std::vector<BorisGoal> getLegalActions() const;
-    BoardModel applyAction(BorisGoal borisGoal, int *numLinesRemoved) const;
+    std::vector<SimpleAction> getLegalActions() const;
+    BoardModel applyAction(SimpleAction action, int *numLinesRemoved) const;
     const TetrixPiece& getCurrentPiece() const { return currentPiece; }
     const TetrixPiece& getNextPiece() const { return nextPiece; }
 };

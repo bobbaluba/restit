@@ -1,11 +1,11 @@
 #include "state.h"
 
-std::vector<BorisGoal> State::getLegalActions() const{
+std::vector<SimpleAction> State::getLegalActions() const{
     return board.getLegalActions(currentPiece);
 }
 
-BoardModel State::applyAction(BorisGoal borisGoal, int *numLinesRemoved) const {
-    return board.applyAction(borisGoal, currentPiece, numLinesRemoved);
+BoardModel State::applyAction(SimpleAction action, int *numLinesRemoved) const {
+    return board.applyAction(action, currentPiece, numLinesRemoved);
 }
 
 

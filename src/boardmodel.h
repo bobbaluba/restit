@@ -1,7 +1,7 @@
 #ifndef BOARDMODEL_H
 #define BOARDMODEL_H
 
-#include "borisgoal.h"
+#include "simpleaction.h"
 
 #include <tetrixpiece.h>
 
@@ -44,8 +44,8 @@ public:
     //required if we plan on supporting placement of pieces under overhangs
     BoardModel placePiece(const TetrixPiece &piece, int x, int y, int* numLinesRemoved) const;
 
-    BoardModel applyAction(BorisGoal action, const TetrixPiece &piece, int *numLinesRemoved) const;
-    const std::vector<BorisGoal> getLegalActions(const TetrixPiece currentPiece) const;
+    BoardModel applyAction(SimpleAction action, const TetrixPiece &piece, int *numLinesRemoved) const;
+    const std::vector<SimpleAction> getLegalActions(const TetrixPiece currentPiece) const;
 
 private:
     //non-deterministic helper methods

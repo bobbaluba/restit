@@ -45,7 +45,7 @@ void Boris::updatePlan() {
     plan.clear();
 
     State currentState = tetris->getState();
-    BorisGoal goal = boss->getGoal(currentState);
+    SimpleAction goal = boss->getGoal(currentState);
 
     const int currentX = tetris->getCurrentPieceX();
     int dx = goal.position - currentX;

@@ -9,11 +9,11 @@ private:
     std::vector<double> theta;
 public:
     StochyBoss();
-    virtual BorisGoal getGoal(const State &currentState);
+    virtual SimpleAction getGoal(const State &currentState);
     void setTheta(const std::vector<double> vector){ theta = vector; }
 private:
-    double evaluateAction(BorisGoal action);
-    std::vector<double> getFeatures(const State& currentState, const BorisGoal& action);
+    double evaluateAction(SimpleAction action);
+    std::vector<double> getFeatures(const State& currentState, const SimpleAction& action);
     std::vector<double> createParameterVector(int size);
     double calculateQuality(const Vector &theta, const Vector &features);
 };

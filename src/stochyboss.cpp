@@ -8,17 +8,17 @@
 StochyBoss::StochyBoss(){
 }
 
-BorisGoal StochyBoss::getGoal(const State &currentState){
+SimpleAction StochyBoss::getGoal(const State &currentState){
     assert(!theta.empty());
-    std::vector<BorisGoal> actions = currentState.getLegalActions();
+    std::vector<SimpleAction> actions = currentState.getLegalActions();
     double maxScore = std::numeric_limits<double>::lowest();
-    BorisGoal bestAction = actions[0];
-    for(std::vector<BorisGoal>::iterator it = actions.begin(); it!=actions.end(); ++it){
-        const BorisGoal& firstAction = *it;
+    SimpleAction bestAction = actions[0];
+    for(std::vector<SimpleAction>::iterator it = actions.begin(); it!=actions.end(); ++it){
+        const SimpleAction& firstAction = *it;
 
         int numLinesRemoved;
         BoardModel nextBoard = currentState.applyAction(firstAction, &numLinesRemoved);
-        std::vector<BorisGoal> secondActions = nextBoard.getLegalActions(currentState.getNextPiece());
+        std::vector<SimpleAction> secondActions = nextBoard.getLegalActions(currentState.getNextPiece());
 
         for(unsigned int i = 0; i<secondActions.size(); ++i){
             int numLinesRemovedSecond;
