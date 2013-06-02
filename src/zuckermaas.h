@@ -19,7 +19,6 @@ public:
     const Vector& getTheta() const { return theta; }
     void setTheta(const Vector& newTheta) { theta = newTheta; }
 private:
-    double evaluateAction(SimpleAction action);
     void initializeTheta(int size);
     double calculateQuality(const Vector &parameterVector, const Vector &features);
 };

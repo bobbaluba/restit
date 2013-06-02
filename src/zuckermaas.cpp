@@ -22,18 +22,19 @@ Vector z_tplus1(const Vector &z, double beta, const Vector &theta, const State& 
 Vector delta_tplus1(const Vector &ztplus1, Vector deltat, const State& xtplus1, const SimpleAction& utplus1, double t);
 SimpleAction pie_hard(const State& x, const Vector &theta);
 SimpleAction pie_soft(const State& x, const Vector &theta);
+SimpleAction pie_soft_lookahead(const State& x, const Vector &theta);
 
 ZuckerMaas::ZuckerMaas(unsigned int boardFeatures, double learningRate, double momentum):zt(boardFeatures+1, 0), delta(boardFeatures+1, 0), alpha(learningRate), beta(momentum), t(0){
     initializeTheta(boardFeatures+1);
 }
 
 SimpleAction ZuckerMaas::getGoal(const State &currentState){
+    const bool lookAhead = true;
     SimpleAction bestAction;
-    const bool softmax = true;
-    if(softmax){
-        bestAction = pie_soft(currentState, theta);
+    if(lookAhead){
+        bestAction = pie_soft_lookahead(currentState, theta);
     } else {
-        bestAction = pie_hard(currentState, theta);
+        bestAction = pie_soft(currentState, theta);
     }
 
     //reinforce step
@@ -90,7 +91,7 @@ Vector grad_l(const Vector theta, const State& x, const SimpleAction& u){
     //ugly way of multiplying scalar by a vector
     Vector gradl = grad_Q(theta, f(x, u));
     double scalar = l(theta, x, u);
-    for(unsigned int i = 0; i<gradl.size(); ++i){
+    for(unsigned int i = 0; i<gradl.size(); ++i){ //TODO use operators instead.
         gradl[i] *= scalar;
     }
     return gradl;
@@ -168,6 +169,48 @@ SimpleAction pie_soft(const State& x, const Vector &theta){
     for(unsigned int i = 0; i<Us.size(); ++i){
         double quality = q(theta, x, Us[i]);
         actionSum += quality;
+        if(actionSum>=actionValue){
+            return Us[i];
+        }
+    }
+    //no actions
+    assert(false);
+}
+
+SimpleAction pie_soft_lookahead(const State& x, const Vector &theta){
+    std::vector<SimpleAction> Us = x.getLegalActions();
+    Vector qualitiesExp;
+    qualitiesExp.reserve(Us.size());
+    for(unsigned int i = 0; i<Us.size(); ++i){
+        //compute Q with lookahead
+        int firstLinesRemoved;
+        BoardModel nextBoard = x.applyAction(Us[i], &firstLinesRemoved);
+        std::vector<SimpleAction> secondActions(nextBoard.getLegalActions(x.getNextPiece()));
+        double maxSecondScore = std::numeric_limits<double>::lowest();
+
+        for(int j=0; j<secondActions.size(); ++j){
+            auto features = f(State(nextBoard, x.getNextPiece(), x.getNextPiece() /* dummy */), secondActions[j]);
+            features[features.size()-1] += firstLinesRemoved;
+            double secondScore = Q(theta, features);
+            if(secondScore > maxSecondScore){
+                maxSecondScore = secondScore;
+            }
+        }
+        qualitiesExp.push_back(exp(maxSecondScore));
+    }
+
+    double qualitiesExpSum = 0;
+    for(unsigned int i = 0; i < qualitiesExp.size(); ++i){
+        qualitiesExpSum += qualitiesExp[i];
+    }
+
+    assert(!Us.empty());
+
+    double actionValue = double(rand())/double(RAND_MAX);
+    double actionSum = 0.0;
+    for(unsigned int i = 0; i<Us.size(); ++i){
+        double probability = qualitiesExp[i]/qualitiesExpSum; //this is softmax
+        actionSum += probability;
         if(actionSum>=actionValue){
             return Us[i];
         }
