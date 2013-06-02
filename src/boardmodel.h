@@ -44,12 +44,12 @@ public:
     //required if we plan on supporting placement of pieces under overhangs
     const BoardModel placePiece(const TetrixPiece &piece, int x, int y, int* numLinesRemoved) const;
 
-    const BoardModel applyAction(SimpleAction action, const TetrixPiece &piece, int *numLinesRemoved) const;
-    const std::vector<SimpleAction> getLegalActions(const TetrixPiece currentPiece) const;
+    const BoardModel applyAction(const SimpleAction& action, const TetrixPiece &piece, int *numLinesRemoved) const;
+    const std::vector<SimpleAction> getLegalActions(const TetrixPiece &currentPiece) const;
 
 private:
     //non-deterministic helper methods
-    void setShapeAt(int x, int y, TetrixShape shape) {tiles[(y * width) + x] = shape; }
+    void setShapeAt(int x, int y, const TetrixShape &shape) {tiles[(y * width) + x] = shape; }
     int placePiece(const TetrixPiece &piece, int x, int y); //returns number of lines removed
     int removeFullLines();
 };

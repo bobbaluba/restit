@@ -94,7 +94,7 @@ const BoardModel BoardModel::placePiece(const TetrixPiece &piece, int x, int y, 
     return copy;
 }
 
-const BoardModel BoardModel::applyAction(SimpleAction action, const TetrixPiece& piece, int *numLinesRemoved) const{
+const BoardModel BoardModel::applyAction(const SimpleAction &action, const TetrixPiece& piece, int *numLinesRemoved) const{
     TetrixPiece tmpPiece = piece;
     for(int i=0; i<action.rotation; ++i){
         tmpPiece = tmpPiece.rotatedLeft();
@@ -102,7 +102,7 @@ const BoardModel BoardModel::applyAction(SimpleAction action, const TetrixPiece&
     return dropPiece(tmpPiece, action.position, numLinesRemoved);
 }
 
-const std::vector<SimpleAction> BoardModel::getLegalActions(const TetrixPiece currentPiece) const {
+const std::vector<SimpleAction> BoardModel::getLegalActions(const TetrixPiece &currentPiece) const {
     std::vector<SimpleAction> legalActions;
     TetrixPiece piece = currentPiece;
     for(int i=0; i<4; ++i){

@@ -10,7 +10,7 @@ private:
 public:
     explicit StochyBoss();
     virtual const SimpleAction getGoal(const State &currentState);
-    void setTheta(const std::vector<double> vector){ theta = vector; }
+    void setTheta(const std::vector<double> &vector){ theta = vector; }
 private:
     double evaluateAction(SimpleAction action);
     Vector getFeatures(const State& currentState, const SimpleAction& action);

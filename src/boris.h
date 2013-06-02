@@ -14,7 +14,7 @@ private:
     };
 private:
     BossOfBoris *boss;
-    ComplexTetris* tetris;
+    ComplexTetris *tetris;
     std::vector<Boris::Action> plan;
 public:
     explicit Boris(BossOfBoris *boss, ComplexTetris* tetris);

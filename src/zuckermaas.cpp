@@ -8,19 +8,19 @@
 
 
 //helper methods
-double Z(const Vector theta, const State& x);
-const Vector grad_Z(const Vector theta, const State& x);
+double Z(const Vector &theta, const State& x);
+const Vector grad_Z(const Vector &theta, const State& x);
 const std::vector<SimpleAction> U(const State& x);
-double l(const Vector theta, const State& x, const SimpleAction& u);
-const Vector grad_l(const Vector theta, const State& x, const SimpleAction& u);
-double Q(const Vector theta, Vector features);
-const Vector grad_Q(const Vector theta, Vector features);
-double q(const Vector theta, const State& x, const SimpleAction& u);
+double l(const Vector &theta, const State& x, const SimpleAction& u);
+const Vector grad_l(const Vector &theta, const State& x, const SimpleAction& u);
+double Q(const Vector &theta, const Vector& features);
+const Vector grad_Q(const Vector &theta, const Vector &features);
+double q(const Vector &theta, const State& x, const SimpleAction& u);
 const Vector grad_q(const Vector &theta, const State& x, const SimpleAction &u);
 const Vector f(const State& x, const SimpleAction& u);
 double r(const State& x, const SimpleAction& u);
 const Vector z_tplus1(const Vector &z, double beta, const Vector &theta, const State& xtplus1, const SimpleAction &utplus1);
-const Vector delta_tplus1(const Vector &ztplus1, Vector deltat, const State& xtplus1, const SimpleAction& utplus1, double t);
+const Vector delta_tplus1(const Vector &ztplus1, const Vector& deltat, const State& xtplus1, const SimpleAction& utplus1, double t);
 const SimpleAction pie_hard(const State& x, const Vector &theta);
 const SimpleAction pie_soft(const State& x, const Vector &theta);
 const std::pair<SimpleAction,SimpleAction> pie_soft_lookahead(const State& x, const Vector &theta);
@@ -69,7 +69,7 @@ const SimpleAction ZuckerMaas::getGoal(const State &currentState){
 
 
 //Z
-double Z(const Vector theta, const State& x){
+double Z(const Vector &theta, const State& x){
     std::vector<SimpleAction> Us = U(x);
     double sum = 0;
     for(unsigned int i=0; i< Us.size(); ++i){
@@ -79,7 +79,7 @@ double Z(const Vector theta, const State& x){
 }
 
 //grad Z
-const Vector grad_Z(const Vector theta, const State& x){
+const Vector grad_Z(const Vector &theta, const State& x){
     std::vector<SimpleAction> Us = U(x);
     Vector gradZ(theta.size(), 0);
     for(unsigned int j=0; j<Us.size(); ++j){
@@ -97,12 +97,12 @@ const std::vector<SimpleAction> U(const State& x){
 }
 
 //l
-double l(const Vector theta, const State& x, const SimpleAction& u){
+double l(const Vector &theta, const State& x, const SimpleAction& u){
     return exp(Q(theta, f(x, u)));
 }
 
 //grad l
-const Vector grad_l(const Vector theta, const State& x, const SimpleAction& u){
+const Vector grad_l(const Vector &theta, const State& x, const SimpleAction& u){
     //ugly way of multiplying scalar by a vector
     Vector gradl = grad_Q(theta, f(x, u));
     double scalar = l(theta, x, u);
@@ -113,7 +113,7 @@ const Vector grad_l(const Vector theta, const State& x, const SimpleAction& u){
 }
 
 //Q
-double Q(const Vector theta, Vector features){
+double Q(const Vector &theta, const Vector &features){
     double sum = 0;
     for(unsigned int i = 0; i<features.size(); ++i){
         sum += theta[i] * features[i];
@@ -122,7 +122,7 @@ double Q(const Vector theta, Vector features){
 }
 
 //grad Q
-const Vector grad_Q(const Vector theta, Vector features){
+const Vector grad_Q(const Vector &theta, const Vector &features){
     return features;
 }
 
@@ -208,7 +208,7 @@ const Vector z_tplus1(const Vector &z, double beta, const Vector &theta, const S
 }
 
 //delta_t+1
-const Vector delta_tplus1(const Vector &ztplus1, Vector deltat, const State& xtplus1, const SimpleAction& utplus1, double t){
+const Vector delta_tplus1(const Vector &ztplus1, const Vector &deltat, const State& xtplus1, const SimpleAction& utplus1, double t){
     Vector ret = deltat + t/(t+1) * (r(xtplus1, utplus1)*ztplus1-deltat);
     return ret;
 }
