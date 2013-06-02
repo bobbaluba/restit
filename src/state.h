@@ -17,8 +17,8 @@ public:
         currentPiece(currentPiece),
         nextPiece(nextPiece)
     {}
-    std::vector<SimpleAction> getLegalActions() const;
-    BoardModel applyAction(SimpleAction action, int *numLinesRemoved) const;
+    const std::vector<SimpleAction> getLegalActions() const;
+    const BoardModel applyAction(SimpleAction action, int *numLinesRemoved) const;
     const TetrixPiece& getCurrentPiece() const { return currentPiece; }
     const TetrixPiece& getNextPiece() const { return nextPiece; }
 };

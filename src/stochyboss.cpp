@@ -8,7 +8,7 @@
 StochyBoss::StochyBoss(){
 }
 
-SimpleAction StochyBoss::getGoal(const State &currentState){
+const SimpleAction StochyBoss::getGoal(const State &currentState){
     assert(!theta.empty());
     std::vector<SimpleAction> actions = currentState.getLegalActions();
     double maxScore = std::numeric_limits<double>::lowest();

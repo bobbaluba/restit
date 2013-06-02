@@ -6,15 +6,15 @@
 
 class StochyBoss : public BossOfBoris {
 private:
-    std::vector<double> theta;
+    Vector theta;
 public:
     explicit StochyBoss();
-    virtual SimpleAction getGoal(const State &currentState);
+    virtual const SimpleAction getGoal(const State &currentState);
     void setTheta(const std::vector<double> vector){ theta = vector; }
 private:
     double evaluateAction(SimpleAction action);
-    std::vector<double> getFeatures(const State& currentState, const SimpleAction& action);
-    std::vector<double> createParameterVector(int size);
+    Vector getFeatures(const State& currentState, const SimpleAction& action);
+    Vector createParameterVector(int size);
     double calculateQuality(const Vector &theta, const Vector &features);
 };
 

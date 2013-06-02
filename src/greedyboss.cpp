@@ -6,7 +6,7 @@ GreedyBoss::GreedyBoss(){
 
 }
 
-SimpleAction GreedyBoss::getGoal(const State &currentState){
+const SimpleAction GreedyBoss::getGoal(const State &currentState){
     std::vector<SimpleAction> actions = currentState.getLegalActions();
     int maxNumLinesRemoved;
     int minimumNumberOfHoles = currentState.applyAction(actions[0], &maxNumLinesRemoved).getHoles();

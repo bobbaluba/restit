@@ -29,7 +29,7 @@ public:
     int getColumnHeight(int x) const;
     int getColumnHeightDifference(int x1, int x2) const;
     int getMaximumHeight() const;
-    std::vector<double> getFeatures() const;
+    const std::vector<double> getFeatures() const;
     size_t getNumFeatures() const {return getFeatures().size();}
 
 
@@ -39,12 +39,12 @@ public:
     bool canDropIntoColumn(const TetrixPiece &piece, int x) const;
 
     //returns the board after dropping a piece into column x, number of lines removed are stored in *numLinesRemoved
-    BoardModel dropPiece(const TetrixPiece &piece, int x, int* numLinesRemoved) const;
+    const BoardModel dropPiece(const TetrixPiece &piece, int x, int* numLinesRemoved) const;
 
     //required if we plan on supporting placement of pieces under overhangs
-    BoardModel placePiece(const TetrixPiece &piece, int x, int y, int* numLinesRemoved) const;
+    const BoardModel placePiece(const TetrixPiece &piece, int x, int y, int* numLinesRemoved) const;
 
-    BoardModel applyAction(SimpleAction action, const TetrixPiece &piece, int *numLinesRemoved) const;
+    const BoardModel applyAction(SimpleAction action, const TetrixPiece &piece, int *numLinesRemoved) const;
     const std::vector<SimpleAction> getLegalActions(const TetrixPiece currentPiece) const;
 
 private:

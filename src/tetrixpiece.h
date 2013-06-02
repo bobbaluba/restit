@@ -51,7 +51,7 @@ class TetrixPiece{
 public:
     explicit TetrixPiece(TetrixShape shape);
     explicit TetrixPiece() : TetrixPiece(NoShape){}
-    static TetrixPiece getRandomPiece(){ return TetrixPiece(TetrixShape(rand() % 7 + 1)); }
+    static const TetrixPiece getRandomPiece(){ return TetrixPiece(TetrixShape(rand() % 7 + 1)); }
 
     TetrixShape shape() const { return pieceShape; }
     int x(int index) const { return coords[index][0]; }
@@ -60,8 +60,8 @@ public:
     int maxX() const;
     int minY() const;
     int maxY() const;
-    TetrixPiece rotatedLeft() const;
-    TetrixPiece rotatedRight() const;
+    const TetrixPiece rotatedLeft() const;
+    const TetrixPiece rotatedRight() const;
 
 private:
     void setX(int index, int x) { coords[index][0] = x; }
