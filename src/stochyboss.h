@@ -8,7 +8,7 @@ class StochyBoss : public BossOfBoris {
 private:
     std::vector<double> theta;
 public:
-    StochyBoss();
+    explicit StochyBoss();
     virtual SimpleAction getGoal(const State &currentState);
     void setTheta(const std::vector<double> vector){ theta = vector; }
 private:

@@ -16,7 +16,7 @@ private:
 public:
 
     //create a new empty board
-    BoardModel(int width, int height);
+    explicit BoardModel(int width, int height);
 
     TetrixShape getShapeAt(int x, int y) const { return tiles[(y * width) + x]; }
     bool isEmpty(int x, int y) const { return getShapeAt(x,y) == NoShape; }

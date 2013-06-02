@@ -49,8 +49,8 @@ enum TetrixShape { NoShape, ZShape, SShape, LineShape, TShape, SquareShape,
 
 class TetrixPiece{
 public:
-    TetrixPiece(TetrixShape shape);
-    TetrixPiece() : TetrixPiece(NoShape){}
+    explicit TetrixPiece(TetrixShape shape);
+    explicit TetrixPiece() : TetrixPiece(NoShape){}
     static TetrixPiece getRandomPiece(){ return TetrixPiece(TetrixShape(rand() % 7 + 1)); }
 
     TetrixShape shape() const { return pieceShape; }

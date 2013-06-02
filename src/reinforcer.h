@@ -10,7 +10,7 @@ private:
     std::vector<double> momentum;
     double beta; //falloff for momentum
 public:
-    Reinforcer();
+    explicit Reinforcer();
 private:
     void updateMomentum();
     void updateWeights();

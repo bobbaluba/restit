@@ -14,7 +14,7 @@ private:
     bool paused;
     bool gameOver;
 public:
-    ComplexTetris(GameModel* game);
+    explicit ComplexTetris(GameModel* game);
     bool rotateCCW();
     void moveDown();
     bool moveLeft();

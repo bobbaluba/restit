@@ -63,7 +63,7 @@ class TetrixBoard : public QFrame
     Q_OBJECT
 
 public:
-    TetrixBoard(QWidget *parent = 0);
+    explicit TetrixBoard(QWidget *parent = 0);
 
     void setNextPieceLabel(QLabel *label);
     QSize sizeHint() const;
