@@ -184,9 +184,9 @@ TetrixWindow::TetrixWindow()
     //combine layouts
     QGridLayout *boxLayout = new QGridLayout;
     boxLayout->addLayout(tetrisLayout, 0, 0);
-    boxLayout->setColumnStretch(0, 3.5);
+    boxLayout->setColumnStretch(0, 3);
     boxLayout->addLayout(AILayout, 0, 1);
-    boxLayout->setColumnStretch(1, 1.5);
+    boxLayout->setColumnStretch(1, 1);
     boxLayout->addLayout(paramBox, 1, 0, 1, 2);
 
     setLayout(boxLayout);
