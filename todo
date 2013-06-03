@@ -1,0 +1,19 @@
+zap zt after ended game?
+
+Program
+-------
+Zap zt or deltat after each game?
+Scale theta if it's too large or fix it in another way
+Remove unused classes/code
+
+Report
+------
+Pictures
+Video
+Text
+
+GUI
+---
+Remove load button
+Implement total moves counter
+Lookahead check button
