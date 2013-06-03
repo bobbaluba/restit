@@ -24,6 +24,7 @@ const Vector delta_tplus1(const Vector &ztplus1, const Vector& deltat, const Sta
 const SimpleAction pie_hard(const State& x, const Vector &theta);
 const SimpleAction pie_soft(const State& x, const Vector &theta);
 const std::pair<SimpleAction,SimpleAction> pie_soft_lookahead(const State& x, const Vector &theta);
+const std::pair<SimpleAction, SimpleAction> pie_hard_lookahead(const State &currentState, const Vector &theta);
 
 ZuckerMaas::ZuckerMaas(unsigned int boardFeatures, double learningRate, double momentum):zt(boardFeatures+1, 0), delta(boardFeatures+1, 0), alpha(learningRate), beta(momentum), t(0){
     initializeTheta(boardFeatures+1);
@@ -31,6 +32,10 @@ ZuckerMaas::ZuckerMaas(unsigned int boardFeatures, double learningRate, double m
 
 const SimpleAction ZuckerMaas::getGoal(const State &currentState){
     const bool lookAhead = true;
+    if(t%1000 == 0){
+        std::cout << "t: " << t << std::endl;
+        std::cout << "Theta:" << theta << std::endl;
+    }
     if(lookAhead){
         const std::pair<SimpleAction,SimpleAction> bestActions(pie_soft_lookahead(currentState, theta));
 
@@ -43,8 +48,6 @@ const SimpleAction ZuckerMaas::getGoal(const State &currentState){
         delta = delta_tplus1(zt, delta, xtplus1, utplus1,t);
 
         theta = theta + (alpha * delta);
-
-        std::cout << theta << std::endl;
 
         ++t;
         return bestActions.first;
@@ -59,8 +62,6 @@ const SimpleAction ZuckerMaas::getGoal(const State &currentState){
         delta = delta_tplus1(zt, delta, xtplus1, utplus1,t);
 
         theta = theta + (alpha * delta);
-
-        std::cout << theta << std::endl;
 
         ++t;
         return bestAction;
@@ -257,6 +258,12 @@ const std::pair<SimpleAction, SimpleAction> pie_soft_lookahead(const State& x, c
         qualitiesExpSum += qualitiesExp[i];
     }
 
+    if(qualitiesExpSum == 0){
+        std::cerr << "Warning: floating point error, falling back to hardmax\n";
+        return pie_hard_lookahead(x,theta);
+    }
+
+    assert(qualitiesExpSum != 0);
     assert(!Us.empty());
 
     double actionValue = double(rand())/double(RAND_MAX);
@@ -289,6 +296,40 @@ const SimpleAction pie_hard(const State &x, const Vector &theta){
         }
     }
     return bestAction;
+}
+
+const std::pair<SimpleAction, SimpleAction> pie_hard_lookahead(const State &currentState, const Vector &theta){
+    assert(!theta.empty());
+    std::vector<SimpleAction> actions = currentState.getLegalActions();
+    double maxScore = std::numeric_limits<double>::lowest();
+    SimpleAction bestAction = actions[0];
+    for(std::vector<SimpleAction>::iterator it = actions.begin(); it!=actions.end(); ++it){
+        const SimpleAction& firstAction = *it;
+
+        int numLinesRemoved;
+        BoardModel nextBoard = currentState.applyAction(firstAction, &numLinesRemoved);
+        std::vector<SimpleAction> secondActions = nextBoard.getLegalActions(currentState.getNextPiece());
+
+        for(unsigned int i = 0; i<secondActions.size(); ++i){
+            int numLinesRemovedSecond;
+            BoardModel finalBoard = nextBoard.applyAction(secondActions[i], currentState.getNextPiece(), &numLinesRemovedSecond);
+            int finalLinesRemoved = numLinesRemovedSecond + numLinesRemoved;
+
+            Vector features = finalBoard.getFeatures();
+            features.push_back(finalLinesRemoved);
+
+            double score = Q(theta, features);
+
+            if(score>maxScore){
+                maxScore = score;
+                bestAction = firstAction;
+            }
+        }
+    }
+    int discard;
+    const State nextState = State(currentState.applyAction(bestAction, &discard), currentState.getNextPiece(), currentState.getNextPiece());
+    const SimpleAction nextAction  = pie_hard(nextState, theta);
+    return std::pair<SimpleAction, SimpleAction>(bestAction, nextAction);
 }
 
 void ZuckerMaas::initializeTheta(int size){
