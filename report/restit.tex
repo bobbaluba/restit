@@ -14,7 +14,8 @@ Removing a line adds one to the players score.
 Tetris is a benchmark problem for testing machine learning algorithms, as it uses comparably simple rules although it requires complex strategies to perform well. 
 
 In \nameref{relatedwork} we will give a short overview about existing reinforcement learning approaches for Tetris and give information about what our project is based on and influenced by.
-We will then describe the algorithms we implemented \nameref{method} and present  the results for the different approaches in \nameref{results}.
+We will then describe the algorithms we implemented \nameref{method}.
+After interpreting some issues we had to deal with in \nameref{problems}, we present our results in \nameref{results}.
 We will give a short summary and wrap up in \nameref{conclusions}.
 
 %------------------------------------------------------------------------------
@@ -41,7 +42,7 @@ To end up in a successor state $x'$, an action $u$ has to be applied being in st
 Whenever one or more lines have been removed applying that action $u$, the player receives the reward $r$, which is dependent on the current state and the action to be applied: $r(x,u)$.
 
 After investigating different variations of features describing the properties of a current state, we revisit the proposed feature combination mentioned in \cite{zucker2009learning}, which have been proven to work best with our implementation. 
-The featurevector thus contains the following information:
+The feature vector thus contains the following information:
 \begin{enumerate}
 	\item[\textbf{0-9:}] the height of each cell
 	\item[\textbf{10-18:}] absolute height difference between adjacent cells
@@ -49,14 +50,37 @@ The featurevector thus contains the following information:
 	\item[\textbf{20:}] number of holes in the board
 	\item[\textbf{21:}] number of removed lines (\Corresponds~reward)
 \end{enumerate}
-While the number of removed lines denotes the obvious quality of an action, or the action-transition from one state to a successor state, the other features constitute important quality attributes too. The height of each cell as well as the absolute height difference between adjacent cells characterize the ``smoothness'' or ``evenness'' of the columns' surface. A state in which the columns are very low and even is to be preferred from a bumpy surface with single columns almost reaching the top of the board. 
+While the number of removed lines denotes the obvious quality of an action, or the action-transition from one state to a successor state, the other features constitute important quality attributes too. 
+The height of each cell as well as the absolute height difference between adjacent cells characterize the ``smoothness'' or ``evenness'' of the columns' surface. 
+A state in which the columns are very low and even is to be preferred from a bumpy surface with single columns almost reaching the top of the board. 
 An increasing number of holes in the board implies increasing complexity of the game, as it makes it harder to complete several lines at a time, and therefore reducing the overall height. 
 
 Adding further features such as the maximum height difference or the number of holes per column do not add relevant information and therefore do not lead to significantly better results. 
 
 %TODO feature: "depth" of holes --> improvement??
 
+The quality of a state is calculated from a parameter (= weight) vector $\theta$ within a quality function $Q$.
+The weights in this vector denote the ``importance'' or ``good-/badness'' of the corresponding values in the feature vector. 
+This function is used calculate the quality of each successor state $x'$ of the current state $x$. 
+The action $u$ leading to the state with the highest quality will then be the preferred action to be applied.
+However, this action is only chosen by a certain probability.
+This is used to prevent getting stuck in a local maxima, which can happen, when the learner chooses an action that leads to a good result in that particular case, but is not necessarily a good action in different situations. 
+If for example, a line has been completed dropping a Tetronimo in the first column, the learner receives a reward for this action and learns, that it is a good idea to drop pieces in the first column. 
+Of course, this is not a clever strategy in general. 
+Another trick to prevent single positive action from having too much influence on the overall learned rules is to use a momentum when updating the weights.
 
+The weights are updated by adding a step value $\delta$, which is determined by the addition of the previous step value and the quality of the next action. 
+This quality, again, is dependent on the immediate reward (number of removed lines after applying that action) and the quality of the successive state. 
+
+More precisely:
+
+$\Delta_{t+1} = \Delta_t + \frac{t}{t+1}(r(x_{t+1},u_{t+1})z_{t+1} - \Delta_t)$
+
+where $z$ can be understood as a momentum which is defined by
+
+$z_{t+1} = \beta z_t + \frac{\bigtriangledown q(\theta,x_{t+1},u_{t+1})}{q(\theta,x_{t+1},u_{t+1})}$.
+
+Here, $\beta$ is a ``momentum-influence-factor'', $\frac{\bigtriangledown q(\theta,x_{t+1},u_{t+1})}{q(\theta,x_{t+1},u_{t+1})}$ the score ratio.
 
 %------------------------------------------------------------------------------
 
