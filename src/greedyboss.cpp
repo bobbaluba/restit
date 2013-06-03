@@ -9,8 +9,8 @@ GreedyBoss::GreedyBoss(){
 const SimpleAction GreedyBoss::getGoal(const State &currentState){
     std::vector<SimpleAction> actions = currentState.getLegalActions();
     int maxNumLinesRemoved;
-    int minimumNumberOfHoles = currentState.applyAction(actions[0], &maxNumLinesRemoved).getHoles();
-    SimpleAction bestAction = actions[0];
+    int minimumNumberOfHoles = currentState.applyAction(actions.at(0), &maxNumLinesRemoved).getHoles();
+    SimpleAction bestAction = actions.at(0);
     for(std::vector<SimpleAction>::iterator it = actions.begin(); it!=actions.end(); ++it){
         //check each move and number of lines removed
         const SimpleAction& action = *it;

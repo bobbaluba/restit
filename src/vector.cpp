@@ -7,7 +7,7 @@ double operator* (Vector& lhs, Vector& rhs){
     assert(lhs.size() == rhs.size());
     double sum = 0;
     for(unsigned int i=0; i<lhs.size(); ++i){
-        sum += lhs[i] * rhs[i];
+        sum += lhs.at(i) * rhs.at(i);
     }
     return sum;
 }
@@ -16,7 +16,7 @@ const Vector operator+ (const Vector& lhs, const Vector& rhs){
     assert(lhs.size() == rhs.size());
     Vector copy = lhs;
     for(unsigned int i=0; i<rhs.size(); ++i){
-        copy[i] += rhs[i];
+        copy.at(i) += rhs.at(i);
     }
     return copy;
 }
@@ -24,7 +24,7 @@ const Vector operator+ (const Vector& lhs, const Vector& rhs){
 const Vector operator*(const Vector& lhs, double rhs){
     Vector copy = lhs;
     for(unsigned int i=0; i<copy.size(); ++i){
-        copy[i] *= rhs;
+        copy.at(i) *= rhs;
     }
     return copy;
 }
@@ -40,7 +40,7 @@ const Vector operator*(double lhs, const Vector& rhs){
 const Vector operator- (const Vector& rhs){
     Vector copy = rhs;
     for(unsigned int i=0; i<copy.size(); ++i){
-        copy[i] *= -1;
+        copy.at(i) *= -1;
     }
     return copy;
 }

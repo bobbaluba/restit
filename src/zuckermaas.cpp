@@ -73,7 +73,7 @@ double Z(const Vector &theta, const State& x){
     std::vector<SimpleAction> Us = U(x);
     double sum = 0;
     for(unsigned int i=0; i< Us.size(); ++i){
-        sum += l(theta, x, Us[i]);
+        sum += l(theta, x, Us.at(i));
     }
     return sum;
 }
@@ -83,9 +83,9 @@ const Vector grad_Z(const Vector &theta, const State& x){
     std::vector<SimpleAction> Us = U(x);
     Vector gradZ(theta.size(), 0);
     for(unsigned int j=0; j<Us.size(); ++j){
-        const Vector gradlj = grad_l(theta, x, Us[j]);
+        const Vector gradlj = grad_l(theta, x, Us.at(j));
         for(unsigned int i=0; i<gradlj.size(); ++i){
-            gradZ[i] += gradlj[i];
+            gradZ.at(i) += gradlj.at(i);
         }
     }
     return gradZ;
@@ -107,7 +107,7 @@ const Vector grad_l(const Vector &theta, const State& x, const SimpleAction& u){
     Vector gradl = grad_Q(theta, f(x, u));
     double scalar = l(theta, x, u);
     for(unsigned int i = 0; i<gradl.size(); ++i){ //TODO use operators instead.
-        gradl[i] *= scalar;
+        gradl.at(i) *= scalar;
     }
     return gradl;
 }
@@ -116,7 +116,7 @@ const Vector grad_l(const Vector &theta, const State& x, const SimpleAction& u){
 double Q(const Vector &theta, const Vector &features){
     double sum = 0;
     for(unsigned int i = 0; i<features.size(); ++i){
-        sum += theta[i] * features[i];
+        sum += theta.at(i) * features.at(i);
     }
     return sum;
 }
@@ -152,7 +152,7 @@ double q(const Vector theta, const State& x, const SimpleAction& u, Vector QValu
     const double QForChosenAction = Q(theta,f(x,u));
     double denominator = 0;
     for(unsigned int i = 0; i < QValues.size(); ++i){
-        denominator += exp(QValues[i]-QForChosenAction);
+        denominator += exp(QValues.at(i)-QForChosenAction);
     }
     const double quality = 1/denominator;
     assert(quality>=0);
@@ -187,7 +187,7 @@ double r(const State& x, const SimpleAction& u){
 const Vector computeQValues(const State& x, const Vector& theta, const std::vector<SimpleAction>& Us){
     Vector QValues;
     for(unsigned int i=0; i<Us.size(); ++i){
-        const double QValue = Q(theta,f(x,Us[i]));
+        const double QValue = Q(theta,f(x,Us.at(i)));
         QValues.push_back(QValue);
     }
     return QValues;
@@ -199,7 +199,7 @@ const Vector z_tplus1(const Vector &z, double beta, const Vector &theta, const S
     std::vector<SimpleAction> Us = xtplus1.getLegalActions();
     Vector QValues = computeQValues(xtplus1, theta, Us);
     for(unsigned int i = 0; i<Us.size(); ++i){
-        sum = sum + grad_Q(theta,f(xtplus1,Us[i])) * q(theta, xtplus1, Us[i], QValues);
+        sum = sum + grad_Q(theta,f(xtplus1,Us.at(i))) * q(theta, xtplus1, Us.at(i), QValues);
     }
     Vector normalizedGradient = grad_Q(theta, f(xtplus1,utplus1)) - sum;
     Vector ret = beta * z + normalizedGradient;
@@ -220,10 +220,10 @@ const SimpleAction pie_soft(const State& x, const Vector &theta){
     double actionSum = 0.0;
     const Vector QValues = computeQValues(x,theta,Us);
     for(unsigned int i = 0; i<Us.size(); ++i){
-        double quality = q(theta, x, Us[i], QValues);
+        double quality = q(theta, x, Us.at(i), QValues);
         actionSum += quality;
         if(actionSum>=actionValue){
-            return Us[i];
+            return Us.at(i);
         }
     }
     //no actions
@@ -237,13 +237,13 @@ const std::pair<SimpleAction, SimpleAction> pie_soft_lookahead(const State& x, c
     for(unsigned int i = 0; i<Us.size(); ++i){
         //compute Q with lookahead
         int firstLinesRemoved;
-        BoardModel nextBoard = x.applyAction(Us[i], &firstLinesRemoved);
+        BoardModel nextBoard = x.applyAction(Us.at(i), &firstLinesRemoved);
         std::vector<SimpleAction> secondActions(nextBoard.getLegalActions(x.getNextPiece()));
         double maxSecondScore = std::numeric_limits<double>::lowest();
 
         for(unsigned int j=0; j<secondActions.size(); ++j){
-            auto features = f(State(nextBoard, x.getNextPiece(), x.getNextPiece() /* dummy */), secondActions[j]);
-            features[features.size()-1] += firstLinesRemoved;
+            auto features = f(State(nextBoard, x.getNextPiece(), x.getNextPiece() /* dummy */), secondActions.at(j));
+            features.at(features.size()-1) += firstLinesRemoved;
             double secondScore = Q(theta, features);
             if(secondScore > maxSecondScore){
                 maxSecondScore = secondScore;
@@ -254,7 +254,7 @@ const std::pair<SimpleAction, SimpleAction> pie_soft_lookahead(const State& x, c
 
     double qualitiesExpSum = 0;
     for(unsigned int i = 0; i < qualitiesExp.size(); ++i){
-        qualitiesExpSum += qualitiesExp[i];
+        qualitiesExpSum += qualitiesExp.at(i);
     }
 
     assert(!Us.empty());
@@ -262,13 +262,13 @@ const std::pair<SimpleAction, SimpleAction> pie_soft_lookahead(const State& x, c
     double actionValue = double(rand())/double(RAND_MAX);
     double actionSum = 0.0;
     for(unsigned int i = 0; i<Us.size(); ++i){
-        double probability = qualitiesExp[i]/qualitiesExpSum; //this is softmax
+        double probability = qualitiesExp.at(i)/qualitiesExpSum; //this is softmax
         actionSum += probability;
         if(actionSum>=actionValue){
             int discard;
-            State xtplus1(x.applyAction(Us[i], &discard), x.getNextPiece(), x.getNextPiece());
+            State xtplus1(x.applyAction(Us.at(i), &discard), x.getNextPiece(), x.getNextPiece());
             SimpleAction bestSecondAction = pie_hard(xtplus1, theta);
-            return std::pair<SimpleAction,SimpleAction>(Us[i], bestSecondAction);
+            return std::pair<SimpleAction,SimpleAction>(Us.at(i), bestSecondAction);
         }
     }
     //no actions
@@ -279,13 +279,13 @@ const SimpleAction pie_hard(const State &x, const Vector &theta){
     //hardmax
     std::vector<SimpleAction> Us = x.getLegalActions();
     assert(!Us.empty());
-    SimpleAction bestAction = Us[rand()%Us.size()];
+    SimpleAction bestAction = Us.at(rand()%Us.size());
     float bestQuality = std::numeric_limits<double>::lowest();
     for(unsigned int i=0; i<Us.size(); ++i){
-        float quality = Q(theta, f(x, Us[i]));
+        float quality = Q(theta, f(x, Us.at(i)));
         if(quality>bestQuality){
             bestQuality = quality;
-            bestAction = Us[i];
+            bestAction = Us.at(i);
         }
     }
     return bestAction;
@@ -302,8 +302,8 @@ void ZuckerMaas::initializeTheta(int size){
             }
             //debug for a vector that performs reasonably well
             //set weight for numlinesremoved and number of holes
-            theta[theta.size()-1] = 1; //linesremoved
-            theta[theta.size()-2] = -1; //number of holes
+            theta.at(theta.size()-1) = 1; //linesremoved
+            theta.at(theta.size()-2) = -1; //number of holes
         } else {
             //create random parameter vector
             for(int i = 0; i<size; ++i){

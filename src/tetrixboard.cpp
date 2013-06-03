@@ -103,11 +103,11 @@ void TetrixBoard::onGameOver(){
     emit avgLinesRemovedChanged(currentAvg);
 
     //update moving average
-    lastLinesRemoved[gamesPlayed % NumGamesMovingAverage] = tetris.getLinesRemoved();
+    lastLinesRemoved.at(gamesPlayed % NumGamesMovingAverage) = tetris.getLinesRemoved();
     if(gamesPlayed >= 10){
         double sumAvgGames = 0;
         for(int i = 0; i < NumGamesMovingAverage; ++i){
-            sumAvgGames += lastLinesRemoved[i];
+            sumAvgGames += lastLinesRemoved.at(i);
         }
         double movingAvg = sumAvgGames/double(NumGamesMovingAverage);
         emit movingAvgLinesChanged(movingAvg);

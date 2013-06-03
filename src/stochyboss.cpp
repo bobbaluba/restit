@@ -12,7 +12,7 @@ const SimpleAction StochyBoss::getGoal(const State &currentState){
     assert(!theta.empty());
     std::vector<SimpleAction> actions = currentState.getLegalActions();
     double maxScore = std::numeric_limits<double>::lowest();
-    SimpleAction bestAction = actions[0];
+    SimpleAction bestAction = actions.at(0);
     for(std::vector<SimpleAction>::iterator it = actions.begin(); it!=actions.end(); ++it){
         const SimpleAction& firstAction = *it;
 
@@ -22,7 +22,7 @@ const SimpleAction StochyBoss::getGoal(const State &currentState){
 
         for(unsigned int i = 0; i<secondActions.size(); ++i){
             int numLinesRemovedSecond;
-            BoardModel finalBoard = nextBoard.applyAction(secondActions[i], currentState.getNextPiece(), &numLinesRemovedSecond);
+            BoardModel finalBoard = nextBoard.applyAction(secondActions.at(i), currentState.getNextPiece(), &numLinesRemovedSecond);
             int finalLinesRemoved = numLinesRemovedSecond + numLinesRemoved;
 
             Vector features = finalBoard.getFeatures();
@@ -43,7 +43,7 @@ double StochyBoss::calculateQuality(const Vector& theta, const Vector& features)
     //evaluate state
     double score = 0;
     for(unsigned int i = 0; i < features.size(); ++i){
-        score += theta[i] * features[i];
+        score += theta.at(i) * features.at(i);
     }
     return score;
 }

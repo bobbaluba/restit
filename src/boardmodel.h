@@ -18,7 +18,7 @@ public:
     //create a new empty board
     explicit BoardModel(int width, int height);
 
-    TetrixShape getShapeAt(int x, int y) const { return tiles[(y * width) + x]; }
+    TetrixShape getShapeAt(int x, int y) const { return tiles.at((y * width) + x); }
     bool isEmpty(int x, int y) const { return getShapeAt(x,y) == NoShape; }
 
     int getWidth() const { return width; }
@@ -49,7 +49,7 @@ public:
 
 private:
     //non-deterministic helper methods
-    void setShapeAt(int x, int y, const TetrixShape &shape) {tiles[(y * width) + x] = shape; }
+    void setShapeAt(int x, int y, const TetrixShape &shape) {tiles.at((y * width) + x) = shape; }
     int placePiece(const TetrixPiece &piece, int x, int y); //returns number of lines removed
     int removeFullLines();
 };
