@@ -27,58 +27,93 @@ Szita \&  L{\"o}rincz \cite{szita2006learning} apply noise to improve the cross-
 Donald Carr introduces reinforcement learning for Tetris and introduces the Formal Tetris Specification by Fahey \cite{faheytetris}.\\
 Gross \& Schwenker \cite{gross2008learningto} investigate the idea of temporal difference learning applied to the Tetris problem and train agent using an $\varepsilon$-greedy policy. 
 
-Our implementation is based on an open source Qt Project\footnote{\href{https://qt-project.org/doc/qt-4.8/widgets-tetrix.html}{Qt Project}} implementation. \\
+Our code is based on an open source Qt Project\footnote{\href{https://qt-project.org/doc/qt-4.8/widgets-tetrix.html}{Qt Project}} implementation. \\
 The core idea for the reinforcement learning algorithm we use is described by Zucker \& Maas \cite{zucker2009learning}, which will be investigated in more detail in \autoref{method}.
 
 %------------------------------------------------------------------------------
-\\
+
 \section{Method}
 \label{method}
 
-We use 
+Following the remarks in \cite{zucker2009learning}, we first defined the properties of the game, needed to calculate the quality.
+According to the common Tetris rules, a player can rotate, move and drop a Tetronimo. As it is an easy representation, we describe an action $u$ as a position and rotation of a piece: $u = (p,r)$. The state $x$ of the game consists of the current board occupancy, the current Tetronimo to be played, and the next Tetronimo to be spawned (in time step $t+1$). 
+To end up in a successor state $x'$, an action $u$ has to be applied being in state $x$. 
+Whenever one or more lines have been removed applying that action $u$, the player receives the reward $r$, which is dependent on the current state and the action to be applied: $r(x,u)$.
 
-\lipsum[9-12]
+After investigating different variations of features describing the properties of a current state, we revisit the proposed feature combination mentioned in \cite{zucker2009learning}, which have been proven to work best with our implementation. 
+The featurevector thus contains the following information:
+\begin{enumerate}
+	\item[\textbf{0-9:}] the height of each cell
+	\item[\textbf{10-18:}] absolute height difference between adjacent cells
+	\item[\textbf{19:}] overall maximum height 
+	\item[\textbf{20:}] number of holes in the board
+	\item[\textbf{21:}] number of removed lines (\Corresponds~reward)
+\end{enumerate}
+While the number of removed lines denotes the obvious quality of an action, or the action-transition from one state to a successor state, the other features constitute important quality attributes too. The height of each cell as well as the absolute height difference between adjacent cells characterize the ``smoothness'' or ``evenness'' of the columns' surface. A state in which the columns are very low and even is to be preferred from a bumpy surface with single columns almost reaching the top of the board. 
+An increasing number of holes in the board implies increasing complexity of the game, as it makes it harder to complete several lines at a time, and therefore reducing the overall height. 
+
+Adding further features such as the maximum height difference or the number of holes per column do not add relevant information and therefore do not lead to significantly better results. 
+
+%TODO feature: "depth" of holes --> improvement??
+
+
 
 %------------------------------------------------------------------------------
 
 \section{Results}
 \label{results}
 
-\lipsum[1-2] 
+To be able to compare the results of our implementation and see, if different changes have significantly different outcomes, we extended the base implementation with some GUI widgets that provide useful information such as the number of played games, the maximum number of removed lines and the average number of removed lines. As the first pieces are randomly placed, it happens by chance, that a line is removed. This is the moment, in which the learner receives a reward for the first time. It can happen, that the learner has to play 50 games or more before it finally removes a line. In that case, the average number of removed lines is not very meaningful. Also, after running the learner for a while, this value does not change significantly, and does not show significant short-term changes. That is why we introduced another value, denoting the average number of removed lines \textit{over the last n games}, the ``moving average''.
 
-\begin{wrapfigure}{r}{0.5\textwidth}
-\vspace{-10pt}
+\begin{wrapfigure}{l}{0.5\textwidth}
+  \vspace{-5pt}
   \begin{center}
-    \includegraphics[width=0.5\textwidth]{img/woooo1.png}
+    \includegraphics[width=0.5\textwidth]{img/three.png}
   \end{center}
-  \vspace{-10pt}
-  \caption{\small{WOOOOOO!}}
-  \label{wooo}
-  \vspace{-10pt}
+  \vspace{-5pt}
+  \caption{\small{The current number of removed lines already exeeds one million. Note, that the difference between the total and the moving average is not significant, as the game has been initiated with excellent weights, and the learning period was left out.}}
+  \label{three}
+  \vspace{-5pt}
 \end{wrapfigure}
 
-\lipsum[3-4]
+We also implemented an agent, which uses hardcoded rules to play Tetris. 
+These rules are what we consider to be the ``naive'' way to play the game, comparable to an unexperienced player. 
+The results of this rather unintelligent approach are used as a baseline. 
+The algorithm with a learning function should by all means outperform the naive Agent.
+
+We also use a Greedy implementation, which simply uses given weights for the features to play the game, without learning from it. 
+This is used to compare the quality of the learnt weights (from the reinforcement learner implementation). 
+These weights can simply be fed in through a text field in the GUI. 
+
+\autoref{three} shows the greedy algorithm using obviously excellent values previously learnt by the reinforcement learner.
+The number of removed lines already exceeds 1,250,000 after 11 played games. 
+
+The performance of the reinforcment learner usually does not outperform the greedy algorithm. 
+To prevent getting stuck in a local maximum, the learner only chooses the ``best'' action (based on what it has learned before) to a certain probability. 
+Otherwise, it just performs a random action, which can be interpreted as ``exploring'' new options without being too dependent on the possibly disadvantageous rules it has learned. 
+
+The difference (exemplified with a rather old implementation of the reinforcement learner) can be seen in \autoref{four}.
 
 
 \begin{wrapfigure}{l}{0.5\textwidth}
 \vspace{-10pt}
   \begin{center}
-    \includegraphics[width=0.5\textwidth]{img/superhappyawesome.png}
+    \includegraphics[width=0.5\textwidth]{img/four.png}
   \end{center}
   \vspace{-10pt}
-  \caption{\small{SUPERHAPPYAWESOME}}
-  \label{superhappyawesome}
+  \caption{\small{Comparison between greedy algorithm (which only uses given weights) and the reinforcement learner (which continuously updates the weights and uses exploration to prevent getting stuck in local maxima).}}
+  \label{four}
   \vspace{-10pt}
 \end{wrapfigure}
 
-\lipsum[5-6]
+%TODO here be dragons... new results.. table?
+
 
 %------------------------------------------------------------------------------
 
 \section{Conclusions}
 \label{conclusions}
 
-\lipsum[7-9]
 
 %------------------------------------------------------------------------------
 

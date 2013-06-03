@@ -15,6 +15,8 @@
 \usepackage{fancyhdr}
 \usepackage{wrapfig}
 \usepackage{lipsum}
+\usepackage{marvosym}
+
 
 % -----------------------------------------------------------------------
 % Page layout
