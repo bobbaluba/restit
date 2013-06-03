@@ -14,7 +14,6 @@ HEADERS       = tetrixboard.h \
     gamemodel.h \
     complextetris.h \
     stochyboss.h \
-    reinforcer.h \
     zuckermaas.h \
     vector.h
  SOURCES       = main.cpp \
@@ -32,7 +31,6 @@ HEADERS       = tetrixboard.h \
     gamemodel.cpp \
     complextetris.cpp \
     stochyboss.cpp \
-    reinforcer.cpp \
     zuckermaas.cpp \
     vector.cpp
 
