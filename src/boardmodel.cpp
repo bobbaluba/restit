@@ -47,7 +47,7 @@ int BoardModel::getMaximumHeight() const {
     return 0;
 }
 
-std::vector<double> BoardModel::getFeatures() const {
+const std::vector<double> BoardModel::getFeatures() const {
     std::vector<double> features;
     for(int i = 0; i < width; ++i){
         features.push_back(getColumnHeight(i));
@@ -77,7 +77,7 @@ bool BoardModel::canDropIntoColumn(const TetrixPiece& piece, int x) const{
     return isFree(piece, x, y);
 }
 
-BoardModel BoardModel::dropPiece(const TetrixPiece &piece, int x, int *numLinesRemoved) const {
+const BoardModel BoardModel::dropPiece(const TetrixPiece &piece, int x, int *numLinesRemoved) const {
     int curY = height - 1 + piece.minY();
 
     assert(isFree(piece, x, curY)); //verify that the move is legal
@@ -88,13 +88,13 @@ BoardModel BoardModel::dropPiece(const TetrixPiece &piece, int x, int *numLinesR
     return placePiece(piece, x, curY, numLinesRemoved);
 }
 
-BoardModel BoardModel::placePiece(const TetrixPiece &piece, int x, int y, int *numLinesRemoved) const {
+const BoardModel BoardModel::placePiece(const TetrixPiece &piece, int x, int y, int *numLinesRemoved) const {
     BoardModel copy = *this;
     *numLinesRemoved = copy.placePiece(piece, x, y);
     return copy;
 }
 
-BoardModel BoardModel::applyAction(SimpleAction action, const TetrixPiece& piece, int *numLinesRemoved) const{
+const BoardModel BoardModel::applyAction(const SimpleAction &action, const TetrixPiece& piece, int *numLinesRemoved) const{
     TetrixPiece tmpPiece = piece;
     for(int i=0; i<action.rotation; ++i){
         tmpPiece = tmpPiece.rotatedLeft();
@@ -102,7 +102,7 @@ BoardModel BoardModel::applyAction(SimpleAction action, const TetrixPiece& piece
     return dropPiece(tmpPiece, action.position, numLinesRemoved);
 }
 
-const std::vector<SimpleAction> BoardModel::getLegalActions(const TetrixPiece currentPiece) const {
+const std::vector<SimpleAction> BoardModel::getLegalActions(const TetrixPiece &currentPiece) const {
     std::vector<SimpleAction> legalActions;
     TetrixPiece piece = currentPiece;
     for(int i=0; i<4; ++i){

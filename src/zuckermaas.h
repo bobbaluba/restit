@@ -13,8 +13,8 @@ private:
     const double beta; //momemntum importance factor
     int t;
 public:
-    ZuckerMaas(unsigned int boardFeatures, double learningRate = 0.1, double momentum = 0.5);
-    virtual SimpleAction getGoal(const State &currentState);
+    explicit ZuckerMaas(unsigned int boardFeatures, double learningRate = 0.1, double momentum = 0.5);
+    virtual const SimpleAction getGoal(const State &currentState);
     //void setParameterVector(const Vector vector){ parameters = vector; }
     const Vector& getTheta() const { return theta; }
     void setTheta(const Vector& newTheta) { theta = newTheta; }

@@ -5,7 +5,7 @@
 LocoBoss::LocoBoss(int boardWidth): boardWidth(boardWidth){
 }
 
-SimpleAction LocoBoss::getGoal(const State &/*currentState*/){
+const SimpleAction LocoBoss::getGoal(const State &/*currentState*/){
     int rotation = rand() % 4;
     int position = rand() % boardWidth;
     return SimpleAction{rotation, position};

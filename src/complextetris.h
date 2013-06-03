@@ -14,7 +14,7 @@ private:
     bool paused;
     bool gameOver;
 public:
-    ComplexTetris(GameModel* game);
+    explicit ComplexTetris(GameModel* game);
     bool rotateCCW();
     void moveDown();
     bool moveLeft();
@@ -25,7 +25,7 @@ public:
     void timeoutElapsed();
 
     //getters
-    State getState(){return State(game->getBoard(), game->getCurrentPiece(), game->getNextPiece());}
+    const State getState(){return State(game->getBoard(), game->getCurrentPiece(), game->getNextPiece());}
     bool isPaused() const { return paused; }
     bool isGameOver() const { return gameOver; }
     bool hasStarted() const { return started; }

@@ -8,7 +8,7 @@
 
 class BossOfBoris{
 public:
-    virtual SimpleAction getGoal(const State& currentState) = 0;
+    virtual const SimpleAction getGoal(const State& currentState) = 0;
 };
 
 #endif // BOSSOFBORIS_H

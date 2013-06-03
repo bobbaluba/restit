@@ -14,10 +14,10 @@ private:
     };
 private:
     BossOfBoris *boss;
-    ComplexTetris* tetris;
+    ComplexTetris *tetris;
     std::vector<Boris::Action> plan;
 public:
-    Boris(BossOfBoris *boss, ComplexTetris* tetris);
+    explicit Boris(BossOfBoris *boss, ComplexTetris* tetris);
     void tick(); //called whenever boris can do an action
     void updatePlan();
     Boris::Action getNextAction();

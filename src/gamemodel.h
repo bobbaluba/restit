@@ -9,7 +9,7 @@ private:
     TetrixPiece currentPiece;
     TetrixPiece nextPiece;
 public:
-    GameModel(int width, int height):
+    explicit GameModel(int width, int height):
         board(BoardModel(width, height)){
     }
 

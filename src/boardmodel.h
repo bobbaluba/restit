@@ -16,7 +16,7 @@ private:
 public:
 
     //create a new empty board
-    BoardModel(int width, int height);
+    explicit BoardModel(int width, int height);
 
     TetrixShape getShapeAt(int x, int y) const { return tiles[(y * width) + x]; }
     bool isEmpty(int x, int y) const { return getShapeAt(x,y) == NoShape; }
@@ -29,7 +29,7 @@ public:
     int getColumnHeight(int x) const;
     int getColumnHeightDifference(int x1, int x2) const;
     int getMaximumHeight() const;
-    std::vector<double> getFeatures() const;
+    const std::vector<double> getFeatures() const;
     size_t getNumFeatures() const {return getFeatures().size();}
 
 
@@ -39,17 +39,17 @@ public:
     bool canDropIntoColumn(const TetrixPiece &piece, int x) const;
 
     //returns the board after dropping a piece into column x, number of lines removed are stored in *numLinesRemoved
-    BoardModel dropPiece(const TetrixPiece &piece, int x, int* numLinesRemoved) const;
+    const BoardModel dropPiece(const TetrixPiece &piece, int x, int* numLinesRemoved) const;
 
     //required if we plan on supporting placement of pieces under overhangs
-    BoardModel placePiece(const TetrixPiece &piece, int x, int y, int* numLinesRemoved) const;
+    const BoardModel placePiece(const TetrixPiece &piece, int x, int y, int* numLinesRemoved) const;
 
-    BoardModel applyAction(SimpleAction action, const TetrixPiece &piece, int *numLinesRemoved) const;
-    const std::vector<SimpleAction> getLegalActions(const TetrixPiece currentPiece) const;
+    const BoardModel applyAction(const SimpleAction& action, const TetrixPiece &piece, int *numLinesRemoved) const;
+    const std::vector<SimpleAction> getLegalActions(const TetrixPiece &currentPiece) const;
 
 private:
     //non-deterministic helper methods
-    void setShapeAt(int x, int y, TetrixShape shape) {tiles[(y * width) + x] = shape; }
+    void setShapeAt(int x, int y, const TetrixShape &shape) {tiles[(y * width) + x] = shape; }
     int placePiece(const TetrixPiece &piece, int x, int y); //returns number of lines removed
     int removeFullLines();
 };

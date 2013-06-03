@@ -1,5 +1,5 @@
 CONFIG += qt
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++11 -Wall -Werror -pedantic-errors -Wno-error=unused-local-typedefs
 HEADERS       = tetrixboard.h \
                  tetrixpiece.h \
 				 tetrixwindow.h \
@@ -14,7 +14,6 @@ HEADERS       = tetrixboard.h \
     gamemodel.h \
     complextetris.h \
     stochyboss.h \
-    reinforcer.h \
     zuckermaas.h \
     vector.h
  SOURCES       = main.cpp \
@@ -32,7 +31,6 @@ HEADERS       = tetrixboard.h \
     gamemodel.cpp \
     complextetris.cpp \
     stochyboss.cpp \
-    reinforcer.cpp \
     zuckermaas.cpp \
     vector.cpp
 

@@ -62,40 +62,35 @@ TetrixPiece::TetrixPiece(TetrixShape shape): pieceShape(shape){
     }
 }
 
-int TetrixPiece::minX() const
-{
+int TetrixPiece::minX() const {
     int min = coords[0][0];
     for (int i = 1; i < 4; ++i)
         min = qMin(min, coords[i][0]);
     return min;
 }
 
-int TetrixPiece::maxX() const
-{
+int TetrixPiece::maxX() const {
     int max = coords[0][0];
     for (int i = 1; i < 4; ++i)
         max = qMax(max, coords[i][0]);
     return max;
 }
 
-int TetrixPiece::minY() const
-{
+int TetrixPiece::minY() const {
     int min = coords[0][1];
     for (int i = 1; i < 4; ++i)
         min = qMin(min, coords[i][1]);
     return min;
 }
 
-int TetrixPiece::maxY() const
-{
+int TetrixPiece::maxY() const {
     int max = coords[0][1];
     for (int i = 1; i < 4; ++i)
         max = qMax(max, coords[i][1]);
     return max;
 }
 
-TetrixPiece TetrixPiece::rotatedLeft() const
-{
+const TetrixPiece TetrixPiece::rotatedLeft() const {
     if (pieceShape == SquareShape)
         return *this;
 
@@ -108,8 +103,7 @@ TetrixPiece TetrixPiece::rotatedLeft() const
     return result;
 }
 
-TetrixPiece TetrixPiece::rotatedRight() const
-{
+const TetrixPiece TetrixPiece::rotatedRight() const {
     if (pieceShape == SquareShape)
         return *this;
 

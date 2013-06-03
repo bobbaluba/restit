@@ -9,8 +9,8 @@ class LocoBoss : public BossOfBoris{
 private:
     const int boardWidth;
 public:
-    LocoBoss(int boardWidth);
-    virtual SimpleAction getGoal(const State& currentState);
+    explicit LocoBoss(int boardWidth);
+    virtual const SimpleAction getGoal(const State& currentState);
 };
 
 #endif // LOCOBOSS_H

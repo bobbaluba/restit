@@ -12,7 +12,7 @@ double operator* (Vector& lhs, Vector& rhs){
     return sum;
 }
 
-Vector operator+ (const Vector& lhs, const Vector& rhs){
+const Vector operator+ (const Vector& lhs, const Vector& rhs){
     assert(lhs.size() == rhs.size());
     Vector copy = lhs;
     for(unsigned int i=0; i<rhs.size(); ++i){
@@ -21,7 +21,7 @@ Vector operator+ (const Vector& lhs, const Vector& rhs){
     return copy;
 }
 
-Vector operator*(const Vector& lhs, double rhs){
+const Vector operator*(const Vector& lhs, double rhs){
     Vector copy = lhs;
     for(unsigned int i=0; i<copy.size(); ++i){
         copy[i] *= rhs;
@@ -29,15 +29,15 @@ Vector operator*(const Vector& lhs, double rhs){
     return copy;
 }
 
-Vector operator/(const Vector& lhs, double rhs){
+const Vector operator/(const Vector& lhs, double rhs){
     return lhs * (1/rhs);
 }
 
-Vector operator*(double lhs, const Vector& rhs){
+const Vector operator*(double lhs, const Vector& rhs){
     return rhs * lhs;
 }
 
-Vector operator- (const Vector& rhs){
+const Vector operator- (const Vector& rhs){
     Vector copy = rhs;
     for(unsigned int i=0; i<copy.size(); ++i){
         copy[i] *= -1;
@@ -45,7 +45,7 @@ Vector operator- (const Vector& rhs){
     return copy;
 }
 
-Vector operator- (const Vector& lhs, const Vector& rhs){
+const Vector operator- (const Vector& lhs, const Vector& rhs){
     return lhs + (-rhs);
 }
 
