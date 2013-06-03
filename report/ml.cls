@@ -5,12 +5,16 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[english]{babel}
 \usepackage[T1]{fontenc}
-\usepackage[colorlinks=true, linkcolor=black,citecolor=black,raiselinks=true,urlcolor=black]{hyperref}
+\usepackage[usenames,dvipsnames]{xcolor}
+\definecolor{darkblue}{RGB}{0,0,85}
+\usepackage[colorlinks=true, linkcolor=darkblue,citecolor=darkblue,raiselinks=true,urlcolor=darkblue]{hyperref}
 \usepackage{graphicx}
 \usepackage{palatino}
 \usepackage{a4}
 \usepackage{url}
 \usepackage{fancyhdr}
+\usepackage{wrapfig}
+\usepackage{lipsum}
 
 % -----------------------------------------------------------------------
 % Page layout
@@ -23,7 +27,7 @@
 \setlength{\parindent}{1ex}
 
 % Abstand zwischen zwei Absätzen
-\setlength{\parskip}{0ex}
+\setlength{\parskip}{1ex}
 
 % Seitenränder verändern
 \addtolength{\evensidemargin}{-1cm}

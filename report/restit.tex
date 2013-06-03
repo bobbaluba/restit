@@ -3,25 +3,84 @@
 \begin{document}
 \maketitle{Rest-It}{Sun, 09 Jun 2013 23:59}{Mareike Picklum}{z3446393}{Johan Klokkhammer Helsing}{z3432903}
 
+%------------------------------------------------------------------------------
+
 \section{Introduction}
+\label{intro}
 The project \textit{Rest-It} is an implementation of a reinforcement learner for the popular puzzle game Tetris. 
+The core idea of the game is, to place Tetronimoes (pieces consisting of connected cells) in the way that the complete as many lines as possible in a 10 columns by 20 rows playing field.
+Each completed line is removed from the field and the cells above are moved one cell down.
+Removing a line adds one to the players score.
+Tetris is a benchmark problem for testing machine learning algorithms, as it uses comparably simple rules although it requires complex strategies to perform well. 
 
+In \nameref{relatedwork} we will give a short overview about existing reinforcement learning approaches for Tetris and give information about what our project is based on and influenced by.
+We will then describe the algorithms we implemented \nameref{method} and present  the results for the different approaches in \nameref{results}.
+We will give a short summary and wrap up in \nameref{conclusions}.
 
-\section{Method}
-
-\section{Results}
-
-\section{Discussion}
+%------------------------------------------------------------------------------
 
 \section{Related work}
-\cite{wwwtetrix}
-Qt Project\footnote{Test footnote: \url{https://qt-project.org/doc/qt-4.8/widgets-tetrix.html}}
-\cite{szepesvari2010algorithms}
-\cite{szita2006learning}
-\cite{carr2005applying}
-\cite{gross2008learningto}
+\label{relatedwork}
+There are different approaches for tetris learners. 
+Csaba Szepesvári \cite{szepesvari2010algorithms} describes different reinforcement learning algorithms and their core ideas and discusses their theoretical  limitations. \\
+Szita \&  L{\"o}rincz \cite{szita2006learning} apply noise to improve the cross-entropy method by preventing it from early convergence and achieve a policy that outperforms previous algorithms by almost two orders of magnitude.\\
+Donald Carr introduces reinforcement learning for Tetris and introduces the Formal Tetris Specification by Fahey \cite{faheytetris}.\\
+Gross \& Schwenker \cite{gross2008learningto} investigate the idea of temporal difference learning applied to the Tetris problem and train agent using an $\varepsilon$-greedy policy. 
+
+Our implementation is based on an open source Qt Project\footnote{\href{https://qt-project.org/doc/qt-4.8/widgets-tetrix.html}{Qt Project}} implementation. \\
+The core idea for the reinforcement learning algorithm we use is described by Zucker \& Maas \cite{zucker2009learning}, which will be investigated in more detail in \autoref{method}.
+
+%------------------------------------------------------------------------------
+\\
+\section{Method}
+\label{method}
+
+We use 
+
+\lipsum[9-12]
+
+%------------------------------------------------------------------------------
+
+\section{Results}
+\label{results}
+
+\lipsum[1-2] 
+
+\begin{wrapfigure}{r}{0.5\textwidth}
+\vspace{-10pt}
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{img/woooo1.png}
+  \end{center}
+  \vspace{-10pt}
+  \caption{\small{WOOOOOO!}}
+  \label{wooo}
+  \vspace{-10pt}
+\end{wrapfigure}
+
+\lipsum[3-4]
+
+
+\begin{wrapfigure}{l}{0.5\textwidth}
+\vspace{-10pt}
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{img/superhappyawesome.png}
+  \end{center}
+  \vspace{-10pt}
+  \caption{\small{SUPERHAPPYAWESOME}}
+  \label{superhappyawesome}
+  \vspace{-10pt}
+\end{wrapfigure}
+
+\lipsum[5-6]
+
+%------------------------------------------------------------------------------
 
 \section{Conclusions}
+\label{conclusions}
+
+\lipsum[7-9]
+
+%------------------------------------------------------------------------------
 
 %%%
 % Sources
