@@ -16,7 +16,7 @@ Tetris is a benchmark problem for testing machine learning algorithms, as it use
 In \nameref{relatedwork} we will give a short overview about existing reinforcement learning approaches for Tetris and give information about what our project is based on and influenced by.
 We will then describe the algorithms we implemented \nameref{method}.
 After interpreting some issues we had to deal with in \nameref{problems}, we present our results in \nameref{results}.
-We will give a short summary and wrap up in \nameref{conclusions}.
+We will give a short summary and wrap up the results in \nameref{conclusions}.
 
 %------------------------------------------------------------------------------
 
@@ -112,14 +112,7 @@ These weights can simply be fed in through a text field in the GUI.
 \autoref{three} shows the greedy algorithm using obviously excellent values previously learnt by the reinforcement learner.
 The number of removed lines already exceeds 1,250,000 after 11 played games. 
 
-The performance of the reinforcment learner usually does not outperform the greedy algorithm. 
-To prevent getting stuck in a local maximum, the learner only chooses the ``best'' action (based on what it has learned before) to a certain probability. 
-Otherwise, it just performs a random action, which can be interpreted as ``exploring'' new options without being too dependent on the possibly disadvantageous rules it has learned. 
-
-The difference (exemplified with a rather old implementation of the reinforcement learner) can be seen in \autoref{four}.
-
-
-\begin{wrapfigure}{l}{0.5\textwidth}
+\begin{wrapfigure}{r}{0.5\textwidth}
 \vspace{-10pt}
   \begin{center}
     \includegraphics[width=0.5\textwidth]{img/four.png}
@@ -130,14 +123,20 @@ The difference (exemplified with a rather old implementation of the reinforcemen
   \vspace{-10pt}
 \end{wrapfigure}
 
-%TODO here be dragons... new results.. table?
+The performance of the reinforcment learner usually does not outperform the greedy algorithm. 
+To prevent getting stuck in a local maximum, the learner only chooses the ``best'' action (based on what it has learned before) to a certain probability. 
+Otherwise, it just performs a random action, which can be interpreted as ``exploring'' new options without being too dependent on the possibly disadvantageous rules it has learned. 
 
+The difference (exemplified with a rather old implementation of the reinforcement learner) can be seen in \autoref{four}.
+%TODO here be dragons... new results.. table?
 
 %------------------------------------------------------------------------------
 
 \section{Conclusions}
 \label{conclusions}
 
+\lipsum[1]
+%TODO here be more dragons
 
 %------------------------------------------------------------------------------
 
