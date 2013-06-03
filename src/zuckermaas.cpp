@@ -209,7 +209,7 @@ const Vector z_tplus1(const Vector &z, double beta, const Vector &theta, const S
 
 //delta_t+1
 const Vector delta_tplus1(const Vector &ztplus1, const Vector &deltat, const State& xtplus1, const SimpleAction& utplus1, double t){
-    Vector ret = deltat + t/(t+1) * (r(xtplus1, utplus1)*ztplus1-deltat);
+    const Vector ret = deltat + t/(t+1) * (r(xtplus1, utplus1)*ztplus1-deltat);
     return ret;
 }
 
@@ -218,7 +218,7 @@ const SimpleAction pie_soft(const State& x, const Vector &theta){
     assert(!Us.empty());
     double actionValue = double(rand())/double(RAND_MAX);
     double actionSum = 0.0;
-    Vector QValues = computeQValues(x,theta,Us);
+    const Vector QValues = computeQValues(x,theta,Us);
     for(unsigned int i = 0; i<Us.size(); ++i){
         double quality = q(theta, x, Us[i], QValues);
         actionSum += quality;
