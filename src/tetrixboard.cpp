@@ -47,6 +47,7 @@
 
 TetrixBoard::TetrixBoard(QWidget *parent) : QFrame(parent),
     invisible(false),
+    lineDownTimeoutEnabled(true),
     gamesPlayed(0),
     maxLinesRemoved(0),
     totalLinesRemoved(0),
@@ -163,6 +164,10 @@ void TetrixBoard::setZuckerAI(bool enabled){
     }
 }
 
+void TetrixBoard::setLineDownTimeoutEnabled(bool enabled){
+    lineDownTimeoutEnabled = enabled;
+}
+
 void TetrixBoard::setGreedyAI(bool enabled){
     if(enabled){
         stochyBoss.setTheta(zuckerBoss.getTheta());
@@ -239,7 +244,7 @@ void TetrixBoard::keyPressEvent(QKeyEvent *event)
 void TetrixBoard::timerEvent(QTimerEvent *event){
     if (event->timerId() == timer.timerId()) {
         if(!tetris.isPaused()){
-            tetris.timeoutElapsed();
+            if(lineDownTimeoutEnabled)tetris.timeoutElapsed();
             timer.start(tetris.getTimeoutTime(), this);
             if(!invisible)refreshGUI();
         }
@@ -294,7 +299,9 @@ void TetrixBoard::refreshGUI(){
     ss << parameters;
     QString parametersString(ss.str().c_str());
     emit parametersChanged(parametersString);
-    emit totalMovesChanged(static_cast<int>(boris.getBoss()->getTotalMoves()));
+    if(boris.getBoss()!=nullptr){
+        emit totalMovesChanged(static_cast<int>(boris.getBoss()->getTotalMoves()));
+    }
 
     update();
     showNextPiece();

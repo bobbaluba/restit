@@ -78,6 +78,8 @@ TetrixWindow::TetrixWindow()
     reinforcementRadio->setChecked(true);
 
     QCheckBox *autoPlayCheckBox = new QCheckBox(tr("Auto Play"));
+    QCheckBox *lineDownCheckBox = new QCheckBox(tr("Line Down Timeout"));
+    lineDownCheckBox->setChecked(true);
 
     QCheckBox *invisiblePlayCheckBox = new QCheckBox(tr("Play without gui"));
 
@@ -92,6 +94,7 @@ TetrixWindow::TetrixWindow()
     aiSelectorLayout->addWidget(reinforcementRadio);
     aiSelectorLayout->addWidget(autoPlayCheckBox);
     aiSelectorLayout->addWidget(invisiblePlayCheckBox);
+    aiSelectorLayout->addWidget(lineDownCheckBox);
     aiSelectorLayout->addWidget(speedSlider);
 
     //vbox->addStretch(1);
@@ -145,6 +148,7 @@ TetrixWindow::TetrixWindow()
     connect(speedSlider, SIGNAL(valueChanged(int)), board, SLOT(setAISpeed(int)));
     connect(autoPlayCheckBox, SIGNAL(toggled(bool)), board, SLOT(setAutoPlay(bool)));
     connect(invisiblePlayCheckBox, SIGNAL(toggled(bool)), board, SLOT(setInvisiblePlay(bool)));
+    connect(lineDownCheckBox, SIGNAL(toggled(bool)), board, SLOT(setLineDownTimeoutEnabled(bool)));
     connect(board, SIGNAL(gamesPlayedChanged(int)), numGames, SLOT(display(int)));
     connect(board, SIGNAL(totalMovesChanged(int)), totalMoves, SLOT(display(int)));
     connect(board, SIGNAL(maxLinesRemovedChanged(int)), maxLinesRemoved, SLOT(display(int)));

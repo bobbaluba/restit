@@ -80,6 +80,7 @@ public slots:
     void setNoAI(bool enabled);
     void setGreedyAI(bool enabled);
     void setZuckerAI(bool enabled);
+    void setLineDownTimeoutEnabled(bool enabled);
 
 signals:
     void levelChanged(int level);
@@ -114,6 +115,7 @@ private:
     //int score;
 
     bool invisible;
+    bool lineDownTimeoutEnabled;
     int gamesPlayed;
     int maxLinesRemoved;
     int totalLinesRemoved;
