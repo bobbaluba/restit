@@ -1,4 +1,4 @@
-# Extract package, build and run restit-program
+# build package
 
 cd build/
 qmake ..
