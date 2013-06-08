@@ -1,5 +1,7 @@
+#!/bin/sh
 # build package
 
-cd src/build/
-qmake ..
+mkdir -p build
+cd build/
+qmake ../src
 make
