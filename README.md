@@ -49,9 +49,17 @@ System requirements
 Installation instructions
 -------------------------
 
-* tar -xf restit.tar.gz
+Option 1:
+run build.sh to build package automagically and run program manually
+
+Option 2:
+run build_n_run.sh to build package, run program and create log file automagically
+
+Option 3:
+Do everything manually:
+
 * cd build/
-* qmake ../src/tetrix.pro
+* qmake .. (or qmake ../src/tetrix.pro on older qt versions)
 * make
 * ./tetrix
 
