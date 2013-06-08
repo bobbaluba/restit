@@ -12,6 +12,11 @@ public:
     explicit GameModel(int width, int height):
         board(BoardModel(width, height)){
     }
+    explicit GameModel(const BoardModel& board, const TetrixPiece& currentPiece, const TetrixPiece& nextPiece) :
+        board(board),
+        currentPiece(currentPiece),
+        nextPiece(nextPiece)
+    {}
 
     const BoardModel &getBoard() const;
     void setBoard(const BoardModel &value);

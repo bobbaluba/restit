@@ -2,25 +2,21 @@
 #define STATE_H
 
 #include "simpleaction.h"
-#include "boardmodel.h"
+#include "gamemodel.h"
 
 #include <vector>
 
 class State{
 private:
-    BoardModel board;
-    TetrixPiece currentPiece; //piece we are about to place
-    TetrixPiece nextPiece; //piece we are about to place
+    GameModel gameModel;
 public:
     explicit State(const BoardModel& board, const TetrixPiece& currentPiece, const TetrixPiece& nextPiece):
-        board(board),
-        currentPiece(currentPiece),
-        nextPiece(nextPiece)
+        gameModel(board,currentPiece, nextPiece)
     {}
-    const std::vector<SimpleAction> getLegalActions() const;
-    const BoardModel applyAction(const SimpleAction& action, int *numLinesRemoved) const;
-    const TetrixPiece& getCurrentPiece() const { return currentPiece; }
-    const TetrixPiece& getNextPiece() const { return nextPiece; }
+    const std::vector<SimpleAction> getLegalActions() const { return gameModel.getBoard().getLegalActions(gameModel.getCurrentPiece()); }
+    const BoardModel applyAction(const SimpleAction& action, int *numLinesRemoved) const { return gameModel.getBoard().applyAction(action, gameModel.getCurrentPiece(), numLinesRemoved); }
+    const TetrixPiece& getCurrentPiece() const { return gameModel.getCurrentPiece(); }
+    const TetrixPiece& getNextPiece() const { return gameModel.getNextPiece(); }
 };
 
 #endif // STATE_H

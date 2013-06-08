@@ -333,7 +333,7 @@ const std::pair<SimpleAction, SimpleAction> pie_hard_lookahead(const State &curr
 }
 
 void ZuckerMaas::initializeTheta(int size){
-    const bool goodParameters = true;
+    const bool goodParameters = false;
     if(theta.empty()){
         theta.reserve(size);
         if(goodParameters){

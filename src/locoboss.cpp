@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 
-LocoBoss::LocoBoss(int boardWidth): boardWidth(boardWidth){
+LocoBoss::LocoBoss(int boardWidth): boardWidth(boardWidth), t(0){
 }
 
 const SimpleAction LocoBoss::getGoal(const State &/*currentState*/){

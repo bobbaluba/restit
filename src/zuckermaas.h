@@ -11,10 +11,11 @@ private:
     Vector delta; //current step
     const double alpha; //learning rate 0.2 a good value?
     const double beta; //momemntum importance factor
-    int t;
+    long t;
 public:
-    explicit ZuckerMaas(unsigned int boardFeatures, double learningRate = 0.1, double momentum = 0.5);
+    explicit ZuckerMaas(unsigned int boardFeatures, double learningRate = 0.1, double momentum = 0.0);
     virtual const SimpleAction getGoal(const State &currentState);
+    virtual long getTotalMoves() const {return t;}
     //void setParameterVector(const Vector vector){ parameters = vector; }
     const Vector& getTheta() const { return theta; }
     void setTheta(const Vector& newTheta) { theta = newTheta; }

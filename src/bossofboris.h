@@ -9,6 +9,7 @@
 class BossOfBoris{
 public:
     virtual const SimpleAction getGoal(const State& currentState) = 0;
+    virtual long getTotalMoves() const = 0;
 };
 
 #endif // BOSSOFBORIS_H

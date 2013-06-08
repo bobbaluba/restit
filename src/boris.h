@@ -22,6 +22,7 @@ public:
     void updatePlan();
     Boris::Action getNextAction();
     void setBoss(BossOfBoris* boss);
+    BossOfBoris* getBoss(){return boss;}
 };
 
 #endif // BORIS_H

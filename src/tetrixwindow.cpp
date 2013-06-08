@@ -129,11 +129,9 @@ TetrixWindow::TetrixWindow()
     QLineEdit *paramView = new QLineEdit("test");
     paramView->setReadOnly(true);
     QLineEdit *paramEdit = new QLineEdit;
-    QPushButton *loadParamsButton = new QPushButton("Load");
     QGridLayout *paramBox = new QGridLayout;
     paramBox->addWidget(paramView, 0, 0);
     paramBox->addWidget(paramEdit, 1, 0);
-    paramBox->addWidget(loadParamsButton, 0, 1, 2, 1);
 
     //tetris
     connect(startButton, SIGNAL(clicked()), board, SLOT(start()));
@@ -148,6 +146,7 @@ TetrixWindow::TetrixWindow()
     connect(autoPlayCheckBox, SIGNAL(toggled(bool)), board, SLOT(setAutoPlay(bool)));
     connect(invisiblePlayCheckBox, SIGNAL(toggled(bool)), board, SLOT(setInvisiblePlay(bool)));
     connect(board, SIGNAL(gamesPlayedChanged(int)), numGames, SLOT(display(int)));
+    connect(board, SIGNAL(totalMovesChanged(int)), totalMoves, SLOT(display(int)));
     connect(board, SIGNAL(maxLinesRemovedChanged(int)), maxLinesRemoved, SLOT(display(int)));
     connect(board, SIGNAL(avgLinesRemovedChanged(double)), avgLinesRemoved, SLOT(display(double)));
     connect(board, SIGNAL(movingAvgLinesChanged(double)), movingAvgLinesRemoved, SLOT(display(double)));

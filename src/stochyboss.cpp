@@ -5,7 +5,7 @@
 #include <cassert>
 
 
-StochyBoss::StochyBoss(){
+StochyBoss::StochyBoss():t(0){
 }
 
 const SimpleAction StochyBoss::getGoal(const State &currentState){
