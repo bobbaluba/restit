@@ -1,5 +1,5 @@
 # build package
 
-cd build/
+cd src/build/
 qmake ..
 make

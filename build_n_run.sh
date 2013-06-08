@@ -1,6 +1,6 @@
 # build package and run restit-program
 
-cd build/
+cd src/build/
 qmake ..
 make
 
