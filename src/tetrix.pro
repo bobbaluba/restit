@@ -14,7 +14,8 @@ HEADERS = tetrixboard.h \
     complextetris.h \
     stochyboss.h \
     zuckermaas.h \
-    vector.h
+    vector.h \
+    digitalclock.h
 
 SOURCES = main.cpp \
     tetrixboard.cpp \
@@ -31,7 +32,8 @@ SOURCES = main.cpp \
     complextetris.cpp \
     stochyboss.cpp \
     zuckermaas.cpp \
-    vector.cpp
+    vector.cpp \
+    digitalclock.cpp
 
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/widgets/tetrix

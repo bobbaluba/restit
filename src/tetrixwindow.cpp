@@ -42,6 +42,7 @@
 
 #include "tetrixboard.h"
 #include "tetrixwindow.h"
+#include "digitalclock.h"
 
 TetrixWindow::TetrixWindow()
 {
@@ -60,6 +61,8 @@ TetrixWindow::TetrixWindow()
 
     QLCDNumber* tetrominoesPlayedLCD = new QLCDNumber(5);
     tetrominoesPlayedLCD->setSegmentStyle(QLCDNumber::Filled);
+
+    DigitalClock* digitalClock = new DigitalClock();
 
 
     startButton = new QPushButton(tr("&Start"));
@@ -164,9 +167,11 @@ TetrixWindow::TetrixWindow()
 
     //tetris
     QGridLayout *tetrisLayout = new QGridLayout;
-    tetrisLayout->addWidget(board, 0, 0, 8, 1);
+    tetrisLayout->addWidget(board, 0, 0, 11, 1);
 
     int y=0;
+    tetrisLayout->addWidget(createLabel(tr("TIME ELAPSED")), y++, 1);
+    tetrisLayout->addWidget(digitalClock, y++, 1);
     tetrisLayout->addWidget(createLabel(tr("LEVEL")), y++, 1);
     tetrisLayout->addWidget(levelLcd, y++, 1);
     tetrisLayout->addWidget(createLabel(tr("LINES")), y++, 1);
