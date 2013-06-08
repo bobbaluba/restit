@@ -49,9 +49,17 @@ System requirements
 Installation instructions
 -------------------------
 
-* tar -xf restit.tar.gz
-* cd build/
-* qmake ../src/tetrix.pro
+Option 1:
+run build.sh to build package automagically and run program manually
+
+Option 2:
+run build_n_run.sh to build package, run program and create log file automagically
+
+Option 3:
+Do everything manually:
+
+* cd src/build/
+* qmake .. (or qmake ../src/tetrix.pro on older qt versions)
 * make
 * ./tetrix
 
@@ -81,3 +89,5 @@ src/
   * vector.cpp/-.h          --> Our own implemenation of a Vector containing doubles, and operations on it
   * zuckermaass.cpp/-.h     --> Implementation of an instructor class (actual reinforcement learner according to algorithm described by Zucker & Maas (see Project report))
 README                      --> This file
+build.sh                    --> script file to build package
+build_n_run.sh              --> script file to build package, run program and create log file
