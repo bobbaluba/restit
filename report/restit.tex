@@ -83,6 +83,13 @@ Here, $\beta$ is a ``momentum-influence-factor'', $\frac{\bigtriangledown q(\the
 
 %------------------------------------------------------------------------------
 
+\section{Practical Issues}
+
+As we use softmax, some of the values can become very small and occasionally be rounded to zero. 
+To prevent this, we switch temporarily to the hardmax variant of the algorithm.
+
+%------------------------------------------------------------------------------
+
 \section{Results}
 \label{results}
 
@@ -128,6 +135,11 @@ Otherwise, it just performs a random action, which can be interpreted as ``explo
 
 The difference (exemplified with a rather old implementation of the reinforcement learner) can be seen in \autoref{four}.
 %TODO here be dragons... new results.. table?
+
+Surprisingly, the reinforcement learner performs worse using lookahead compared to only using the current piece to determine the best action.
+While the greedy agent, which just uses a given weight vector to play, improves using the lookahead, the reinforcement learner keeps on learning disadvantageous weights, which can, for example, result in stacking pieces on both edges of the board. 
+Using a momentum adds to this effect.
+We do not really have an explanation for this, so this might be a subject for further research.
 
 A video of the learning procedure can be found on YouTube\footnote{\href{http://www.youtube.com/watch?v=eblep6rzEAU}{Reinforcement Learner for Tetris}}.
 
