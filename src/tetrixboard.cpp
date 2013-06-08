@@ -294,6 +294,7 @@ void TetrixBoard::refreshGUI(){
     ss << parameters;
     QString parametersString(ss.str().c_str());
     emit parametersChanged(parametersString);
+    emit totalMovesChanged(static_cast<int>(boris.getBoss()->getTotalMoves()));
 
     update();
     showNextPiece();

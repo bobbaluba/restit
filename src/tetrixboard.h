@@ -89,6 +89,7 @@ signals:
     void movingAvgLinesChanged(double lines);
     void gamesPlayedChanged(int numGames);
     void parametersChanged(QString newParameters);
+    void totalMovesChanged(int); //has to be int to connect with qlcds
 
 protected:
     void paintEvent(QPaintEvent *event);
