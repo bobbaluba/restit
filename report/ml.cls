@@ -16,6 +16,7 @@
 \usepackage{wrapfig}
 \usepackage{lipsum}
 \usepackage{marvosym}
+\usepackage{natbib}
 
 
 % -----------------------------------------------------------------------
