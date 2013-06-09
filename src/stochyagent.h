@@ -7,11 +7,9 @@
 class StochyAgent : public TetrisAgent {
 private:
     Vector theta;
-    long t;
 public:
     explicit StochyAgent();
     virtual const SimpleAction getGoal(const State &currentState);
-    virtual long getTotalMoves() const {return t;};
     void setTheta(const std::vector<double> &vector){ theta = vector; }
 private:
     double evaluateAction(SimpleAction action);

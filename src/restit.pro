@@ -5,7 +5,6 @@ HEADERS = \
     state.h \
     boris.h \
     simpleaction.h \
-    locoboss.h \
     gamemodel.h \
     complextetris.h \
     zuckermaas.h \
@@ -16,14 +15,14 @@ HEADERS = \
     tetriswindow.h \
     greedyagent.h \
     stochyagent.h \
-    tetronimo.h
+    tetronimo.h \
+    randomagent.h
 
 SOURCES = main.cpp \
     boardmodel.cpp \
     state.cpp \
     boris.cpp \
     simpleaction.cpp \
-    locoboss.cpp \
     gamemodel.cpp \
     complextetris.cpp \
     zuckermaas.cpp \
@@ -34,4 +33,5 @@ SOURCES = main.cpp \
     tetriswindow.cpp \
     tetrisboard.cpp \
     stochyagent.cpp \
-    tetronimo.cpp
+    tetronimo.cpp \
+    randomagent.cpp

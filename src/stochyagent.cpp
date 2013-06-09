@@ -5,10 +5,11 @@
 #include <cassert>
 
 
-StochyAgent::StochyAgent():t(0){
+StochyAgent::StochyAgent(){
 }
 
 const SimpleAction StochyAgent::getGoal(const State &currentState){
+    ++t;
     assert(!theta.empty());
     std::vector<SimpleAction> actions = currentState.getLegalActions();
     double maxScore = std::numeric_limits<double>::lowest();

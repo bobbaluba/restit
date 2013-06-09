@@ -26,7 +26,7 @@ const SimpleAction pie_soft(const State& x, const Vector &theta);
 const std::pair<SimpleAction,SimpleAction> pie_soft_lookahead(const State& x, const Vector &theta);
 const std::pair<SimpleAction, SimpleAction> pie_hard_lookahead(const State &currentState, const Vector &theta);
 
-ZuckerMaas::ZuckerMaas(unsigned int boardFeatures, double learningRate, double momentum):zt(boardFeatures+1, 0), delta(boardFeatures+1, 0), alpha(learningRate), beta(momentum), t(0){
+ZuckerMaas::ZuckerMaas(unsigned int boardFeatures, double learningRate, double momentum):zt(boardFeatures+1, 0), delta(boardFeatures+1, 0), alpha(learningRate), beta(momentum){
     initializeTheta(boardFeatures+1);
 }
 

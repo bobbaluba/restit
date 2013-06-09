@@ -1,4 +1,4 @@
-#include "locoboss.h"
+#include "randomagent.h"
 
 #include <cstdlib>
 
