@@ -30,9 +30,9 @@ Option 3:
 Do everything manually:
 
 * cd src/build/
-* qmake .. (or qmake ../src/tetrix.pro on older qt versions)
+* qmake .. (or qmake ../src/restit.pro on older qt versions)
 * make
-* ./tetrix
+* ./restit
 
 ---> in case you cannot build the program yourself, try using the binary we added (you can trust us ;) ) or let us
 know and we will visit you for a short demonstration.

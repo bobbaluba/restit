@@ -35,9 +35,3 @@ SOURCES = main.cpp \
     tetrisboard.cpp \
     stochyagent.cpp \
     tetronimo.cpp
-
-# install
-target.path = $$[QT_INSTALL_EXAMPLES]/widgets/tetrix
-sources.files = $$SOURCES $$HEADERS $$RESOURCES $$FORMS tetrix.pro
-sources.path = $$[QT_INSTALL_EXAMPLES]/widgets/tetrix
-INSTALLS += target sources

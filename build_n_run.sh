@@ -6,4 +6,4 @@
 fileName="restit_$(date +%Y%m%d_%H%M%S)"
 
 mkdir -p logs
-./build/tetrix >> logs/$fileName.log
+./build/restit >> logs/$fileName.log
