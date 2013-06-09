@@ -46,17 +46,17 @@ logs/                       --> logs created by the tetrix binary
 src/
   * boardmodel.cpp/-.h      --> Data structure for the restit board
   * boris.cpp/-.h           --> Agent who plays the game, translates simple higher-order instructions into chain of low-level actions
-  * bossofboris.cpp/-.h     --> Interface for instructor-classes composing player instructions
+  * tetrisagent.cpp/-.h     --> Interface for instructor-classes composing player instructions
   * complextetris.cpp/-.h   --> Controller for the game model (implements all actions: sliding, rotation, movement..)
   * gamemodel.cpp/-.h       --> Data structure for the current state of the tetrix game
-  * greedyboss.cpp/-.h      --> Implementation of an instructor class (uses given weight vector to play, no learning implementation, used for testing quality of the weights calculated by reinforcement learner)
-  * locoboss.cpp/-.h        --> Implementation of an instructor class (sends random instructions to agent)
+  * greedyagent.cpp/-.h      --> Implementation of an instructor class (uses given weight vector to play, no learning implementation, used for testing quality of the weights calculated by reinforcement learner)
+  * randomagent.cpp/-.h        --> Implementation of an instructor class (sends random instructions to agent)
   * main.cpp                --> Starting point of program
   * simpleaction.cpp/-.h    --> Rotation + Position of a Tetronimo
   * state.cpp/-.h           --> Wrapper for the gameModel (only used in zuckermaas)
-  * tetrixboard.cpp/-.h     --> Game implementation
-  * tetrixpiece.cpp/-.h     --> Implementation of Tetronimos
-  * tetrixwindow.cpp/-.h    --> GUI implementation of the game
+  * tetrisboard.cpp/-.h     --> Game implementation
+  * tetronimo.cpp/-.h     --> Implementation of Tetronimos
+  * tetriswindow.cpp/-.h    --> GUI implementation of the game
   * vector.cpp/-.h          --> Our own implemenation of a Vector containing doubles, and operations on it
   * zuckermaass.cpp/-.h     --> Implementation of an instructor class (actual reinforcement learner according to algorithm described by Zucker & Maas (see Project report))
 README                      --> This file
