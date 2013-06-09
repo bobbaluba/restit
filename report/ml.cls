@@ -18,6 +18,9 @@
 \usepackage{marvosym}
 \usepackage{natbib}
 
+\widowpenalty=1000
+\clubpenalty=1000
+
 
 % -----------------------------------------------------------------------
 % Page layout

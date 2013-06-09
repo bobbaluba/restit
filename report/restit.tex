@@ -99,7 +99,7 @@ To be able to compare the results of our implementation and see if different cha
     \includegraphics[width=0.5\textwidth]{img/three.png}
   \end{center}
   \vspace{-15pt}
-  \caption{\small{The current number of removed lines already exceeds one million. Note, that the difference between the total and the moving average is not significant, as the game has been initiated with excellent weights, and the learning period was left out.}}
+  \caption{\footnotesize{The current number of removed lines already exceeds one million. Note, that the difference between the total and the moving average is not significant, as the game has been initiated with excellent weights, and the learning period was left out.}}
   \label{three}
   \vspace{-5pt}
 \end{wrapfigure}
@@ -121,10 +121,10 @@ The number of removed lines already exceeds 1,250,000 after 11 played games.
   \begin{center}
     \includegraphics[width=0.5\textwidth]{img/restit4.jpg}
   \end{center}
-  \vspace{-10pt}
-  \caption{\small{More recent values: The greedy algorithm runs since more than four hours and has not lost one single game yet. The number of removed lines exceeds 1.3 million}}
+  \vspace{-20pt}
+  \caption{\footnotesize{More recent values: The greedy algorithm runs since more than four hours and has not lost one single game yet. The number of removed lines exceeds 1.3 million}}
   \label{four}
-  \vspace{-10pt}
+  \vspace{-15pt}
 \end{wrapfigure}
 
 The performance of the reinforcement learner usually does not outperform the greedy algorithm. 
@@ -151,7 +151,7 @@ It is much simpler for the learner to figure out what those weights are if looka
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{img/video1.jpg}
 \end{minipage}
-\caption{\small{The learner has played 5000 games in less than one hour, the greedy algorithm takes more than 3 hours for two games}}
+\caption{\footnotesize{The learner has played 5000 games in less than one hour, the greedy algorithm takes more than 3 hours for two games}}
 \label{demo}
 \end{figure}
 
@@ -188,13 +188,10 @@ Run & Lines removed in first game & Maximum Lines Removed & Games played\\
 \tiny{* interrupted before game ended} 
 \end{center}
 
-\caption{5 different instances of the reinforcement learner trained with 5000 games each. Evaluated with learning turned off, using lookahead.}
+\caption{\footnotesize{5 different instances of the reinforcement learner trained with 5000 games each. Evaluated with learning turned off, using lookahead.}}
 \label{resulttable}
 
 \end{table}
-
-
-A video of the learning procedure can be found on YouTube\footnote{\href{http://www.youtube.com/watch?v=DXgtzFiRHdc}{Reinforcement Learner for Tetris Reloaded}}.
 
 %------------------------------------------------------------------------------
 
@@ -204,6 +201,8 @@ A video of the learning procedure can be found on YouTube\footnote{\href{http://
 With a few minor changes, we basically implemented the algorithm described by \cite{zucker2009learning}, but we surprisingly get much better results. 
 We assume that training the weights without lookahead and only using it in the evaluation phase, makes a big difference. 
 In general, we achieve better results than we expected and except for a few minor implementation bugs we consider this project as successful.
+A video of the learning procedure can be found on YouTube\footnote{\href{http://www.youtube.com/watch?v=DXgtzFiRHdc}{Reinforcement Learner for Tetris Reloaded}}.
+
 
 %------------------------------------------------------------------------------
 
