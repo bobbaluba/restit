@@ -27,7 +27,7 @@ Szita \&  L{\"o}rincz \cite{szita2006learning} apply noise to improve the cross-
 Donald Carr introduces reinforcement learning for Tetris and introduces the Formal Tetris Specification by Fahey \cite{faheytetris}.\\
 Gross \& Schwenker \cite{gross2008learningto} investigate the idea of temporal difference learning applied to the Tetris problem and train agent using an $\varepsilon$-greedy policy. 
 
-Our code is based on an open source Qt Project\footnote{\href{https://qt-project.org/doc/qt-4.8/widgets-tetrix.html}{Qt Project}} implementation. \\
+Our code is based on an open source Qt Project\footnote{\href{https://qt-project.org/doc/qt-4.8/widgets-tetrix.html}{Qt Project}} implementation of tetris. \\
 The core idea for the reinforcement learning algorithm we use is described by Zucker \& Maas \cite{zucker2009learning}, which will be investigated in more detail in \autoref{method}.
 
 %------------------------------------------------------------------------------
@@ -86,7 +86,7 @@ Here, $\beta$ is a ``momentum-influence-factor'', $\frac{\bigtriangledown q(\the
 \section{Practical Issues}
 
 As we use softmax, some of the values can become very small and occasionally be rounded to zero. 
-To prevent this, we switch temporarily to the hardmax variant of the algorithm.
+To prevent this, we switch temporarily to hardmax whenever softmax would cause a floating point error.
 
 %------------------------------------------------------------------------------
 
