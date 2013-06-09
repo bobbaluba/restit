@@ -7,7 +7,7 @@ A reinforcement learner for tetris.
 Video demonstation
 ------------------
 
-[![Youtube video](http://img.youtube.com/vi/eblep6rzEAU/0.jpg)](http://www.youtube.com/watch?v=eblep6rzEAU)
+[![Youtube video](http://img.youtube.com/vi/DXgtzFiRHdc/0.jpg)](http://www.youtube.com/watch?v=DXgtzFiRHdc)
 
 
 System requirements
