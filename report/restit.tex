@@ -136,10 +136,15 @@ Otherwise, it just performs a random action, which can be interpreted as ``explo
 The difference (exemplified with a rather old implementation of the reinforcement learner) can be seen in \autoref{four}.
 %TODO here be dragons... new results.. table?
 
-Surprisingly, the reinforcement learner performs worse using lookahead compared to only using the current piece to determine the best action.
+Surprisingly, the weights learned by the reinforcement learner are actually worse when using lookahead compared to only using the current piece to determine the best action.
 While the greedy agent, which just uses a given weight vector to play, improves using the lookahead, the reinforcement learner keeps on learning disadvantageous weights, which can, for example, result in stacking pieces on both edges of the board. 
 Using a momentum adds to this effect.
 We do not really have an explanation for this, so this might be a subject for further research.
+
+What turned out to be the best strategy, was to let the agent run without lookahead, and then for the evaluation switch to a greedy method with lookahead using the learned weights.
+We assume this is because the learned weights for tetris without lookahead approximate a desire for ``safe'' states.
+Getting a high score only depends on staying alive for the longest possible amount of time, so essentially good weights when not using lookahead should approximate good weights when using lookahead.
+It is much simpler for the learner to figure out what those weights are if lookahead is not enabled.
 
 A video of the learning procedure can be found on YouTube\footnote{\href{http://www.youtube.com/watch?v=eblep6rzEAU}{Reinforcement Learner for Tetris}}.
 
