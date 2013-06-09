@@ -19,19 +19,30 @@ const SimpleAction StochyAgent::getGoal(const State &currentState){
 
         int numLinesRemoved;
         BoardModel nextBoard = currentState.applyAction(firstAction, &numLinesRemoved);
-        std::vector<SimpleAction> secondActions = nextBoard.getLegalActions(currentState.getNextPiece());
 
-        for(unsigned int i = 0; i<secondActions.size(); ++i){
-            int numLinesRemovedSecond;
-            BoardModel finalBoard = nextBoard.applyAction(secondActions[i], currentState.getNextPiece(), &numLinesRemovedSecond);
-            int finalLinesRemoved = numLinesRemovedSecond + numLinesRemoved;
+        if(isUsinglookAhead()){
+            std::vector<SimpleAction> secondActions = nextBoard.getLegalActions(currentState.getNextPiece());
 
-            Vector features = finalBoard.getFeatures();
-            features.push_back(finalLinesRemoved);
+            for(unsigned int i = 0; i<secondActions.size(); ++i){
+                int numLinesRemovedSecond;
+                BoardModel finalBoard = nextBoard.applyAction(secondActions[i], currentState.getNextPiece(), &numLinesRemovedSecond);
+                int finalLinesRemoved = numLinesRemovedSecond + numLinesRemoved;
 
+                Vector features = finalBoard.getFeatures();
+                features.push_back(finalLinesRemoved);
+
+                double score = calculateQuality(theta, features);
+
+                if(score>maxScore){
+                    maxScore = score;
+                    bestAction = firstAction;
+                }
+            }
+        } else { //no lookahead
+            Vector features = nextBoard.getFeatures();
+            features.push_back(numLinesRemoved);
             double score = calculateQuality(theta, features);
-
-            if(score>maxScore){
+            if(score > maxScore){
                 maxScore = score;
                 bestAction = firstAction;
             }

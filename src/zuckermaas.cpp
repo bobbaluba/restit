@@ -31,7 +31,7 @@ ZuckerMaas::ZuckerMaas(unsigned int boardFeatures, double learningRate, double m
 }
 
 const SimpleAction ZuckerMaas::getGoal(const State &currentState){
-    const bool lookAhead = true;
+    const bool lookAhead = isUsinglookAhead();
     if(t%1000 == 0){
         std::cout << "t: " << t << std::endl;
         std::cout << "Theta:" << theta << std::endl;

@@ -3,7 +3,7 @@
 
 #include "gamemodel.h"
 #include "boris.h"
-#include "locoboss.h"
+#include "randomagent.h"
 #include "greedyagent.h"
 #include "stochyagent.h"
 #include "zuckermaas.h"
