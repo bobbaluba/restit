@@ -6,13 +6,13 @@
 class GameModel{
 private:
     BoardModel board;
-    TetrixPiece currentPiece;
-    TetrixPiece nextPiece;
+    Tetronimo currentPiece;
+    Tetronimo nextPiece;
 public:
     explicit GameModel(int width, int height):
         board(BoardModel(width, height)){
     }
-    explicit GameModel(const BoardModel& board, const TetrixPiece& currentPiece, const TetrixPiece& nextPiece) :
+    explicit GameModel(const BoardModel& board, const Tetronimo& currentPiece, const Tetronimo& nextPiece) :
         board(board),
         currentPiece(currentPiece),
         nextPiece(nextPiece)
@@ -20,10 +20,10 @@ public:
 
     const BoardModel &getBoard() const;
     void setBoard(const BoardModel &value);
-    const TetrixPiece &getCurrentPiece() const;
-    void setCurrentPiece(const TetrixPiece &value);
-    const TetrixPiece &getNextPiece() const;
-    void setNextPiece(const TetrixPiece &value);
+    const Tetronimo &getCurrentPiece() const;
+    void setCurrentPiece(const Tetronimo &value);
+    const Tetronimo &getNextPiece() const;
+    void setNextPiece(const Tetronimo &value);
 
     //convenience methods
     int getWidth() {return getBoard().getWidth(); }

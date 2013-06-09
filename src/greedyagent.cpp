@@ -1,12 +1,12 @@
-#include "greedyboss.h"
+#include "greedyagent.h"
 
 #include <cstdlib>
 
-GreedyBoss::GreedyBoss(){
+GreedyAgent::GreedyAgent(){
 
 }
 
-const SimpleAction GreedyBoss::getGoal(const State &currentState){
+const SimpleAction GreedyAgent::getGoal(const State &currentState){
     std::vector<SimpleAction> actions = currentState.getLegalActions();
     int maxNumLinesRemoved;
     int minimumNumberOfHoles = currentState.applyAction(actions[0], &maxNumLinesRemoved).getHoles();

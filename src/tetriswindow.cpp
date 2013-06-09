@@ -40,13 +40,13 @@
 
 #include <QtGui>
 
-#include "tetrixboard.h"
-#include "tetrixwindow.h"
+#include "tetrisboard.h"
+#include "tetriswindow.h"
 #include "digitalclock.h"
 
-TetrixWindow::TetrixWindow()
+TetrisWindow::TetrisWindow()
 {
-    board = new TetrixBoard;
+    board = new TetrisBoard;
 
     nextPieceLabel = new QLabel;
     nextPieceLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
@@ -203,7 +203,7 @@ TetrixWindow::TetrixWindow()
     resize(700, 500);
 }
 
-QLabel *TetrixWindow::createLabel(const QString &text)
+QLabel *TetrisWindow::createLabel(const QString &text)
 {
     QLabel *lbl = new QLabel(text);
     lbl->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);

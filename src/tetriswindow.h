@@ -38,80 +38,42 @@
  **
  ****************************************************************************/
 
-#include <QtCore>
+#ifndef TETRISWINDOW_H
+#define TETRISWINDOW_H
 
-#include <stdlib.h>
+#include <QFrame>
+#include <QWidget>
+#include <QRadioButton>
+#include <QGroupBox>
 
-#include "tetrixpiece.h"
 
-TetrixPiece::TetrixPiece(TetrixShape shape): pieceShape(shape){
-    static const int coordsTable[8][4][2] = {
-        { { 0, 0 },   { 0, 0 },   { 0, 0 },   { 0, 0 } },
-        { { 0, -1 },  { 0, 0 },   { -1, 0 },  { -1, 1 } },
-        { { 0, -1 },  { 0, 0 },   { 1, 0 },   { 1, 1 } },
-        { { 0, -1 },  { 0, 0 },   { 0, 1 },   { 0, 2 } },
-        { { -1, 0 },  { 0, 0 },   { 1, 0 },   { 0, 1 } },
-        { { 0, 0 },   { 1, 0 },   { 0, 1 },   { 1, 1 } },
-        { { -1, -1 }, { 0, -1 },  { 0, 0 },   { 0, 1 } },
-        { { 1, -1 },  { 0, -1 },  { 0, 0 },   { 0, 1 } }
-    };
+class QLCDNumber;
+class QLabel;
+class QPushButton;
 
-    for (int i = 0; i < 4 ; i++) {
-        for (int j = 0; j < 2; ++j)
-            coords[i][j] = coordsTable[shape][i][j];
-    }
-}
+class TetrisBoard;
 
-int TetrixPiece::minX() const {
-    int min = coords[0][0];
-    for (int i = 1; i < 4; ++i)
-        min = qMin(min, coords[i][0]);
-    return min;
-}
+class TetrisWindow : public QWidget
+{
+    Q_OBJECT
 
-int TetrixPiece::maxX() const {
-    int max = coords[0][0];
-    for (int i = 1; i < 4; ++i)
-        max = qMax(max, coords[i][0]);
-    return max;
-}
+public:
+    explicit TetrisWindow();
 
-int TetrixPiece::minY() const {
-    int min = coords[0][1];
-    for (int i = 1; i < 4; ++i)
-        min = qMin(min, coords[i][1]);
-    return min;
-}
+private:
+    QLabel *createLabel(const QString &text);
+    QGroupBox *createAISelector();
 
-int TetrixPiece::maxY() const {
-    int max = coords[0][1];
-    for (int i = 1; i < 4; ++i)
-        max = qMax(max, coords[i][1]);
-    return max;
-}
+    TetrisBoard *board;
+    QLabel *nextPieceLabel;
+    QLCDNumber *scoreLcd;
+    QLCDNumber *levelLcd;
+    QLCDNumber *linesLcd;
+    QPushButton *startButton;
+    QPushButton *quitButton;
+    QPushButton *pauseButton;
 
-const TetrixPiece TetrixPiece::rotatedLeft() const {
-    if (pieceShape == SquareShape)
-        return *this;
+    QRadioButton *radioButton;
+};
 
-    TetrixPiece result;
-    result.pieceShape = pieceShape;
-    for (int i = 0; i < 4; ++i) {
-        result.setX(i, y(i));
-        result.setY(i, -x(i));
-    }
-    return result;
-}
-
-const TetrixPiece TetrixPiece::rotatedRight() const {
-    if (pieceShape == SquareShape)
-        return *this;
-
-    TetrixPiece result;
-    result.pieceShape = pieceShape;
-    for (int i = 0; i < 4; ++i) {
-        result.setX(i, -y(i));
-        result.setY(i, x(i));
-    }
-    return result;
-}
+#endif

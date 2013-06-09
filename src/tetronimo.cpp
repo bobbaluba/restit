@@ -38,42 +38,80 @@
  **
  ****************************************************************************/
 
-#ifndef TETRIXWINDOW_H
-#define TETRIXWINDOW_H
+#include <QtCore>
 
-#include <QFrame>
-#include <QWidget>
-#include <QRadioButton>
-#include <QGroupBox>
+#include <stdlib.h>
 
+#include "tetronimo.h"
 
-class QLCDNumber;
-class QLabel;
-class QPushButton;
+Tetronimo::Tetronimo(TetronimoShape shape): pieceShape(shape){
+    static const int coordsTable[8][4][2] = {
+        { { 0, 0 },   { 0, 0 },   { 0, 0 },   { 0, 0 } },
+        { { 0, -1 },  { 0, 0 },   { -1, 0 },  { -1, 1 } },
+        { { 0, -1 },  { 0, 0 },   { 1, 0 },   { 1, 1 } },
+        { { 0, -1 },  { 0, 0 },   { 0, 1 },   { 0, 2 } },
+        { { -1, 0 },  { 0, 0 },   { 1, 0 },   { 0, 1 } },
+        { { 0, 0 },   { 1, 0 },   { 0, 1 },   { 1, 1 } },
+        { { -1, -1 }, { 0, -1 },  { 0, 0 },   { 0, 1 } },
+        { { 1, -1 },  { 0, -1 },  { 0, 0 },   { 0, 1 } }
+    };
 
-class TetrixBoard;
+    for (int i = 0; i < 4 ; i++) {
+        for (int j = 0; j < 2; ++j)
+            coords[i][j] = coordsTable[shape][i][j];
+    }
+}
 
-class TetrixWindow : public QWidget
-{
-    Q_OBJECT
+int Tetronimo::minX() const {
+    int min = coords[0][0];
+    for (int i = 1; i < 4; ++i)
+        min = qMin(min, coords[i][0]);
+    return min;
+}
 
-public:
-    explicit TetrixWindow();
+int Tetronimo::maxX() const {
+    int max = coords[0][0];
+    for (int i = 1; i < 4; ++i)
+        max = qMax(max, coords[i][0]);
+    return max;
+}
 
-private:
-    QLabel *createLabel(const QString &text);
-    QGroupBox *createAISelector();
+int Tetronimo::minY() const {
+    int min = coords[0][1];
+    for (int i = 1; i < 4; ++i)
+        min = qMin(min, coords[i][1]);
+    return min;
+}
 
-    TetrixBoard *board;
-    QLabel *nextPieceLabel;
-    QLCDNumber *scoreLcd;
-    QLCDNumber *levelLcd;
-    QLCDNumber *linesLcd;
-    QPushButton *startButton;
-    QPushButton *quitButton;
-    QPushButton *pauseButton;
+int Tetronimo::maxY() const {
+    int max = coords[0][1];
+    for (int i = 1; i < 4; ++i)
+        max = qMax(max, coords[i][1]);
+    return max;
+}
 
-    QRadioButton *radioButton;
-};
+const Tetronimo Tetronimo::rotatedLeft() const {
+    if (pieceShape == SquareShape)
+        return *this;
 
-#endif
+    Tetronimo result;
+    result.pieceShape = pieceShape;
+    for (int i = 0; i < 4; ++i) {
+        result.setX(i, y(i));
+        result.setY(i, -x(i));
+    }
+    return result;
+}
+
+const Tetronimo Tetronimo::rotatedRight() const {
+    if (pieceShape == SquareShape)
+        return *this;
+
+    Tetronimo result;
+    result.pieceShape = pieceShape;
+    for (int i = 0; i < 4; ++i) {
+        result.setX(i, -y(i));
+        result.setY(i, x(i));
+    }
+    return result;
+}

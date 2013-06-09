@@ -43,9 +43,9 @@
 #include <cassert>
 #include <sstream>
 
-#include "tetrixboard.h"
+#include "tetrisboard.h"
 
-TetrixBoard::TetrixBoard(QWidget *parent) : QFrame(parent),
+TetrisBoard::TetrisBoard(QWidget *parent) : QFrame(parent),
     invisible(false),
     lineDownTimeoutEnabled(true),
     gamesPlayed(0),
@@ -66,24 +66,24 @@ TetrixBoard::TetrixBoard(QWidget *parent) : QFrame(parent),
     setFocusPolicy(Qt::StrongFocus);
 }
 
-void TetrixBoard::setNextPieceLabel(QLabel *label)
+void TetrisBoard::setNextPieceLabel(QLabel *label)
 {
     nextPieceLabel = label;
 }
 
-QSize TetrixBoard::sizeHint() const
+QSize TetrisBoard::sizeHint() const
 {
     return QSize(BoardWidth * 15 + frameWidth() * 2,
                  BoardHeight * 15 + frameWidth() * 2);
 }
 
-QSize TetrixBoard::minimumSizeHint() const
+QSize TetrisBoard::minimumSizeHint() const
 {
     return QSize(BoardWidth * 5 + frameWidth() * 2,
                  BoardHeight * 5 + frameWidth() * 2);
 }
 
-void TetrixBoard::start(){
+void TetrisBoard::start(){
     gameOver = false;
     tetris.startNewGame();
     timer.start(tetris.getTimeoutTime(), this);
@@ -91,7 +91,7 @@ void TetrixBoard::start(){
     refreshGUI();
 }
 
-void TetrixBoard::onGameOver(){
+void TetrisBoard::onGameOver(){
     gamesPlayed++;
     emit gamesPlayedChanged(gamesPlayed);
     //update total lines
@@ -122,28 +122,28 @@ void TetrixBoard::onGameOver(){
     }
 }
 
-void TetrixBoard::pause(bool checked){
+void TetrisBoard::pause(bool checked){
     tetris.setPaused(checked);
     update();
 }
 
-void TetrixBoard::setAISpeed(int speed){
+void TetrisBoard::setAISpeed(int speed){
     borisInterval = 2*(100 - speed);
     borisTimer.start(borisInterval,this);
 }
 
-void TetrixBoard::setAutoPlay(bool value){
+void TetrisBoard::setAutoPlay(bool value){
     autoPlay = value;
     if(autoPlay){
         start();
     }
 }
 
-void TetrixBoard::setInvisiblePlay(bool value){
+void TetrisBoard::setInvisiblePlay(bool value){
     invisible = value;
 }
 
-void TetrixBoard::setParameters(QString newParameters){
+void TetrisBoard::setParameters(QString newParameters){
     std::stringstream ss;
     ss << newParameters.toStdString();
     Vector newTheta;
@@ -152,23 +152,23 @@ void TetrixBoard::setParameters(QString newParameters){
     emit parametersChanged(newParameters);
 }
 
-void TetrixBoard::setNoAI(bool enabled){
+void TetrisBoard::setNoAI(bool enabled){
     if(enabled){
         boris.setBoss(NULL);
     }
 }
 
-void TetrixBoard::setZuckerAI(bool enabled){
+void TetrisBoard::setZuckerAI(bool enabled){
     if(enabled){
         boris.setBoss(&zuckerBoss);
     }
 }
 
-void TetrixBoard::setLineDownTimeoutEnabled(bool enabled){
+void TetrisBoard::setLineDownTimeoutEnabled(bool enabled){
     lineDownTimeoutEnabled = enabled;
 }
 
-void TetrixBoard::setGreedyAI(bool enabled){
+void TetrisBoard::setGreedyAI(bool enabled){
     if(enabled){
         stochyBoss.setTheta(zuckerBoss.getTheta());
         boris.setBoss(&stochyBoss);
@@ -176,7 +176,7 @@ void TetrixBoard::setGreedyAI(bool enabled){
 }
 
 
-void TetrixBoard::paintEvent(QPaintEvent *event)
+void TetrisBoard::paintEvent(QPaintEvent *event)
 {
     QFrame::paintEvent(event);
 
@@ -189,7 +189,7 @@ void TetrixBoard::paintEvent(QPaintEvent *event)
     const BoardModel& board = gameModel.getBoard();
     for (int i = 0; i < BoardHeight; ++i) {
         for (int j = 0; j < BoardWidth; ++j) {
-            const TetrixShape &shape = board.getShapeAt(j, BoardHeight - i - 1);
+            const TetronimoShape &shape = board.getShapeAt(j, BoardHeight - i - 1);
             if (shape != NoShape)
                 drawSquare(painter, rect.left() + j * squareWidth(),
                            boardTop + i * squareHeight(), shape);
@@ -197,7 +197,7 @@ void TetrixBoard::paintEvent(QPaintEvent *event)
     }
 
     //draw the tetronimo on top of the board
-    const TetrixPiece &curPiece = gameModel.getCurrentPiece();
+    const Tetronimo &curPiece = gameModel.getCurrentPiece();
     const int curX = tetris.getCurrentPieceX();
     const int curY = tetris.getCurrentPieceY();
     if (curPiece.shape() != NoShape) {
@@ -211,7 +211,7 @@ void TetrixBoard::paintEvent(QPaintEvent *event)
     }
 }
 
-void TetrixBoard::keyPressEvent(QKeyEvent *event)
+void TetrisBoard::keyPressEvent(QKeyEvent *event)
 {
     if (!tetris.hasStarted() || tetris.isPaused()) {
         QFrame::keyPressEvent(event);
@@ -241,7 +241,7 @@ void TetrixBoard::keyPressEvent(QKeyEvent *event)
     refreshGUI();
 }
 
-void TetrixBoard::timerEvent(QTimerEvent *event){
+void TetrisBoard::timerEvent(QTimerEvent *event){
     if (event->timerId() == timer.timerId()) {
         if(!tetris.isPaused()){
             if(lineDownTimeoutEnabled)tetris.timeoutElapsed();
@@ -268,12 +268,12 @@ void TetrixBoard::timerEvent(QTimerEvent *event){
     }
 }
 
-void TetrixBoard::showNextPiece()
+void TetrisBoard::showNextPiece()
 {
     if (!nextPieceLabel)
         return;
 
-    const TetrixPiece& nextPiece = gameModel.getNextPiece();
+    const Tetronimo& nextPiece = gameModel.getNextPiece();
     int dx = nextPiece.maxX() - nextPiece.minX() + 1;
     int dy = nextPiece.maxY() - nextPiece.minY() + 1;
 
@@ -290,7 +290,7 @@ void TetrixBoard::showNextPiece()
     nextPieceLabel->setPixmap(pixmap);
 }
 
-void TetrixBoard::refreshGUI(){
+void TetrisBoard::refreshGUI(){
     emit levelChanged(tetris.getLevel());
     emit linesRemovedChanged(tetris.getLinesRemoved());
 
@@ -307,7 +307,7 @@ void TetrixBoard::refreshGUI(){
     showNextPiece();
 }
 
-void TetrixBoard::drawSquare(QPainter &painter, int x, int y, TetrixShape shape)
+void TetrisBoard::drawSquare(QPainter &painter, int x, int y, TetronimoShape shape)
 {
     static const QRgb colorTable[8] = {
         0x000000, 0xCC6666, 0x66CC66, 0x6666CC,

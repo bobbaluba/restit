@@ -1,39 +1,40 @@
 CONFIG += qt
 QMAKE_CXXFLAGS += -std=c++11 -Wall -Werror -pedantic-errors -Wno-error=unused-local-typedefs
-HEADERS = tetrixboard.h \
-    tetrixpiece.h \
-    tetrixwindow.h \
+HEADERS = \
     boardmodel.h \
     state.h \
     boris.h \
     simpleaction.h \
-    bossofboris.h \
     locoboss.h \
-    greedyboss.h \
     gamemodel.h \
     complextetris.h \
-    stochyboss.h \
     zuckermaas.h \
     vector.h \
-    digitalclock.h
+    digitalclock.h \
+    tetrisagent.h \
+    tetrisboard.h \
+    tetriswindow.h \
+    greedyagent.h \
+    stochyagent.h \
+    tetronimo.h
 
 SOURCES = main.cpp \
-    tetrixboard.cpp \
-    tetrixpiece.cpp \
-    tetrixwindow.cpp \
     boardmodel.cpp \
     state.cpp \
     boris.cpp \
     simpleaction.cpp \
-    bossofboris.cpp \
     locoboss.cpp \
-    greedyboss.cpp \
     gamemodel.cpp \
     complextetris.cpp \
-    stochyboss.cpp \
     zuckermaas.cpp \
     vector.cpp \
-    digitalclock.cpp
+    digitalclock.cpp \
+    tetrisagent.cpp \
+    greedyagent.cpp \
+    tetriswindow.cpp \
+    tetrisboard.cpp \
+    stochyagent.cpp \
+    tetronimo.cpp
 
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/widgets/tetrix

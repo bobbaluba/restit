@@ -1,14 +1,14 @@
-#include "stochyboss.h"
+#include "stochyagent.h"
 
 #include <vector>
 #include <limits>
 #include <cassert>
 
 
-StochyBoss::StochyBoss():t(0){
+StochyAgent::StochyAgent():t(0){
 }
 
-const SimpleAction StochyBoss::getGoal(const State &currentState){
+const SimpleAction StochyAgent::getGoal(const State &currentState){
     assert(!theta.empty());
     std::vector<SimpleAction> actions = currentState.getLegalActions();
     double maxScore = std::numeric_limits<double>::lowest();
@@ -39,7 +39,7 @@ const SimpleAction StochyBoss::getGoal(const State &currentState){
     return bestAction;
 }
 
-double StochyBoss::calculateQuality(const Vector& theta, const Vector& features){
+double StochyAgent::calculateQuality(const Vector& theta, const Vector& features){
     //evaluate state
     double score = 0;
     for(unsigned int i = 0; i < features.size(); ++i){
@@ -49,7 +49,7 @@ double StochyBoss::calculateQuality(const Vector& theta, const Vector& features)
 }
 
 //not used?
-std::vector<double> StochyBoss::createParameterVector(int size){
+std::vector<double> StochyAgent::createParameterVector(int size){
     if(theta.empty()){
         //create parameter vector
         theta.reserve(size);

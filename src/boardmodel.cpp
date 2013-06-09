@@ -60,7 +60,7 @@ const std::vector<double> BoardModel::getFeatures() const {
     return features;
 }
 
-bool BoardModel::isFree(const TetrixPiece &piece, int x, int y) const{
+bool BoardModel::isFree(const Tetronimo &piece, int x, int y) const{
     for (int i = 0; i < 4; ++i) {
         int currentX = x + piece.x(i);
         int currentY = y - piece.y(i);
@@ -72,12 +72,12 @@ bool BoardModel::isFree(const TetrixPiece &piece, int x, int y) const{
     return true;
 }
 
-bool BoardModel::canDropIntoColumn(const TetrixPiece& piece, int x) const{
+bool BoardModel::canDropIntoColumn(const Tetronimo& piece, int x) const{
     int y = height - 1 + piece.minY();
     return isFree(piece, x, y);
 }
 
-const BoardModel BoardModel::dropPiece(const TetrixPiece &piece, int x, int *numLinesRemoved) const {
+const BoardModel BoardModel::dropPiece(const Tetronimo &piece, int x, int *numLinesRemoved) const {
     int curY = height - 1 + piece.minY();
 
     assert(isFree(piece, x, curY)); //verify that the move is legal
@@ -88,23 +88,23 @@ const BoardModel BoardModel::dropPiece(const TetrixPiece &piece, int x, int *num
     return placePiece(piece, x, curY, numLinesRemoved);
 }
 
-const BoardModel BoardModel::placePiece(const TetrixPiece &piece, int x, int y, int *numLinesRemoved) const {
+const BoardModel BoardModel::placePiece(const Tetronimo &piece, int x, int y, int *numLinesRemoved) const {
     BoardModel copy = *this;
     *numLinesRemoved = copy.placePiece(piece, x, y);
     return copy;
 }
 
-const BoardModel BoardModel::applyAction(const SimpleAction &action, const TetrixPiece& piece, int *numLinesRemoved) const{
-    TetrixPiece tmpPiece = piece;
+const BoardModel BoardModel::applyAction(const SimpleAction &action, const Tetronimo& piece, int *numLinesRemoved) const{
+    Tetronimo tmpPiece = piece;
     for(int i=0; i<action.rotation; ++i){
         tmpPiece = tmpPiece.rotatedLeft();
     }
     return dropPiece(tmpPiece, action.position, numLinesRemoved);
 }
 
-const std::vector<SimpleAction> BoardModel::getLegalActions(const TetrixPiece &currentPiece) const {
+const std::vector<SimpleAction> BoardModel::getLegalActions(const Tetronimo &currentPiece) const {
     std::vector<SimpleAction> legalActions;
-    TetrixPiece piece = currentPiece;
+    Tetronimo piece = currentPiece;
     for(int i=0; i<4; ++i){
         //check each x position
         for(int j = -piece.minX(); j < getWidth() - piece.maxX(); ++j){
@@ -117,7 +117,7 @@ const std::vector<SimpleAction> BoardModel::getLegalActions(const TetrixPiece &c
     return legalActions;
 }
 
-int BoardModel::placePiece(const TetrixPiece &piece, int x, int y){
+int BoardModel::placePiece(const Tetronimo &piece, int x, int y){
     for (int i = 0; i < 4; ++i) {
         int currentX = x + piece.x(i);
         int currentY = y - piece.y(i);

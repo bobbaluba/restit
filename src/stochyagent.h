@@ -1,15 +1,15 @@
-#ifndef STOCHYBOSS_H
-#define STOCHYBOSS_H
+#ifndef STOCHYAGENT_H
+#define STOCHYAGENT_H
 
 #include "vector.h"
-#include "bossofboris.h"
+#include "tetrisagent.h"
 
-class StochyBoss : public BossOfBoris {
+class StochyAgent : public TetrisAgent {
 private:
     Vector theta;
     long t;
 public:
-    explicit StochyBoss();
+    explicit StochyAgent();
     virtual const SimpleAction getGoal(const State &currentState);
     virtual long getTotalMoves() const {return t;};
     void setTheta(const std::vector<double> &vector){ theta = vector; }
@@ -20,4 +20,4 @@ private:
     double calculateQuality(const Vector &theta, const Vector &features);
 };
 
-#endif // STOCHYBOSS_H
+#endif // STOCHYAGENT_H

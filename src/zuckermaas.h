@@ -1,10 +1,10 @@
 #ifndef ZUCKERMAAS_H
 #define ZUCKERMAAS_H
 
-#include "bossofboris.h"
+#include "tetrisagent.h"
 #include "vector.h"
 
-class ZuckerMaas : public BossOfBoris {
+class ZuckerMaas : public TetrisAgent {
 private:
     Vector theta; //policy parameters
     Vector zt; //current momentum

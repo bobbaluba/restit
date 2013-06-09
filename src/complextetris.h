@@ -38,10 +38,10 @@ private:
     //helper/convenience methods
     bool oneLineDown(); //returns false if the piece hit something and was "dropped"
     void droppedPiece();
-    bool tryMove(const TetrixPiece &newPiece, int newX, int newY);
+    bool tryMove(const Tetronimo &newPiece, int newX, int newY);
     void newPiece();
-    const TetrixPiece& curPiece() const { return game->getCurrentPiece(); }
-    const TetrixPiece& nextPiece() const { return game->getNextPiece(); }
+    const Tetronimo& curPiece() const { return game->getCurrentPiece(); }
+    const Tetronimo& nextPiece() const { return game->getNextPiece(); }
     const BoardModel& board() const { return game->getBoard(); }
     int getStartColumn() { return game->getWidth() / 2; }
 };

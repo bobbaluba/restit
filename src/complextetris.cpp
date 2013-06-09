@@ -7,7 +7,7 @@ ComplexTetris::ComplexTetris(GameModel *game):
     paused(false),
     gameOver(false)
 {
-    TetrixPiece piece = TetrixPiece::getRandomPiece();
+    Tetronimo piece = Tetronimo::getRandomPiece();
     game->setNextPiece(piece);
 }
 
@@ -44,7 +44,7 @@ void ComplexTetris::startNewGame(){
     numLinesRemoved = 0;
     BoardModel emptyBoard(game->getWidth(), game->getHeight());
     game->setBoard(emptyBoard);
-    game->setNextPiece(TetrixPiece::getRandomPiece());
+    game->setNextPiece(Tetronimo::getRandomPiece());
     newPiece();
 }
 
@@ -77,7 +77,7 @@ void ComplexTetris::droppedPiece(){
     newPiece();
 }
 
-bool ComplexTetris::tryMove(const TetrixPiece &newPiece, int newX, int newY){
+bool ComplexTetris::tryMove(const Tetronimo &newPiece, int newX, int newY){
     if(board().isFree(newPiece, newX, newY)){
         game->setCurrentPiece(newPiece);
         curX = newX;
@@ -90,7 +90,7 @@ bool ComplexTetris::tryMove(const TetrixPiece &newPiece, int newX, int newY){
 
 void ComplexTetris::newPiece(){
     game->setCurrentPiece(game->getNextPiece());
-    game->setNextPiece(TetrixPiece::getRandomPiece());
+    game->setNextPiece(Tetronimo::getRandomPiece());
     curX = getStartColumn();
     curY = game->getHeight() - 1 + curPiece().minY();
 

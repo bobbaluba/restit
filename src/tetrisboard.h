@@ -38,15 +38,14 @@
  **
  ****************************************************************************/
 
-#ifndef TETRIXBOARD_H
-#define TETRIXBOARD_H
+#ifndef TETRISBOARD_H
+#define TETRISBOARD_H
 
-#include "tetrixpiece.h"
 #include "gamemodel.h"
 #include "boris.h"
 #include "locoboss.h"
-#include "greedyboss.h"
-#include "stochyboss.h"
+#include "greedyagent.h"
+#include "stochyagent.h"
 #include "zuckermaas.h"
 
 #include <QBasicTimer>
@@ -58,12 +57,12 @@
 
 class QLabel;
 
-class TetrixBoard : public QFrame
+class TetrisBoard : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit TetrixBoard(QWidget *parent = 0);
+    explicit TetrisBoard(QWidget *parent = 0);
 
     void setNextPieceLabel(QLabel *label);
     QSize sizeHint() const;
@@ -107,7 +106,7 @@ private:
     void newPiece();
     void showNextPiece();
     void refreshGUI();
-    void drawSquare(QPainter &painter, int x, int y, TetrixShape shape);
+    void drawSquare(QPainter &painter, int x, int y, TetronimoShape shape);
     void onGameOver();
 
     QBasicTimer timer, borisTimer;
@@ -128,8 +127,8 @@ private:
 
     //ai
     //GreedyBoss greedyBoss; //replaced by stochy
-    LocoBoss locoBoss;
-    StochyBoss stochyBoss;
+    RandomAgent locoBoss;
+    StochyAgent stochyBoss;
     ZuckerMaas zuckerBoss;
     Boris boris;
     bool borisIsPlaying;

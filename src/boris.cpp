@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-Boris::Boris(BossOfBoris *boss, ComplexTetris *tetris) :
+Boris::Boris(TetrisAgent *boss, ComplexTetris *tetris) :
     boss(boss),
     tetris(tetris){
 }
@@ -69,6 +69,6 @@ void Boris::updatePlan() {
 }
 
 
-void Boris::setBoss(BossOfBoris *boss){
+void Boris::setBoss(TetrisAgent *boss){
     this->boss = boss;
 }

@@ -10,22 +10,22 @@ void GameModel::setBoard(const BoardModel &value)
     board = value;
 }
 
-const TetrixPiece &GameModel::getCurrentPiece() const
+const Tetronimo &GameModel::getCurrentPiece() const
 {
     return currentPiece;
 }
 
-void GameModel::setCurrentPiece(const TetrixPiece &value)
+void GameModel::setCurrentPiece(const Tetronimo &value)
 {
     currentPiece = value;
 }
 
-const TetrixPiece &GameModel::getNextPiece() const
+const Tetronimo &GameModel::getNextPiece() const
 {
     return nextPiece;
 }
 
-void GameModel::setNextPiece(const TetrixPiece &value)
+void GameModel::setNextPiece(const Tetronimo &value)
 {
     nextPiece = value;
 }

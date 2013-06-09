@@ -3,7 +3,7 @@
 
 #include "simpleaction.h"
 
-#include <tetrixpiece.h>
+#include "tetronimo.h"
 
 #include <vector>
 
@@ -11,14 +11,14 @@ class BoardModel
 {
 private:
     int width, height;
-    std::vector<TetrixShape> tiles;
+    std::vector<TetronimoShape> tiles;
 
 public:
 
     //create a new empty board
     explicit BoardModel(int width, int height);
 
-    TetrixShape getShapeAt(int x, int y) const { return tiles[(y * width) + x]; }
+    TetronimoShape getShapeAt(int x, int y) const { return tiles[(y * width) + x]; }
     bool isEmpty(int x, int y) const { return getShapeAt(x,y) == NoShape; }
 
     int getWidth() const { return width; }
@@ -34,23 +34,23 @@ public:
 
 
     //check if there are no conflicting or pieces, or pieces outside the board
-    bool isFree(const TetrixPiece &piece, int x, int y) const;
+    bool isFree(const Tetronimo &piece, int x, int y) const;
 
-    bool canDropIntoColumn(const TetrixPiece &piece, int x) const;
+    bool canDropIntoColumn(const Tetronimo &piece, int x) const;
 
     //returns the board after dropping a piece into column x, number of lines removed are stored in *numLinesRemoved
-    const BoardModel dropPiece(const TetrixPiece &piece, int x, int* numLinesRemoved) const;
+    const BoardModel dropPiece(const Tetronimo &piece, int x, int* numLinesRemoved) const;
 
     //required if we plan on supporting placement of pieces under overhangs
-    const BoardModel placePiece(const TetrixPiece &piece, int x, int y, int* numLinesRemoved) const;
+    const BoardModel placePiece(const Tetronimo &piece, int x, int y, int* numLinesRemoved) const;
 
-    const BoardModel applyAction(const SimpleAction& action, const TetrixPiece &piece, int *numLinesRemoved) const;
-    const std::vector<SimpleAction> getLegalActions(const TetrixPiece &currentPiece) const;
+    const BoardModel applyAction(const SimpleAction& action, const Tetronimo &piece, int *numLinesRemoved) const;
+    const std::vector<SimpleAction> getLegalActions(const Tetronimo &currentPiece) const;
 
 private:
     //non-deterministic helper methods
-    void setShapeAt(int x, int y, const TetrixShape &shape) {tiles[(y * width) + x] = shape; }
-    int placePiece(const TetrixPiece &piece, int x, int y); //returns number of lines removed
+    void setShapeAt(int x, int y, const TetronimoShape &shape) {tiles[(y * width) + x] = shape; }
+    int placePiece(const Tetronimo &piece, int x, int y); //returns number of lines removed
     int removeFullLines();
 };
 
