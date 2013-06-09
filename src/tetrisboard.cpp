@@ -21,7 +21,9 @@ TetrisBoard::TetrisBoard(QWidget *parent) : QFrame(parent),
     boris(&zuckerAgent, &tetris),
     borisIsPlaying(true),
     borisInterval(0),
-    autoPlay(false)
+    autoPlay(false),
+    autoStopEnabled(false),
+    autoStopGames(0)
 {
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
     setFocusPolicy(Qt::StrongFocus);
@@ -136,6 +138,10 @@ void TetrisBoard::setLookAheadEnabled(bool enabled){
     randomAgent.setLookAheadEnabled(enabled);
 }
 
+void TetrisBoard::setAutoStopGames(QString games){
+    autoStopGames = games.toInt();
+}
+
 void TetrisBoard::setGreedyAI(bool enabled){
     if(enabled){
         stochyAgent.setTheta(zuckerAgent.getTheta());
@@ -230,7 +236,7 @@ void TetrisBoard::timerEvent(QTimerEvent *event){
     if(tetris.isGameOver() && !gameOver){
         gameOver = true;
         onGameOver();
-        if (autoPlay){
+        if (autoPlay && !(autoStopEnabled && gamesPlayed >= autoStopGames)){
             start();
         }
     }
@@ -295,4 +301,9 @@ void TetrisBoard::drawSquare(QPainter &painter, int x, int y, TetronimoShape sha
                      x + squareWidth() - 1, y + squareHeight() - 1);
     painter.drawLine(x + squareWidth() - 1, y + squareHeight() - 1,
                      x + squareWidth() - 1, y + 1);
+}
+
+
+void TetrisBoard::setAutoStopEnabled(bool enabled){
+    autoStopEnabled = enabled;
 }

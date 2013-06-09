@@ -47,6 +47,9 @@ TetrisWindow::TetrisWindow()
     QCheckBox *lookAheadCheckBox = new QCheckBox(tr("Use lookahead"));
     lookAheadCheckBox->setChecked(true);
 
+    QCheckBox *autoStopCheckBox = new QCheckBox(tr("Auto stop after games:"));
+    QLineEdit *numGamesBox = new QLineEdit();
+
     QSlider *speedSlider = new QSlider(Qt::Horizontal, 0);
     speedSlider->setRange(0,100);
     speedSlider->setValue(100);
@@ -60,6 +63,8 @@ TetrisWindow::TetrisWindow()
     aiSelectorLayout->addWidget(invisiblePlayCheckBox);
     aiSelectorLayout->addWidget(lineDownCheckBox);
     aiSelectorLayout->addWidget(lookAheadCheckBox);
+    aiSelectorLayout->addWidget(autoStopCheckBox);
+    aiSelectorLayout->addWidget(numGamesBox);
     aiSelectorLayout->addWidget(speedSlider);
 
     //vbox->addStretch(1);
@@ -115,6 +120,8 @@ TetrisWindow::TetrisWindow()
     connect(invisiblePlayCheckBox, SIGNAL(toggled(bool)), board, SLOT(setInvisiblePlay(bool)));
     connect(lookAheadCheckBox, SIGNAL(toggled(bool)), board, SLOT(setLookAheadEnabled(bool)));
     connect(lineDownCheckBox, SIGNAL(toggled(bool)), board, SLOT(setLineDownTimeoutEnabled(bool)));
+    connect(autoStopCheckBox, SIGNAL(toggled(bool)), board, SLOT(setAutoStopEnabled(bool)));
+    connect(numGamesBox, SIGNAL(textEdited(QString)), board, SLOT(setAutoStopGames(QString)));
     connect(board, SIGNAL(gamesPlayedChanged(int)), numGames, SLOT(display(int)));
     connect(board, SIGNAL(totalMovesChanged(int)), totalMoves, SLOT(display(int)));
     connect(board, SIGNAL(maxLinesRemovedChanged(int)), maxLinesRemoved, SLOT(display(int)));
@@ -140,12 +147,14 @@ TetrisWindow::TetrisWindow()
     tetrisLayout->addWidget(createLabel(tr("LINES")), y++, 1);
     tetrisLayout->addWidget(linesLcd, y++, 1);
     tetrisLayout->addWidget(createLabel(tr("NEXT")), y++, 1);
+    const int nextPieceRow = y;
     tetrisLayout->addWidget(nextPieceLabel, y++, 1);
     tetrisLayout->addWidget(quitButton, y++, 1);
     tetrisLayout->addWidget(pauseButton, y++, 1);
     tetrisLayout->addWidget(startButton, y++, 1);
     tetrisLayout->setColumnStretch(0, 2);
     tetrisLayout->setColumnStretch(1, 1);
+    tetrisLayout->setRowMinimumHeight(nextPieceRow, 100);
 
     //our ai stuff
     QGridLayout *AILayout = new QGridLayout;

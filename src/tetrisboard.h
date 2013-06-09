@@ -41,6 +41,9 @@ public slots:
     void setZuckerAI(bool enabled);
     void setLineDownTimeoutEnabled(bool enabled);
     void setLookAheadEnabled(bool enabled);
+    void setAutoStopGames(QString games);
+    void setAutoStopEnabled(bool enabled);
+
 
 signals:
     void levelChanged(int level);
@@ -95,6 +98,8 @@ private:
     bool borisIsPlaying;
     int borisInterval;
     bool autoPlay;
+    bool autoStopEnabled;
+    int autoStopGames;
 };
 
 #endif
