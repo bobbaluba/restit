@@ -12,7 +12,7 @@ private:
     const double alpha; //learning rate 0.2 a good value?
     const double beta; //momemntum importance factor
 public:
-    explicit ZuckerMaas(unsigned int boardFeatures, double learningRate = 0.1, double momentum = 0.0);
+    explicit ZuckerMaas(unsigned int boardFeatures, double learningRate = 0.1, double momentum = 0.5);
     virtual const SimpleAction getGoal(const State &currentState);
     //void setParameterVector(const Vector vector){ parameters = vector; }
     const Vector& getTheta() const { return theta; }

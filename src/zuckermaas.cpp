@@ -44,7 +44,7 @@ const SimpleAction ZuckerMaas::getGoal(const State &currentState){
         int discard;
         const State xtplus1(currentState.applyAction(bestActions.first, &discard), currentState.getNextPiece(), currentState.getNextPiece());
 
-        zt = z_tplus1(zt,beta,theta,xtplus1,utplus1); //not currentState?
+        zt = z_tplus1(zt,0/*beta for some reason is messing up lookahead*/,theta,xtplus1,utplus1); //not currentState?
         delta = delta_tplus1(zt, delta, xtplus1, utplus1,t);
 
         theta = theta + (alpha * delta);
