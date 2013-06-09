@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 
-RandomAgent::RandomAgent(int boardWidth): boardWidth(boardWidth), t(0){
+RandomAgent::RandomAgent(int boardWidth): boardWidth(boardWidth){
 }
 
 const SimpleAction RandomAgent::getGoal(const State &/*currentState*/){

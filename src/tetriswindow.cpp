@@ -43,8 +43,9 @@ TetrisWindow::TetrisWindow()
     QCheckBox *autoPlayCheckBox = new QCheckBox(tr("Auto Play"));
     QCheckBox *lineDownCheckBox = new QCheckBox(tr("Line Down Timeout"));
     lineDownCheckBox->setChecked(true);
-
     QCheckBox *invisiblePlayCheckBox = new QCheckBox(tr("Play without gui"));
+    QCheckBox *lookAheadCheckBox = new QCheckBox(tr("Use lookahead"));
+    lookAheadCheckBox->setChecked(true);
 
     QSlider *speedSlider = new QSlider(Qt::Horizontal, 0);
     speedSlider->setRange(0,100);
@@ -58,6 +59,7 @@ TetrisWindow::TetrisWindow()
     aiSelectorLayout->addWidget(autoPlayCheckBox);
     aiSelectorLayout->addWidget(invisiblePlayCheckBox);
     aiSelectorLayout->addWidget(lineDownCheckBox);
+    aiSelectorLayout->addWidget(lookAheadCheckBox);
     aiSelectorLayout->addWidget(speedSlider);
 
     //vbox->addStretch(1);
@@ -111,6 +113,7 @@ TetrisWindow::TetrisWindow()
     connect(speedSlider, SIGNAL(valueChanged(int)), board, SLOT(setAISpeed(int)));
     connect(autoPlayCheckBox, SIGNAL(toggled(bool)), board, SLOT(setAutoPlay(bool)));
     connect(invisiblePlayCheckBox, SIGNAL(toggled(bool)), board, SLOT(setInvisiblePlay(bool)));
+    connect(lookAheadCheckBox, SIGNAL(toggled(bool)), board, SLOT(setLookAheadEnabled(bool)));
     connect(lineDownCheckBox, SIGNAL(toggled(bool)), board, SLOT(setLineDownTimeoutEnabled(bool)));
     connect(board, SIGNAL(gamesPlayedChanged(int)), numGames, SLOT(display(int)));
     connect(board, SIGNAL(totalMovesChanged(int)), totalMoves, SLOT(display(int)));

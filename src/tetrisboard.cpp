@@ -15,10 +15,10 @@ TetrisBoard::TetrisBoard(QWidget *parent) : QFrame(parent),
     gameModel(BoardWidth, BoardHeight),
     tetris(&gameModel),
     gameOver(false),
-    locoBoss(BoardWidth),
-    stochyBoss(),
-    zuckerBoss(gameModel.getBoard().getNumFeatures()),
-    boris(&zuckerBoss, &tetris),
+    randomAgent(BoardWidth),
+    stochyAgent(),
+    zuckerAgent(gameModel.getBoard().getNumFeatures()),
+    boris(&zuckerAgent, &tetris),
     borisIsPlaying(true),
     borisInterval(0),
     autoPlay(false)
@@ -109,7 +109,8 @@ void TetrisBoard::setParameters(QString newParameters){
     ss << newParameters.toStdString();
     Vector newTheta;
     ss >> newTheta;
-    zuckerBoss.setTheta(newTheta);
+    zuckerAgent.setTheta(newTheta);
+    stochyAgent.setTheta(newTheta);
     emit parametersChanged(newParameters);
 }
 
@@ -121,7 +122,7 @@ void TetrisBoard::setNoAI(bool enabled){
 
 void TetrisBoard::setZuckerAI(bool enabled){
     if(enabled){
-        boris.setBoss(&zuckerBoss);
+        boris.setBoss(&zuckerAgent);
     }
 }
 
@@ -129,10 +130,16 @@ void TetrisBoard::setLineDownTimeoutEnabled(bool enabled){
     lineDownTimeoutEnabled = enabled;
 }
 
+void TetrisBoard::setLookAheadEnabled(bool enabled){
+    stochyAgent.setLookAheadEnabled(enabled);
+    zuckerAgent.setLookAheadEnabled(enabled);
+    randomAgent.setLookAheadEnabled(enabled);
+}
+
 void TetrisBoard::setGreedyAI(bool enabled){
     if(enabled){
-        stochyBoss.setTheta(zuckerBoss.getTheta());
-        boris.setBoss(&stochyBoss);
+        stochyAgent.setTheta(zuckerAgent.getTheta());
+        boris.setBoss(&stochyAgent);
     }
 }
 
@@ -255,7 +262,7 @@ void TetrisBoard::refreshGUI(){
     emit levelChanged(tetris.getLevel());
     emit linesRemovedChanged(tetris.getLinesRemoved());
 
-    Vector parameters(zuckerBoss.getTheta());
+    Vector parameters(zuckerAgent.getTheta());
     std::stringstream ss;
     ss << parameters;
     QString parametersString(ss.str().c_str());

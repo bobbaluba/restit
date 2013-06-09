@@ -40,6 +40,7 @@ public slots:
     void setGreedyAI(bool enabled);
     void setZuckerAI(bool enabled);
     void setLineDownTimeoutEnabled(bool enabled);
+    void setLookAheadEnabled(bool enabled);
 
 signals:
     void levelChanged(int level);
@@ -87,9 +88,9 @@ private:
 
     //ai
     //GreedyBoss greedyBoss; //replaced by stochy
-    RandomAgent locoBoss;
-    StochyAgent stochyBoss;
-    ZuckerMaas zuckerBoss;
+    RandomAgent randomAgent;
+    StochyAgent stochyAgent;
+    ZuckerMaas zuckerAgent;
     Boris boris;
     bool borisIsPlaying;
     int borisInterval;
