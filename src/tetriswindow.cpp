@@ -162,8 +162,8 @@ TetrisWindow::TetrisWindow()
 
     setLayout(boxLayout);
 
-    setWindowTitle(tr("Tetrix"));
-    resize(700, 500);
+    setWindowTitle(tr("Restit"));
+    resize(768, 576);
 }
 
 QLabel *TetrisWindow::createLabel(const QString &text)
