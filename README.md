@@ -29,7 +29,7 @@ run build_n_run.sh to build package, run program and create log file automagical
 Option 3:
 Do everything manually:
 
-* cd src/build/
+* cd build/
 * qmake .. (or qmake ../src/restit.pro on older qt versions)
 * make
 * ./restit
