@@ -22,13 +22,13 @@ We will give a short summary and wrap up the results in \nameref{conclusions}.
 \section{Related work}
 \label{relatedwork}
 There are different approaches for tetris learners. 
-Csaba Szepesvári \cite{szepesvari2010algorithms} describes different reinforcement learning algorithms and their core ideas and discusses their theoretical  limitations. \\
-Szita \&  L{\"o}rincz \cite{szita2006learning} apply noise to improve the cross-entropy method by preventing it from early convergence and achieve a policy that outperforms previous algorithms by almost two orders of magnitude.\\
-Donald Carr introduces reinforcement learning for Tetris and introduces the Formal Tetris Specification by Fahey \cite{faheytetris}.\\
-Gross \& Schwenker \cite{gross2008learningto} investigate the idea of temporal difference learning applied to the Tetris problem and train agent using an $\varepsilon$-greedy policy. 
+\cite{szepesvari2010algorithms} describes different reinforcement learning algorithms and their core ideas and discusses their theoretical  limitations. \\
+\cite{szita2006learning} apply noise to improve the cross-entropy method by preventing it from early convergence and achieve a policy that outperforms previous algorithms by almost two orders of magnitude.\\
+\cite{carr2005applying} introduces reinforcement learning for Tetris and introduces the Formal Tetris Specification by \cite{faheytetris}.\\
+\cite{gross2008learningto} investigate the idea of temporal difference learning applied to the Tetris problem and train agent using an $\varepsilon$-greedy policy. 
 
 Our code is based on an open source Qt Project\footnote{\href{https://qt-project.org/doc/qt-4.8/widgets-tetrix.html}{Qt Project}} implementation of tetris. \\
-The core idea for the reinforcement learning algorithm we use is described by Zucker \& Maas \cite{zucker2009learning}, which will be investigated in more detail in \autoref{method}.
+The core idea for the reinforcement learning algorithm we use is described by \cite{zucker2009learning}, which will be investigated in more detail in \nameref{method}.
 
 %------------------------------------------------------------------------------
 
@@ -55,8 +55,6 @@ A state in which the columns are very low and even is to be preferred from a bum
 An increasing number of holes in the board implies increasing complexity of the game, as it makes it harder to complete several lines at a time, and therefore reducing the overall height. 
 
 Adding further features such as the maximum height difference or the number of holes per column do not add relevant information and therefore do not lead to significantly better results. 
-
-%TODO feature: "depth" of holes --> improvement??
 
 The quality of a state is calculated from a parameter (= weight) vector $\theta$ within a quality function $Q(\theta, x)$.
 The weights in $\theta$ denote the ``importance'' or ``good-/badness'' of the corresponding values in the feature vector. 
@@ -100,7 +98,7 @@ To be able to compare the results of our implementation and see if different cha
   \begin{center}
     \includegraphics[width=0.5\textwidth]{img/three.png}
   \end{center}
-  \vspace{-5pt}
+  \vspace{-15pt}
   \caption{\small{The current number of removed lines already exceeds one million. Note, that the difference between the total and the moving average is not significant, as the game has been initiated with excellent weights, and the learning period was left out.}}
   \label{three}
   \vspace{-5pt}
@@ -121,10 +119,10 @@ The number of removed lines already exceeds 1,250,000 after 11 played games.
 \begin{wrapfigure}{r}{0.5\textwidth}
 \vspace{-10pt}
   \begin{center}
-    \includegraphics[width=0.5\textwidth]{img/four.png}
+    \includegraphics[width=0.5\textwidth]{img/restit4.jpg}
   \end{center}
   \vspace{-10pt}
-  \caption{\small{Comparison between greedy algorithm (which only uses given weights) and the reinforcement learner (which continuously updates the weights and uses exploration to prevent getting stuck in local maxima).}}
+  \caption{\small{More recent values: The greedy algorithm runs since more than four hours and has not lost one single game yet. The number of removed lines exceeds 1.3 million}}
   \label{four}
   \vspace{-10pt}
 \end{wrapfigure}
@@ -134,7 +132,6 @@ To prevent getting stuck in a local maximum, the learner only chooses the ``best
 Otherwise, it just performs a random action, which can be interpreted as ``exploring'' new options without being too dependent on the possibly disadvantageous rules it has learned. 
 
 The difference (exemplified with a rather old implementation of the reinforcement learner) can be seen in \autoref{four}.
-%TODO here be dragons... new results.. table?
 
 Surprisingly, the weights learned by the reinforcement learner are actually worse when using lookahead compared to only using the current piece to determine the best action.
 While the greedy agent, which just uses a given weight vector to play, improves using the lookahead, the reinforcement learner keeps on learning disadvantageous weights, which can, for example, result in stacking pieces on both edges of the board. 
@@ -145,6 +142,18 @@ What turned out to be the best strategy, was to let the agent run without lookah
 We assume this is because the learned weights for tetris without lookahead approximate a desire for ``safe'' states.
 Getting a high score only depends on staying alive for the longest possible amount of time, so essentially good weights when not using lookahead should approximate good weights when using lookahead.
 It is much simpler for the learner to figure out what those weights are if lookahead is not enabled.
+
+\begin{figure}[h!]
+\centering
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{img/restit.jpg}
+\end{minipage}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{img/video1.jpg}
+\end{minipage}
+\caption{\small{The learner has played 5000 games in less than one hour, the greedy algorithm takes more than 3 hours for two games}}
+\label{demo}
+\end{figure}
 
 We found empirically that a learning rate, $\alpha$, of 0.1 was suitable. A bigger learning rate seemed to cause the learned values to fluctuate.
 On the other hand a lower learning rate caused the learning process to last unreasonably long. 
@@ -184,21 +193,23 @@ Avg & • \\
 \end{table}
 
 
-A video of the learning procedure can be found on YouTube\footnote{\href{http://www.youtube.com/watch?v=eblep6rzEAU}{Reinforcement Learner for Tetris}}.
+A video of the learning procedure can be found on YouTube\footnote{\href{http://www.youtube.com/watch?v=DXgtzFiRHdc}{Reinforcement Learner for Tetris Reloaded}}.
 
 %------------------------------------------------------------------------------
 
 \section{Conclusions}
 \label{conclusions}
 
-\lipsum[1]
-%TODO here be more dragons
+With a few minor changes, we basically implemented the algorithm described by \cite{zucker2009learning}, but we surprisingly get much better results. 
+We assume that training the weights without lookahead and only using it in the evaluation phase, makes a big difference. 
+In general, we achieve better results than we expected and except for a few minor implementation bugs we consider this project as successful.
 
 %------------------------------------------------------------------------------
 
 %%%
 % Sources
 \newpage
-\bibliographystyle{alphadin}
+\bibliographystyle{agsm}
+%\bibliographystyle{alphadin}
 \bibliography{sources/sources}
 \end{document}
