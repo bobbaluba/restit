@@ -172,24 +172,25 @@ The results are shown in \autoref{resulttable}.
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
 \hline 
-Run & Lines removed in first game & Maximum Lines Removed (bevor game interrupted) & Games played\\ 
+Run & Lines removed in first game & Maximum Lines Removed & Games played\\ 
 \hline 
-1 & 336,989 <M2> & 630,468 & 6 \\ 
+1 & 336,989 & 630,468 & 6 \\ 
 \hline 
 2 & 659,616 &&\\ %J2 550k+ in second run, still running
 \hline 
 3 & 703,426 && 2\\ %141552 in second run, still running 3rd run at 311k
 \hline 
-4 & 1,700,103 & 1,700,103 & 1\\ 
+4 & 1,700,103* & 1,700,103* & 1\\ 
 \hline 
-5 & 1,743,241 & 1,743,241 & 1\\ 
+5 & 1,743,241* & 1,743,241* & 1\\ 
 \hline 
-Avg & • \\ 
-\hline 
-\end{tabular}
+\end{tabular}\\
+\tiny{* interrupted before game ended} 
+\end{center}
+
 \caption{5 different instances of the reinforcement learner trained with 5000 games each. Evaluated with learning turned off, using lookahead.}
 \label{resulttable}
-\end{center}
+
 \end{table}
 
 
