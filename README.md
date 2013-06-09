@@ -34,8 +34,7 @@ Do everything manually:
 * make
 * ./restit
 
----> in case you cannot build the program yourself, try using the binary we added (you can trust us ;) ) or let us
-know and we will visit you for a short demonstration.
+---> in case you cannot build the program yourself, let us know and we will visit you for a short demonstration. Or just watch the video on youtube.
 
 
 File structure
@@ -58,7 +57,7 @@ src/
   * tetronimo.cpp/-.h     --> Implementation of Tetronimos
   * tetriswindow.cpp/-.h    --> GUI implementation of the game
   * vector.cpp/-.h          --> Our own implemenation of a Vector containing doubles, and operations on it
-  * zuckermaass.cpp/-.h     --> Implementation of an instructor class (actual reinforcement learner according to algorithm described by Zucker & Maas (see Project report))
+  * zuckermaas.cpp/-.h     --> Implementation of an instructor class (actual reinforcement learner according to algorithm described by Zucker & Maas (see Project report))
 README                      --> This file
 build.sh                    --> script file to build package
 build_n_run.sh              --> script file to build package, run program and create log file
