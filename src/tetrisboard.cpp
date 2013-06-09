@@ -15,8 +15,7 @@ TetrisBoard::TetrisBoard(QWidget *parent) : QFrame(parent),
     gameModel(BoardWidth, BoardHeight),
     tetris(&gameModel),
     gameOver(false),
-    randomAgent(BoardWidth),
-    stochyAgent(),
+    greedyAgent(),
     zuckerAgent(gameModel.getBoard().getNumFeatures()),
     boris(&zuckerAgent, &tetris),
     borisIsPlaying(true),
@@ -112,7 +111,7 @@ void TetrisBoard::setParameters(QString newParameters){
     Vector newTheta;
     ss >> newTheta;
     zuckerAgent.setTheta(newTheta);
-    stochyAgent.setTheta(newTheta);
+    greedyAgent.setTheta(newTheta);
     emit parametersChanged(newParameters);
 }
 
@@ -133,9 +132,8 @@ void TetrisBoard::setLineDownTimeoutEnabled(bool enabled){
 }
 
 void TetrisBoard::setLookAheadEnabled(bool enabled){
-    stochyAgent.setLookAheadEnabled(enabled);
+    greedyAgent.setLookAheadEnabled(enabled);
     zuckerAgent.setLookAheadEnabled(enabled);
-    randomAgent.setLookAheadEnabled(enabled);
 }
 
 void TetrisBoard::setAutoStopGames(QString games){
@@ -144,8 +142,8 @@ void TetrisBoard::setAutoStopGames(QString games){
 
 void TetrisBoard::setGreedyAI(bool enabled){
     if(enabled){
-        stochyAgent.setTheta(zuckerAgent.getTheta());
-        boris.setBoss(&stochyAgent);
+        greedyAgent.setTheta(zuckerAgent.getTheta());
+        boris.setBoss(&greedyAgent);
     }
 }
 

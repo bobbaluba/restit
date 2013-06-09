@@ -5,7 +5,7 @@
 #include "boris.h"
 #include "randomagent.h"
 #include "greedyagent.h"
-#include "stochyagent.h"
+#include "naiveagent.h"
 #include "zuckermaas.h"
 
 #include <QBasicTimer>
@@ -91,8 +91,7 @@ private:
 
     //ai
     //GreedyBoss greedyBoss; //replaced by stochy
-    RandomAgent randomAgent;
-    StochyAgent stochyAgent;
+    GreedyAgent greedyAgent;
     ZuckerMaas zuckerAgent;
     Boris boris;
     bool borisIsPlaying;

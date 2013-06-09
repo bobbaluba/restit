@@ -146,6 +146,44 @@ We assume this is because the learned weights for tetris without lookahead appro
 Getting a high score only depends on staying alive for the longest possible amount of time, so essentially good weights when not using lookahead should approximate good weights when using lookahead.
 It is much simpler for the learner to figure out what those weights are if lookahead is not enabled.
 
+We found empirically that a learning rate, $\alpha$, of 0.1 was suitable. A bigger learning rate seemed to cause the learned values to fluctuate.
+On the other hand a lower learning rate caused the learning process to last unreasonably long. 
+As \cite{zucker2009learning}, we found that a momentum, $\beta$, of 0.5 was suitable, as long as we don't use lookahead.
+
+For the benchmark, we first let the learner run for 5000 games without using lookahead.
+Then we switched off learning (greedy algorithm) and turned on lookahead for the evaluation and planned on running 100 games.
+This is the same setup as \cite{zucker2009learning} used.
+The problem however, was that the learner performed way better than we had expected. Just a single game usually lasts over two hours, and exceeds 600,000 removed lines.
+This made it very impractical to do 100 tests. 
+
+We ended up running 5 parallel learners, and tested them on just one game each. 
+The results are shown in \autoref{resulttable}.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline 
+Run & Lines removed in first game \\ 
+\hline 
+1 & 336,989 <M2> \\ 
+\hline 
+2 & 659,616 <J2> \\ 
+\hline 
+3 & 703,426 <J1> \\ 
+\hline 
+4 & • \\ 
+\hline 
+5 & • \\ 
+\hline 
+Avg & • \\ 
+\hline 
+\end{tabular}
+\caption{5 different instances of the reinforcement learner trained with 5000 games each. Evaluated with learning turned off, using lookahead.}
+\label{resulttable}
+\end{center}
+\end{table}
+
+
 A video of the learning procedure can be found on YouTube\footnote{\href{http://www.youtube.com/watch?v=eblep6rzEAU}{Reinforcement Learner for Tetris}}.
 
 %------------------------------------------------------------------------------

@@ -13,10 +13,10 @@ HEADERS = \
     tetrisagent.h \
     tetrisboard.h \
     tetriswindow.h \
-    greedyagent.h \
-    stochyagent.h \
     tetronimo.h \
-    randomagent.h
+    randomagent.h \
+    naiveagent.h \
+    greedyagent.h
 
 SOURCES = main.cpp \
     boardmodel.cpp \
@@ -29,9 +29,9 @@ SOURCES = main.cpp \
     vector.cpp \
     digitalclock.cpp \
     tetrisagent.cpp \
-    greedyagent.cpp \
     tetriswindow.cpp \
     tetrisboard.cpp \
-    stochyagent.cpp \
     tetronimo.cpp \
-    randomagent.cpp
+    randomagent.cpp \
+    naiveagent.cpp \
+    greedyagent.cpp
