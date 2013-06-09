@@ -30,7 +30,7 @@ Option 3:
 Do everything manually:
 
 * cd build/
-* qmake .. (or qmake ../src/restit.pro on older qt versions)
+* qmake ../src (or qmake ../src/restit.pro on older qt versions)
 * make
 * ./restit
 
